@@ -1,0 +1,9 @@
+# General
+__pycache__
+
+# IDEs
+.vscode
+
+# Project-specific
+.env
+logs
