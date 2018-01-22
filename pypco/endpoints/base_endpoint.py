@@ -161,6 +161,8 @@ class BaseEndpoint:
 
     # TODO: Add function to delete objects
 
+    # TODO: Figure out file uploads
+
     @classmethod
     def resolve_root_endpoint_name(cls):
         """Resolve the current root endpoint name.
