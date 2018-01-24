@@ -5,6 +5,7 @@ import logging
 import logging.handlers
 import unittest
 import vcr_unittest
+import pypco
 
 PYCO_LOGGER_EXISTS = False
 
@@ -112,4 +113,16 @@ class BasePCOVCRTestCase(vcr_unittest.VCRTestCase):
         vcr_unittest.VCRTestCase.__init__(self, *args, **kwargs)
 
         self.creds = get_creds_from_environment()
+
+        # TODO: Add exception handling/fallback for situations where we don't have any creds available
+        self.pco = pypco.PCO(self.creds['application_id'], self.creds['secret']) #pylint: disable=W0201
+
         build_logging_environment()
+
+    def _get_vcr(self, **kwargs):
+        custom_vcr = super(BasePCOVCRTestCase, self)._get_vcr(
+            filter_headers=['Authorization'],
+            **kwargs
+        )
+
+        return custom_vcr

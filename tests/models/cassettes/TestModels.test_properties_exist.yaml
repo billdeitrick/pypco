@@ -1,0 +1,54 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://api.planningcenteronline.com/people/v2/people/16555904
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA7VWXW/aMBT9K5OfQyEMWsH7HqdNU586TZaJb4hVx7Zsh45V/e87xgEC7Z7IJB6w
+        fXPu17nHfmVSRMHWryzuHbE1+04+WMMKpiRW5f1yuVzNFliLGL3adJFCshbGqB1Mhd+ztem0hsEO
+        SB4fNTG6sJ5OHVmn6c7pZGy2FZlI3hqtDN1Vtp2GKKKqpsZy19hoeWy6dmOE0rwVhm+92N+F3Rau
+        N8rHBnGm+MpVeT+ZlfjhoGqURpi10IGw8gQbyUWE3XyW7BaT+efHWbkuV+vl4glfSGotkF2jKp4D
+        5p3X/yPoWvkQuRHtoaqi0/C+JSMplehrWqCApjfIFURgEtbnRYcCWcP3lOqat5URVVQodZ9o3tXi
+        7OsHoTEEBy1JVQnNjT00LVu21G7Qt0a5Q1geHVBOmJjslZSaLiIahP/phGtU9ZwPMmTuM3fkWxUC
+        AoYz9kWqaD1QPSoeiSc6ZfNQNdZqnvnWbylYCNkqo0L0In14bGoiSZcAD2mntDqXqHBu88OknE/K
+        8hE9LmfrRfnE3goGkj1nokrpKYRUgBMxhVP/ZmXOZrqb9/ydHmdgKk5QILtzYyAmFBDXGkNVyik7
+        vz3Ud4gFoxaTNULMPU7BakVa8iwft5Z2gFWwxnaBGgvwM1lHCPxj2IG7MX2ktvajShy6lDT1OIHC
+        q4ixPDL7OJchiC1B9mw3BrVakH6Al9TgsDFCkiekgiUZ4M5TrX4f0ztsha4ebEEZkD8fZ2aGYAXD
+        zWEgWbg44OP2ubmEK1jWqpNy2Uqhcc7bWukxKhmuAAv2Yv1zre0Lr4SXIyR0hYeMSNc314m9QWKV
+        qXQnCbr+81eiV35GVLi6+xMcsKFmfqQcF+P3fmSAezktl5TrVz3bwIYB0a65cWom/lyVHeE74fE8
+        SS+b/O5ZPTyU95jh/lX0zW+FUX8O1zGSf/sLhWrqWjcJAAA=
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Headers: ['Accept, Authorization, Content-Type, If-Match,
+          If-Modified-Since, If-None-Match, If-Unmodified-Since, Origin, X-Requested-With']
+      Access-Control-Allow-Methods: ['GET, POST, PATCH, PUT, DELETE, OPTIONS']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['ETag, Link, X-PCO-API-Auth-Method']
+      Cache-Control: ['max-age=0, private, must-revalidate']
+      Connection: [keep-alive]
+      Content-Encoding: [gzip]
+      Content-Type: [application/json; charset=utf-8]
+      Date: ['Wed, 24 Jan 2018 04:00:43 GMT']
+      ETag: [W/"bbd48e1dbeaf0c7f48d8d3371e6a92e4"]
+      Server: [nginx]
+      Status: [200 OK]
+      Strict-Transport-Security: [max-age=31536000]
+      Vary: [Accept-Encoding, 'Accept, Accept-Encoding, Origin']
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [SAMEORIGIN]
+      X-PCO-API-Auth-Method: [HTTPBasic]
+      X-PCO-API-Request-Rate-Count: ['1']
+      X-PCO-API-Request-Rate-Limit: ['100']
+      X-PCO-API-Request-Rate-Period: [20 seconds]
+      X-Request-Id: [dfb2a65b-039c-47c0-b607-6d379826b658]
+      X-Runtime: ['0.045003']
+      X-XSS-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+version: 1
