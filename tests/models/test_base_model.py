@@ -10,11 +10,6 @@ from .. import BasePCOVCRTestCase
 class TestModels(BasePCOVCRTestCase):
     """Test the BaseModel class."""
 
-    def setUp(self): #pylint: disable=C0103
-        """Configure test objects for models."""
-
-        self.pco = pypco.PCO(self.creds['application_id'], self.creds['secret']) #pylint: disable=W0201
-
     def test_properties_exist(self):
         """Verify the correct properties exist on the BaseModel object."""
 
