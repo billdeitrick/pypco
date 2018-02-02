@@ -22,7 +22,7 @@ def get_creds_from_environment():
         Dict: Personal access token for connecting to PCO {application_id: ..., secret: ...}
 
     Raises:
-        VarsNotFoundError
+        CredsNotFoundError
     """
 
     try:
@@ -31,8 +31,10 @@ def get_creds_from_environment():
         creds['application_id'] = os.environ['PCO_APP_ID']
         creds['secret'] = os.environ['PCO_SECRET']
 
-    except KeyError:
-        raise CredsNotFoundError("PCO_APP_ID and/or PCO_SECRET environment variables not found.")
+    except KeyError as exc:
+        raise CredsNotFoundError(
+            "PCO_APP_ID and/or PCO_SECRET environment variables not found."
+        ) from exc
 
     return creds
 
@@ -112,9 +114,13 @@ class BasePCOVCRTestCase(vcr_unittest.VCRTestCase):
 
         vcr_unittest.VCRTestCase.__init__(self, *args, **kwargs)
 
-        self.creds = get_creds_from_environment()
+        try:
+            self.creds = get_creds_from_environment()
+        except CredsNotFoundError:
+            self.creds = {}
+            self.creds['application_id'] = 'pico'
+            self.creds['secret'] = 'robot'
 
-        # TODO: Add exception handling/fallback for situations where we don't have any creds available
         self.pco = pypco.PCO(self.creds['application_id'], self.creds['secret']) #pylint: disable=W0201
 
         build_logging_environment()
