@@ -5,8 +5,6 @@
 import pypco
 from .. import BasePCOVCRTestCase
 
-# TODO: Figure out why pyvcr isn't working
-
 class TestModels(BasePCOVCRTestCase):
     """Test the BaseModel class."""
 
