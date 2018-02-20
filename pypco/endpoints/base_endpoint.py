@@ -230,13 +230,31 @@ class BaseEndpoint:
 
             # If loop hasn't been exited, we have another page
             # Add the offset parameter so we'll pull the next page
-            query_params.append(('offset', int(response['meta']['next']['offset']))) #pylint disable=W0101
+            query_params.append(('offset', response['meta']['next']['offset'])) #pylint disable=W0101
 
         #endregion
 
-    # TODO: Add function to save objects
-    def save(self):
-        raise NotImplementedError("Not implemented yet!")
+    def update(self, item_id, payload):
+        """Update the PCO object identified by item_id.
+
+        Args:
+            item_id (str): The ID of the PCO object to update.
+            payload (dict): The payload to pass to PCO to update the object.
+
+        Returns:
+            Dictionary returned from PCO representing the updated object.
+        """
+
+        result = self._dispatch_single_request(
+            "{}/{}".format(
+                self.get_full_endpoint_url(),
+                item_id
+            ),
+            payload = payload,
+            method=PCOAPIMethod.PATCH
+        )
+
+        return result
 
     # TODO: Add function to create new objects
     def new(self):

@@ -982,3 +982,113 @@ class TestBaseEndpoint(BasePCOTestCase):
             "https://api.planningcenteronline.com/people/v2/people/25253",
             method = PCOAPIMethod.DELETE
         )
+
+    @patch('pypco.endpoints.people.People._dispatch_single_request')
+    def test_people_update(self, mock_people_request):
+        """Test updating a mocked object using the update function."""
+
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"))
+
+        mock_people_request.return_value = {
+            "data": {
+                "type": "Person",
+                "id": "34765191",
+                "attributes": {
+                    "anniversary": None,
+                    "avatar": "https://people.planningcenteronline.com/static/no_photo_thumbnail_man_gray.svg",
+                    "birthdate": None,
+                    "child": False,
+                    "created_at": "2018-02-20T20:59:57Z",
+                    "demographic_avatar_url": "https://people.planningcenteronline.com/static/no_photo_thumbnail_man_gray.svg",
+                    "first_name": "Pico",
+                    "gender": "M",
+                    "given_name": None,
+                    "grade": None,
+                    "graduation_year": None,
+                    "inactivated_at": None,
+                    "last_name": "Robot",
+                    "medical_notes": None,
+                    "membership": None,
+                    "middle_name": None,
+                    "name": "Pico Robot",
+                    "nickname": None,
+                    "people_permissions": None,
+                    "remote_id": None,
+                    "school_type": None,
+                    "site_administrator": False,
+                    "status": "active",
+                    "updated_at": "2018-02-20T21:15:29Z"
+                },
+                "links": {
+                    "addresses": "https://api.planningcenteronline.com/people/v2/people/34765191/addresses",
+                    "apps": "https://api.planningcenteronline.com/people/v2/people/34765191/apps",
+                    "connected_people": "https://api.planningcenteronline.com/people/v2/people/34765191/connected_people",
+                    "emails": "https://api.planningcenteronline.com/people/v2/people/34765191/emails",
+                    "field_data": "https://api.planningcenteronline.com/people/v2/people/34765191/field_data",
+                    "household_memberships": "https://api.planningcenteronline.com/people/v2/people/34765191/household_memberships",
+                    "households": "https://api.planningcenteronline.com/people/v2/people/34765191/households",
+                    "inactive_reason": None,
+                    "marital_status": None,
+                    "message_groups": "https://api.planningcenteronline.com/people/v2/people/34765191/message_groups",
+                    "messages": "https://api.planningcenteronline.com/people/v2/people/34765191/messages",
+                    "name_prefix": None,
+                    "name_suffix": None,
+                    "person_apps": "https://api.planningcenteronline.com/people/v2/people/34765191/person_apps",
+                    "phone_numbers": "https://api.planningcenteronline.com/people/v2/people/34765191/phone_numbers",
+                    "school": None,
+                    "social_profiles": "https://api.planningcenteronline.com/people/v2/people/34765191/social_profiles",
+                    "workflow_cards": "https://api.planningcenteronline.com/people/v2/people/34765191/workflow_cards",
+                    "self": "https://api.planningcenteronline.com/people/v2/people/34765191"
+                }
+            },
+            "included": [],
+            "meta": {
+                "can_include": [
+                    "addresses",
+                    "emails",
+                    "field_data",
+                    "households",
+                    "inactive_reason",
+                    "marital_status",
+                    "name_prefix",
+                    "name_suffix",
+                    "person_apps",
+                    "phone_numbers",
+                    "school",
+                    "social_profiles"
+                ],
+                "parent": {
+                    "id": "197716",
+                    "type": "Organization"
+                }
+            }
+        }
+
+        result = people.people.update(
+            "34765191", 
+            {
+                "data": {
+                    "type": "Person",
+                    "id": "34765191",
+                    "attributes": {
+                        "gender": "Male"
+                    }
+                }
+            }
+        )
+
+        mock_people_request.assert_called_with(
+            "https://api.planningcenteronline.com/people/v2/people/34765191",
+            payload = {
+                "data": {
+                    "type": "Person",
+                    "id": "34765191",
+                    "attributes": {
+                        "gender": "Male"
+                    }
+                }
+            },
+            method = PCOAPIMethod.PATCH
+        )
+
+        self.assertEqual(result['data']['attributes']['gender'], 'M')
