@@ -210,7 +210,7 @@ class BaseEndpoint:
         while True:
             
             # Dispatch the request
-            response = self._dispatch_single_request('people', params=query_params)
+            response = self._dispatch_single_request(self.get_full_endpoint_url(), params=query_params)
 
             # Iterate through and return results
             for obj in response['data']:
