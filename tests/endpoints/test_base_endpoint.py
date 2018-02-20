@@ -3,7 +3,7 @@
 
 from unittest.mock import Mock, patch
 from pypco.endpoints import PCOAuthConfig
-from pypco.endpoints.base_endpoint import BaseEndpoint, NotValidRootEndpointError
+from pypco.endpoints.base_endpoint import BaseEndpoint, NotValidRootEndpointError, PCOAPIMethod
 from pypco.endpoints.people import PeopleEndpoint, People, Addresses, Stats, FieldDefinitions
 from pypco.models.people import Person, Address, FieldDefinition
 from tests import BasePCOTestCase
@@ -353,3 +353,580 @@ class TestBaseEndpoint(BasePCOTestCase):
         self.assertIsInstance(result, FieldDefinition)
 
         #endregion
+
+    @patch('pypco.endpoints.people.People._dispatch_single_request')
+    def test_people_list(self, mock_people_request):
+        """Test the list function to query endpoints."""
+
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"))
+
+        # Mock retrieving people over multiple pages with a simple query
+        # This validates search parameters and multiple pages of results
+        #region
+
+        # Mock page one of the search results for people
+        # with the last name "Revere" and a page size of 2
+        mock_people_request.return_value = {
+            "links": {
+                "self": "https://api.planningcenteronline.com/people/v2/people?per_page=2&where[last_name]=Revere",
+                "next": "https://api.planningcenteronline.com/people/v2/people?offset=2&per_page=2&where[last_name]=Revere"
+            },
+            "data": [
+                {
+                    "type": "Person",
+                    "id": "16555904",
+                    "attributes": {
+                        "anniversary": None,
+                        "avatar": "https://people.planningcenteronline.com/static/no_photo_thumbnail_man_gray.svg",
+                        "birthdate": "1916-01-01",
+                        "child": False,
+                        "created_at": "2016-04-23T01:19:54Z",
+                        "demographic_avatar_url": "https://people.planningcenteronline.com/static/no_photo_thumbnail_man_gray.svg",
+                        "first_name": "Paul",
+                        "gender": "M",
+                        "given_name": None,
+                        "grade": None,
+                        "graduation_year": None,
+                        "inactivated_at": None,
+                        "last_name": "Revere",
+                        "medical_notes": None,
+                        "membership": "Participant",
+                        "middle_name": None,
+                        "name": "Paul Revere",
+                        "nickname": None,
+                        "people_permissions": "Editor",
+                        "remote_id": None,
+                        "school_type": None,
+                        "site_administrator": False,
+                        "status": "active",
+                        "updated_at": "2017-12-11T19:10:41Z"
+                    },
+                    "links": {
+                        "self": "https://api.planningcenteronline.com/people/v2/people/16555904"
+                    }
+                },
+                {
+                    "type": "Person",
+                    "id": "25423946",
+                    "attributes": {
+                        "anniversary": None,
+                        "avatar": "https://people.planningcenteronline.com/static/no_photo_thumbnail_man_gray.svg",
+                        "birthdate": None,
+                        "child": False,
+                        "created_at": "2017-04-11T22:42:08Z",
+                        "demographic_avatar_url": "https://people.planningcenteronline.com/static/no_photo_thumbnail_man_gray.svg",
+                        "first_name": "Paul",
+                        "gender": "M",
+                        "given_name": None,
+                        "grade": None,
+                        "graduation_year": None,
+                        "inactivated_at": None,
+                        "last_name": "Revere",
+                        "medical_notes": None,
+                        "membership": "Former Attender",
+                        "middle_name": None,
+                        "name": "Paul Revere Jr.",
+                        "nickname": None,
+                        "people_permissions": None,
+                        "remote_id": None,
+                        "school_type": None,
+                        "site_administrator": False,
+                        "status": "active",
+                        "updated_at": "2017-04-12T00:28:13Z"
+                    },
+                    "links": {
+                        "self": "https://api.planningcenteronline.com/people/v2/people/25423946"
+                    }
+                }
+            ],
+            "included": [],
+            "meta": {
+                "total_count": 4,
+                "count": 2,
+                "next": {
+                    "offset": 2
+                },
+                "can_order_by": [
+                    "given_name",
+                    "first_name",
+                    "nickname",
+                    "middle_name",
+                    "last_name",
+                    "birthdate",
+                    "anniversary",
+                    "gender",
+                    "grade",
+                    "child",
+                    "status",
+                    "school_type",
+                    "graduation_year",
+                    "site_administrator",
+                    "people_permissions",
+                    "membership",
+                    "inactivated_at",
+                    "remote_id",
+                    "medical_notes",
+                    "created_at",
+                    "updated_at"
+                ],
+                "can_query_by": [
+                    "given_name",
+                    "first_name",
+                    "nickname",
+                    "middle_name",
+                    "last_name",
+                    "birthdate",
+                    "anniversary",
+                    "gender",
+                    "grade",
+                    "child",
+                    "status",
+                    "school_type",
+                    "graduation_year",
+                    "site_administrator",
+                    "people_permissions",
+                    "membership",
+                    "inactivated_at",
+                    "remote_id",
+                    "medical_notes",
+                    "created_at",
+                    "updated_at",
+                    "search_name",
+                    "search_name_or_email",
+                    "id"
+                ],
+                "can_include": [
+                    "addresses",
+                    "emails",
+                    "field_data",
+                    "households",
+                    "inactive_reason",
+                    "marital_status",
+                    "name_prefix",
+                    "name_suffix",
+                    "person_apps",
+                    "phone_numbers",
+                    "school",
+                    "social_profiles"
+                ],
+                "can_filter": [
+                    "created_since",
+                    "admins",
+                    "organization_admins"
+                ],
+                "parent": {
+                    "id": "197716",
+                    "type": "Organization"
+                }
+            }
+        }
+
+        results = people.people.list(where={'last_name': 'Revere'}, per_page=2)
+        result_count = 0
+
+        for result in results:
+            result_count += 1
+
+            self.assertIsInstance(result, Person)
+
+            # Verify we've called the first request with correct params
+            if result_count == 1:
+                mock_people_request.assert_called_with(
+                    'people',
+                    params = [
+                        ('where[last_name]', 'Revere'),
+                        ('per_page', 2)
+                    ]
+                )
+
+            # Mock the second page of search results
+            elif result_count == 2:            
+                mock_people_request.return_value = {
+                    "links": {
+                        "self": "https://api.planningcenteronline.com/people/v2/people?offset=2&per_page=2&where[last_name]=Revere",
+                        "prev": "https://api.planningcenteronline.com/people/v2/people?offset=0&per_page=2&where[last_name]=Revere"
+                    },
+                    "data": [
+                        {
+                            "type": "Person",
+                            "id": "25423947",
+                            "attributes": {
+                                "anniversary": None,
+                                "avatar": "https://people.planningcenteronline.com/static/no_photo_thumbnail_woman_gray.svg",
+                                "birthdate": None,
+                                "child": False,
+                                "created_at": "2017-04-11T22:42:09Z",
+                                "demographic_avatar_url": "https://people.planningcenteronline.com/static/no_photo_thumbnail_woman_gray.svg",
+                                "first_name": "Rachel",
+                                "gender": "F",
+                                "given_name": None,
+                                "grade": None,
+                                "graduation_year": None,
+                                "inactivated_at": None,
+                                "last_name": "Revere",
+                                "medical_notes": None,
+                                "membership": "Former Attender",
+                                "middle_name": None,
+                                "name": "Rachel Revere",
+                                "nickname": None,
+                                "people_permissions": None,
+                                "remote_id": None,
+                                "school_type": None,
+                                "site_administrator": False,
+                                "status": "active",
+                                "updated_at": "2017-04-12T00:28:14Z"
+                            },
+                            "links": {
+                                "self": "https://api.planningcenteronline.com/people/v2/people/25423947"
+                            }
+                        },
+                        {
+                            "type": "Person",
+                            "id": "31515549",
+                            "attributes": {
+                                "anniversary": None,
+                                "avatar": "https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.svg",
+                                "birthdate": None,
+                                "child": False,
+                                "created_at": "2017-11-17T15:52:06Z",
+                                "demographic_avatar_url": "https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.svg",
+                                "first_name": "Rachel",
+                                "gender": None,
+                                "given_name": None,
+                                "grade": None,
+                                "graduation_year": None,
+                                "inactivated_at": None,
+                                "last_name": "Revere",
+                                "medical_notes": None,
+                                "membership": None,
+                                "middle_name": None,
+                                "name": "Rachel Revere",
+                                "nickname": None,
+                                "people_permissions": None,
+                                "remote_id": 77953914,
+                                "school_type": None,
+                                "site_administrator": False,
+                                "status": "active",
+                                "updated_at": "2017-11-17T15:52:06Z"
+                            },
+                            "links": {
+                                "self": "https://api.planningcenteronline.com/people/v2/people/31515549"
+                            }
+                        }
+                    ],
+                    "included": [],
+                    "meta": {
+                        "total_count": 4,
+                        "count": 2,
+                        "prev": {
+                            "offset": 0
+                        },
+                        "can_order_by": [
+                            "given_name",
+                            "first_name",
+                            "nickname",
+                            "middle_name",
+                            "last_name",
+                            "birthdate",
+                            "anniversary",
+                            "gender",
+                            "grade",
+                            "child",
+                            "status",
+                            "school_type",
+                            "graduation_year",
+                            "site_administrator",
+                            "people_permissions",
+                            "membership",
+                            "inactivated_at",
+                            "remote_id",
+                            "medical_notes",
+                            "created_at",
+                            "updated_at"
+                        ],
+                        "can_query_by": [
+                            "given_name",
+                            "first_name",
+                            "nickname",
+                            "middle_name",
+                            "last_name",
+                            "birthdate",
+                            "anniversary",
+                            "gender",
+                            "grade",
+                            "child",
+                            "status",
+                            "school_type",
+                            "graduation_year",
+                            "site_administrator",
+                            "people_permissions",
+                            "membership",
+                            "inactivated_at",
+                            "remote_id",
+                            "medical_notes",
+                            "created_at",
+                            "updated_at",
+                            "search_name",
+                            "search_name_or_email",
+                            "id"
+                        ],
+                        "can_include": [
+                            "addresses",
+                            "emails",
+                            "field_data",
+                            "households",
+                            "inactive_reason",
+                            "marital_status",
+                            "name_prefix",
+                            "name_suffix",
+                            "person_apps",
+                            "phone_numbers",
+                            "school",
+                            "social_profiles"
+                        ],
+                        "can_filter": [
+                            "created_since",
+                            "admins",
+                            "organization_admins"
+                        ],
+                        "parent": {
+                            "id": "197716",
+                            "type": "Organization"
+                        }
+                    }
+                }
+
+            # Verify we've called the second request with correct params
+            if result_count == 3:
+                mock_people_request.assert_called_with(
+                    'people',
+                    params = [                        
+                        ('where[last_name]', 'Revere'),
+                        ('per_page', 2),
+                        ('offset', 2)
+                    ]
+                )
+
+        # Verify we've iterated through 4 results as expected
+        self.assertEqual(result_count, 4)
+        
+        #endregion
+
+        # Mock retrieving people with different sets of parameters
+        # We'll mock a request that returns no results
+        #region
+        mock_people_request.return_value = {
+            "links": {
+                "self": "https://api.planningcenteronline.com/people/v2/people?offset=2&per_page=2&where[last_name]=NotAResult",
+                "prev": "https://api.planningcenteronline.com/people/v2/people?offset=0&per_page=2&where[last_name]=NotAResult"
+            },
+            "data": [],
+            "included": [],
+            "meta": {
+                "total_count": 0,
+                "count": 0,
+                "prev": {
+                    "offset": 0
+                },
+                "can_order_by": [
+                    "given_name",
+                    "first_name",
+                    "nickname",
+                    "middle_name",
+                    "last_name",
+                    "birthdate",
+                    "anniversary",
+                    "gender",
+                    "grade",
+                    "child",
+                    "status",
+                    "school_type",
+                    "graduation_year",
+                    "site_administrator",
+                    "people_permissions",
+                    "membership",
+                    "inactivated_at",
+                    "remote_id",
+                    "medical_notes",
+                    "created_at",
+                    "updated_at"
+                ],
+                "can_query_by": [
+                    "given_name",
+                    "first_name",
+                    "nickname",
+                    "middle_name",
+                    "last_name",
+                    "birthdate",
+                    "anniversary",
+                    "gender",
+                    "grade",
+                    "child",
+                    "status",
+                    "school_type",
+                    "graduation_year",
+                    "site_administrator",
+                    "people_permissions",
+                    "membership",
+                    "inactivated_at",
+                    "remote_id",
+                    "medical_notes",
+                    "created_at",
+                    "updated_at",
+                    "search_name",
+                    "search_name_or_email",
+                    "id"
+                ],
+                "can_include": [
+                    "addresses",
+                    "emails",
+                    "field_data",
+                    "households",
+                    "inactive_reason",
+                    "marital_status",
+                    "name_prefix",
+                    "name_suffix",
+                    "person_apps",
+                    "phone_numbers",
+                    "school",
+                    "social_profiles"
+                ],
+                "can_filter": [
+                    "created_since",
+                    "admins",
+                    "organization_admins"
+                ],
+                "parent": {
+                    "id": "197716",
+                    "type": "Organization"
+                }
+            }
+        }
+
+        # A set of "where" params to re-use
+        wheres = {
+            'first_name': 'pico',
+            'last_name': 'robot'
+        }
+
+        # Test a query with just "where" params
+        #region
+        results = [result for result in people.people.list(
+            where = {
+                'first_name': 'pico',
+                'last_name': 'robot'
+            }
+        )]
+
+        self.assertEqual(len(results), 0)
+        mock_people_request.assert_called_with(
+            'people',
+            params = [
+                ('where[first_name]', 'pico'),
+                ('where[last_name]', 'robot'),
+            ]
+        )
+        #endregion
+
+        # Test a query with "where" and filter params
+        #region
+        results = [result for result in people.people.list(
+            wheres,
+            filter=[
+                'admins',
+                'created_since'
+            ]
+        )]
+
+        self.assertEqual(len(results), 0)
+        mock_people_request.assert_called_with(
+            'people',
+            params=[
+                ('where[first_name]', 'pico'),
+                ('where[last_name]', 'robot'),
+                ('filter', 'admins'),
+                ('filter', 'created_since')
+            ]
+        )
+        #endregion
+
+        # Test a query with "where" and "per_page" params
+        #region
+        results = [result for result in people.people.list(
+            wheres,
+            per_page=5
+        )]
+
+        self.assertEqual(len(results), 0)
+        mock_people_request.assert_called_with(
+            'people',
+            params=[
+                ('where[first_name]', 'pico'),
+                ('where[last_name]', 'robot'),
+                ('per_page', 5)
+            ]
+        )
+        #endregion
+
+        # Test a query with "where" and "order" params
+        #region
+        results = [result for result in people.people.list(
+            wheres,
+            order='birthdate'
+        )]
+
+        self.assertEqual(len(results), 0)
+        mock_people_request.assert_called_with(
+            'people',
+            params=[
+                ('where[first_name]', 'pico'),
+                ('where[last_name]', 'robot'),
+                ('order', 'birthdate')
+            ]
+        )
+        #endregion
+
+        # Test a query with "where" and a kwarg
+        #region
+        results = [result for result in people.people.list(
+            wheres,
+            custom_kwarg = "abc123"
+        )]
+
+        self.assertEqual(len(results), 0)
+        mock_people_request.assert_called_with(
+            'people',
+            params=[
+                ('where[first_name]', 'pico'),
+                ('where[last_name]', 'robot'),
+                ('custom_kwarg', 'abc123')
+            ]
+        )
+        #endregion
+
+        # The kitchen sink test...a query with all params.
+        #region
+        results = [result for result in people.people.list(
+            wheres,
+            filter = ['admins'],
+            per_page = 11,
+            order = 'birthdate',
+            custom_kwarg = "abc123"
+        )]
+
+        self.assertEqual(len(results), 0)
+        mock_people_request.assert_called_with(
+            'people',
+            params=[
+                ('where[first_name]', 'pico'),
+                ('where[last_name]', 'robot'),
+                ('filter', 'admins'),
+                ('per_page', 11),
+                ('order', 'birthdate'),
+                ('custom_kwarg', 'abc123')
+            ]
+        )
+        #endregion
+
+        #endregion
+

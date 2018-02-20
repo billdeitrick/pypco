@@ -148,20 +148,100 @@ class BaseEndpoint:
         )
 
         klass_info = self.resolve_model_type(obj['data'])
-
         klass = getattr(globals()[klass_info[0]], klass_info[1])
 
-        return klass(self, obj, from_get=True)
+        return klass(self, obj['data'], from_get=True)
 
-    # TODO: Add list function to get multiple objects (returns iterator, handles paging)
+    def list(self, where={}, filter=[], per_page=None, order=None, **kwargs):
+        """Execute a query to get a list of objects from the PCO API.
+
+        Note: This should not be called from the BaseModel class. It should be called
+        from a class that inherits from the BaseModel class.
+            >>> p = pypco.PCO('app_id', 'secret')
+            >>> person = p.people.people.list(where={'last_name': 'Revere'})
+
+        Args:
+            where (dict): Query parameters specified as a dictionary. See PCO API docs for valid params.
+            filter (list): Filter parameters for the query. See PCO API docs for valid filter params.
+            per_page (int): How many items to retrieve per page. Defaults to PCO default of 25.
+            order (str): The field by which to order results. Defaults to PCO API default (sorted by ID).
+            kwargs (str): Any additional kwargs will added directly to the request as query params.
+        Returns:
+            The results of the query as a list of objects (subclasses of the BaseModel object) .
+        """
+
+        # Step 1: Build query params
+        #region
+
+        # The query params we'll be using
+        query_params = []
+
+        # Add "where" params to query
+        for key in where.keys():
+            query_params.append(
+                ('where[{0}]'.format(key), where[key])
+            )
+
+        # Add filter params to query
+        for param in filter:
+            query_params.append(
+                ('filter', param)
+            )
+
+        # Add per_page param
+        if per_page:
+            query_params.append(('per_page', per_page))
+
+        # Add order param
+        if order:
+            query_params.append(('order', order))
+
+        # Add kwargs
+        for key in kwargs.keys():
+            query_params.append(
+                (key, kwargs[key])
+            )
+
+        #endregion
+
+        # Step 2: Query execution
+        #region
+
+        while True:
+            
+            # Dispatch the request
+            response = self._dispatch_single_request('people', params=query_params)
+
+            # Iterate through and return results
+            for obj in response['data']:
+                klass_info = self.resolve_model_type(obj)
+                klass = getattr(globals()[klass_info[0]], klass_info[1])
+
+                yield klass(self, obj)
+
+            # Quit if we don't have further results
+            if not 'next' in response['meta']:
+                break
+
+            # If loop hasn't been exited, we have another page
+            # Add the offset parameter so we'll pull the next page
+            query_params.append(('offset', int(response['meta']['next']['offset']))) #pylint disable=W0101
+
+        #endregion
 
     # TODO: Add function to save objects
+    def save(self):
+        raise NotImplementedError("Not implemented yet!")
 
-    # TODO: Add function to create objects
+    # TODO: Add function to create new objects
+    def new(self):
+        raise NotImplementedError("Not implemented yet!")
 
     # TODO: Add function to delete objects
+    def delete(self):
+        raise NotImplementedError("Not implemented yet!")
 
-    # TODO: Figure out file uploads
+    # TODO: File Uploads
 
     @classmethod
     def resolve_root_endpoint_name(cls):
