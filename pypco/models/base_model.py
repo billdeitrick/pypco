@@ -71,9 +71,25 @@ class BaseModel():
         else:
             self._data['attributes'][name] = value
 
+    def delete(self):
+        """Delete this object.
+
+        WARNING: This is most likely permanent. Make sure you're REALLY
+        sure you want to delete this object on PCO before calling this function.
+
+        Raises:
+            PCOModelStateError: Raised if the state of the current object is invalid
+            for this function call (i.e., you cannot delete an object that hasn't been
+            pulled from PCO at some point during its lifecycle.)
+        """
+
+        if self._user_created == True or not self._data or not 'id' in self._data:
+            raise PCOModelStateError("Couldn't delete this object; it appears it was never synced with PCO.")
+
+        self._endpoint.delete(self.id)
+
     # TODO: Build capability for user to create new objects
     # TODO: Build the capability to update existing objects (a "save" function?)
-    # TODO: Build the capability to delete objects (a "delete" function?)
 
     # TODO: Build the capability to manage link attributes (link_manager object?)
     # TODO: Build capability to access data in the relationships attribute
@@ -82,3 +98,9 @@ class BaseModel():
     # TODO: Build the capability to create models from JSON
 
     # TODO: Handle OrganizationStatistics weirdness
+
+class PCOModelStateError(Exception):
+    """An exception representing a function call against a model that is
+    in an invalid state."""
+
+    pass

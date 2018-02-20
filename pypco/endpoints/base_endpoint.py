@@ -119,9 +119,14 @@ class BaseEndpoint:
 
             response.raise_for_status()
 
-            self._log.debug("Response content: %s", response.json())
+            self._log.debug("Response content: %s", response.text)
 
             break
+
+        # The JSON module doesn't handle empty strings, so we return an
+        # empty dictionary if there's no content in the response body
+        if not len(response.text):
+            return {}
 
         return response.json()
 

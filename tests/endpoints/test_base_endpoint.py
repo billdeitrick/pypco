@@ -1,6 +1,7 @@
 """Test the base PCO endpoint class"""
 #pylint: disable=E1101,W0212
 
+import json as jsonlib
 from unittest.mock import Mock, patch
 from pypco.endpoints import PCOAuthConfig
 from pypco.endpoints.base_endpoint import BaseEndpoint, NotValidRootEndpointError, PCOAPIMethod
@@ -80,6 +81,7 @@ class TestBaseEndpoint(BasePCOTestCase):
         response = Mock()
         response.status_code = 200
         response.headers = {}
+        response.text = '{ "hello": "world" }'
         response.json = lambda: {
             "hello": "world"
         }
@@ -104,6 +106,26 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         # make sure we got the expected result from our call
         self.assertEqual(result['hello'], 'world')
+
+    @patch('requests.request')
+    def test_dispatch_empty_response(self, mock_delete):
+        """Verify we handle empty API responses gracefully"""
+
+        base_endpoint = BaseEndpoint(PCOAuthConfig("app_id", "secret'"))
+
+        # Mock a simple response to our request
+        response = Mock()
+        response.status_code = 204
+        response.headers = {}
+        response.text = ""
+        response.json = lambda: 1/0
+
+        result = base_endpoint._dispatch_single_request(
+            "https://api.planningcenteronline.com/people/v2/people/1",
+            method=PCOAPIMethod.DELETE
+        )
+
+        self.assertEqual(result, {})        
 
     def get_rate_limit_mock(method, url, headers, params, json): #pylint: disable=R0201,E0213,W0613
         """Create an object to mock rate limiting responses"""
@@ -138,6 +160,12 @@ class TestBaseEndpoint(BasePCOTestCase):
                     return {}
 
                 return {"Retry-After": 5}
+
+            @property
+            def text(self):
+                """Mock the text property"""
+
+                return jsonlib.dumps(RateLimitResponse.json())
 
             @staticmethod
             def json():
@@ -954,4 +982,3 @@ class TestBaseEndpoint(BasePCOTestCase):
             "https://api.planningcenteronline.com/people/v2/people/25253",
             method = PCOAPIMethod.DELETE
         )
-

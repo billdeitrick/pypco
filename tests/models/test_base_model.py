@@ -2,8 +2,9 @@
 
 #pylint: disable=E1101
 
-import pypco
+from requests import HTTPError
 from .. import BasePCOVCRTestCase
+import pypco
 
 class TestModels(BasePCOVCRTestCase):
     """Test the BaseModel class."""
@@ -59,3 +60,32 @@ class TestModels(BasePCOVCRTestCase):
         # Set the person's birthdate and ensure it was changed
         test_person.birthdate = "1950-1-1"
         self.assertEqual(test_person.birthdate, "1950-1-1")
+
+    def test_delete(self):
+        """Test deleting an object from PCO."""
+
+        pco = self.pco
+
+        # Verify we can retrieve and delete an object
+
+        # Get our victim
+        person = pco.people.people.get("34762810")
+
+        # Verify who we wanted
+        self.assertIsInstance(person, pypco.models.people.Person)
+        self.assertEqual(person.first_name, 'Pico')
+        self.assertEqual(person.last_name, 'Robot')
+
+        # Bye bye, Pico
+        person.delete()
+
+        # Verify Pico is gone...sniff.
+        with self.assertRaises(HTTPError):
+            pco.people.people.get("34762810")
+
+        # Verify exception is thrown when we attempt to delete a user
+        # via an object never synced with PCO
+        bad_person = pypco.models.people.Person(None)
+
+        with self.assertRaises(pypco.models.base_model.PCOModelStateError):
+            bad_person.delete()
