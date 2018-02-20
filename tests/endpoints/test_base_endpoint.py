@@ -310,6 +310,9 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         result = people.people.get("25253")
 
+        mock_people_request.assert_called_with(
+            "https://api.planningcenteronline.com/people/v2/people/25253"
+        )
         self.assertIsInstance(result, Person)
 
         #endregion
@@ -331,6 +334,9 @@ class TestBaseEndpoint(BasePCOTestCase):
         people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"))
         result = people.addresses.get("25253")
 
+        mock_address_request.assert_called_with(
+            "https://api.planningcenteronline.com/people/v2/addresses/25253"
+        )
         self.assertIsInstance(result, Address)
 
         #endregion
@@ -350,6 +356,9 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         result = people.field_definitions.get("25253")
 
+        mock_field_definition_request.assert_called_with(
+            "https://api.planningcenteronline.com/people/v2/field_definitions/25253"
+        )
         self.assertIsInstance(result, FieldDefinition)
 
         #endregion
@@ -532,7 +541,7 @@ class TestBaseEndpoint(BasePCOTestCase):
             # Verify we've called the first request with correct params
             if result_count == 1:
                 mock_people_request.assert_called_with(
-                    'people',
+                    'https://api.planningcenteronline.com/people/v2/people',
                     params = [
                         ('where[last_name]', 'Revere'),
                         ('per_page', 2)
@@ -699,7 +708,7 @@ class TestBaseEndpoint(BasePCOTestCase):
             # Verify we've called the second request with correct params
             if result_count == 3:
                 mock_people_request.assert_called_with(
-                    'people',
+                    'https://api.planningcenteronline.com/people/v2/people',
                     params = [                        
                         ('where[last_name]', 'Revere'),
                         ('per_page', 2),
@@ -820,7 +829,7 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         self.assertEqual(len(results), 0)
         mock_people_request.assert_called_with(
-            'people',
+            'https://api.planningcenteronline.com/people/v2/people',
             params = [
                 ('where[first_name]', 'pico'),
                 ('where[last_name]', 'robot'),
@@ -840,7 +849,7 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         self.assertEqual(len(results), 0)
         mock_people_request.assert_called_with(
-            'people',
+            'https://api.planningcenteronline.com/people/v2/people',
             params=[
                 ('where[first_name]', 'pico'),
                 ('where[last_name]', 'robot'),
@@ -859,7 +868,7 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         self.assertEqual(len(results), 0)
         mock_people_request.assert_called_with(
-            'people',
+            'https://api.planningcenteronline.com/people/v2/people',
             params=[
                 ('where[first_name]', 'pico'),
                 ('where[last_name]', 'robot'),
@@ -877,7 +886,7 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         self.assertEqual(len(results), 0)
         mock_people_request.assert_called_with(
-            'people',
+            'https://api.planningcenteronline.com/people/v2/people',
             params=[
                 ('where[first_name]', 'pico'),
                 ('where[last_name]', 'robot'),
@@ -895,7 +904,7 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         self.assertEqual(len(results), 0)
         mock_people_request.assert_called_with(
-            'people',
+            'https://api.planningcenteronline.com/people/v2/people',
             params=[
                 ('where[first_name]', 'pico'),
                 ('where[last_name]', 'robot'),
@@ -916,7 +925,7 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         self.assertEqual(len(results), 0)
         mock_people_request.assert_called_with(
-            'people',
+            'https://api.planningcenteronline.com/people/v2/people',
             params=[
                 ('where[first_name]', 'pico'),
                 ('where[last_name]', 'robot'),
