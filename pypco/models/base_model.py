@@ -71,12 +71,12 @@ class BaseModel():
         else:
             self._data['attributes'][name] = value
 
-    # TODO: Build the capability to manage link attributes (link_manager object?)
-    # TODO: Build capability to access data in the relationships attribute
-
     # TODO: Build capability for user to create new objects
     # TODO: Build the capability to update existing objects (a "save" function?)
     # TODO: Build the capability to delete objects (a "delete" function?)
+
+    # TODO: Build the capability to manage link attributes (link_manager object?)
+    # TODO: Build capability to access data in the relationships attribute
 
     # TODO: Build a json function to convert the object to JSON
     # TODO: Build the capability to create models from JSON
