@@ -237,9 +237,20 @@ class BaseEndpoint:
     def new(self):
         raise NotImplementedError("Not implemented yet!")
 
-    # TODO: Add function to delete objects
-    def delete(self):
-        raise NotImplementedError("Not implemented yet!")
+    def delete(self, item_id):
+        """Delete the specified object from PCO.
+
+        Args:
+            item_id (str): The PCO ID of the object you would like to delete.
+        """
+
+        self._dispatch_single_request(
+            "{}/{}".format(
+                self.get_full_endpoint_url(),
+                item_id
+            ),
+            method=PCOAPIMethod.DELETE
+        )
 
     # TODO: File Uploads
 

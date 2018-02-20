@@ -939,3 +939,19 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         #endregion
 
+    @patch('pypco.endpoints.people.People._dispatch_single_request')
+    def test_people_delete(self, mock_people_request):
+        """Test delete function to delete objects from the PCO API."""
+
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"))
+
+        # Mock an empty response for a deleted person
+        mock_people_request.return_value = {}
+
+        people.people.delete("25253")
+
+        mock_people_request.assert_called_with(
+            "https://api.planningcenteronline.com/people/v2/people/25253",
+            method = PCOAPIMethod.DELETE
+        )
+
