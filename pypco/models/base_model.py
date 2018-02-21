@@ -16,7 +16,7 @@ class BaseModel():
 
         self._endpoint = endpoint
         self._data = data
-        self._link_managers = None
+        self._update_attribs = []
         self._user_created = user_created
         self._from_get = from_get
 
@@ -36,8 +36,6 @@ class BaseModel():
             AttributeError: Thrown if the property does not exist on the object.
         """
 
-        value = None
-
         search_dicts = [
             self._data,
             self._data['attributes']
@@ -45,12 +43,9 @@ class BaseModel():
 
         for search_dict in search_dicts:
             if name in search_dict.keys():
-                value = search_dict[name]
+                return search_dict[name]
 
-        if not value:
-            raise AttributeError("'{}' is not an available attribute on this object.".format(name))
-
-        return value
+        raise AttributeError("'{}' is not an available attribute on this object.".format(name))
 
     def __setattr__(self, name, value):
         """Magic method to facilitate handling object properties.
@@ -70,6 +65,7 @@ class BaseModel():
             object.__setattr__(self, name, value)
         else:
             self._data['attributes'][name] = value
+            self._update_attribs.append(name)
 
     def delete(self):
         """Delete this object.
@@ -86,10 +82,41 @@ class BaseModel():
         if self._user_created == True or not self._data or not 'id' in self._data:
             raise PCOModelStateError("Couldn't delete this object; it appears it was never synced with PCO.")
 
-        self._endpoint.delete(self.id)
+        self._endpoint.delete(self.links['self'])
+
+    def update(self):
+        """Update any changes you've made to the current object in PCO.
+
+        Raises:
+            PCOModelStateError: Raised if the state of the current object is invalid
+            for this function call. This would be the case if the current object has
+            never been connected PCO (i.e., one you create new but never actually created
+            on the PCO API via the create function).
+        """
+
+        if self._user_created == True or not self._data or not 'id' in self._data:
+            raise PCOModelStateError("Couldn't delete this object; it appears it was never synced with PCO.")
+
+        self._data = self._endpoint.update(self.links['self'], self._get_updates())['data']
+
+        self._update_attribs = []
+
+    def _get_updates(self):
+        """Get updated attributes to be pushed to PCO.
+
+        Returns:
+            A dictionary representing only the changed attributes to be pushed to PCO.
+        """
+
+        return {
+            'data': {
+                'type': self.type,
+                'id': self.id,
+                'attributes': {key:self._data['attributes'][key] for key in self._update_attribs}
+            }
+        }        
 
     # TODO: Build capability for user to create new objects
-    # TODO: Build the capability to update existing objects (a "save" function?)
 
     # TODO: Build the capability to manage link attributes (link_manager object?)
     # TODO: Build capability to access data in the relationships attribute
@@ -97,7 +124,7 @@ class BaseModel():
     # TODO: Build a json function to convert the object to JSON
     # TODO: Build the capability to create models from JSON
 
-    # TODO: Handle OrganizationStatistics weirdness
+    # TODO: Handle OrganizationStatistics weirdness (or ignore for now?)
 
 class PCOModelStateError(Exception):
     """An exception representing a function call against a model that is

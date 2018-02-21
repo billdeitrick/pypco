@@ -9,6 +9,7 @@ import logging
 import base64
 import time
 import re
+import json
 import requests
 from .utils import PCOAuthType
 
@@ -96,6 +97,8 @@ class BaseEndpoint:
 
             self._log.debug("Executing request to: \"%s\"", url)
 
+            self._log.debug("Request payload is: \"%s\"", payload)
+
             response = requests.request(
                 method,
                 url,
@@ -117,9 +120,9 @@ class BaseEndpoint:
                 time.sleep(int(response.headers['Retry-After']))
                 continue
 
-            response.raise_for_status()
+            self._log.debug("Response content: \"%s\"", response.text)
 
-            self._log.debug("Response content: %s", response.text)
+            response.raise_for_status()
 
             break
 
@@ -234,11 +237,11 @@ class BaseEndpoint:
 
         #endregion
 
-    def update(self, item_id, payload):
+    def update(self, url, payload):
         """Update the PCO object identified by item_id.
 
         Args:
-            item_id (str): The ID of the PCO object to update.
+            url (str): The URL of the item to update.
             payload (dict): The payload to pass to PCO to update the object.
 
         Returns:
@@ -246,10 +249,7 @@ class BaseEndpoint:
         """
 
         result = self._dispatch_single_request(
-            "{}/{}".format(
-                self.get_full_endpoint_url(),
-                item_id
-            ),
+            url,
             payload = payload,
             method=PCOAPIMethod.PATCH
         )
@@ -260,7 +260,7 @@ class BaseEndpoint:
     def new(self):
         raise NotImplementedError("Not implemented yet!")
 
-    def delete(self, item_id):
+    def delete(self, url):
         """Delete the specified object from PCO.
 
         Args:
@@ -268,10 +268,7 @@ class BaseEndpoint:
         """
 
         self._dispatch_single_request(
-            "{}/{}".format(
-                self.get_full_endpoint_url(),
-                item_id
-            ),
+            url,
             method=PCOAPIMethod.DELETE
         )
 
