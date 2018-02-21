@@ -1,6 +1,8 @@
 """Provides the base model object from which all other models inherit.
 """
 
+import copy
+
 class BaseModel():
     """Base model class from which all models inherit."""
 
@@ -101,6 +103,13 @@ class BaseModel():
 
         self._update_attribs = []
 
+    def refresh(self):
+        """Refresh the current object with data from the PCO API."""
+
+        refr_obj = self._endpoint.get_by_url(self.links['self'])
+
+        self._data = refr_obj.data
+
     def _get_updates(self):
         """Get updated attributes to be pushed to PCO.
 
@@ -115,6 +124,17 @@ class BaseModel():
                 'attributes': {key:self._data['attributes'][key] for key in self._update_attribs}
             }
         }        
+
+    @property
+    def data(self):
+        """Get a copy of this object's raw data structure.
+        
+        Returns:
+            A copy of the dict object that stores this object's raw data from
+            the PCO API.
+        """
+        
+        return copy.deepcopy(self._data)
 
     # TODO: Build capability for user to create new objects
 

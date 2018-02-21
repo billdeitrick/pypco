@@ -30,6 +30,9 @@ class TestModels(BasePCOVCRTestCase):
         # Verify the object was created from a direct get request
         self.assertTrue(test_person._from_get) #pylint: disable=W0212
 
+        # Verify the data property is available
+        self.assertIsInstance(test_person.data, dict)
+
     def test_get_dynamic_attribs_basic(self):
         """Verify that we can get basic dynamic attributes from model (relying on model's __getattr__)"""
 
@@ -176,3 +179,57 @@ class TestModels(BasePCOVCRTestCase):
         actual_dict = pico._get_updates()
 
         self.assertEqual(expected_dict, actual_dict)
+
+    def test_refresh(self):
+        """Test refreshing the model with data from PCO."""
+
+        pco = self.pco
+
+        # Get two copies of the same person
+        pico1 = pco.people.people.get("34765191")
+        pico2 = pco.people.people.get("34765191")
+
+        # Verify expected attrib values
+        self.assertEqual(pico1.child, False)
+        self.assertEqual(pico1.nickname, None)
+        self.assertEqual(pico2.child, False)
+        self.assertEqual(pico2.nickname, None)
+
+        # Set attribs on pico1
+        pico1.child = True
+        pico1.nickname = "PiRo"
+        pico1.update()
+
+        # Verify correct attribs, pico2 is same as before
+        self.assertEqual(pico1.child, True)
+        self.assertEqual(pico1.nickname, "PiRo")
+        self.assertEqual(pico2.child, False)
+        self.assertEqual(pico2.nickname, None)
+
+        # Refresh pico2, and verify we have correct values
+        pico2.refresh()
+
+        self.assertEqual(pico2.child, True)
+        self.assertEqual(pico2.nickname, "PiRo")
+
+        # Set values back to previous
+        pico1.child = False
+        pico1.nickname = None
+        pico1.update()
+
+    def test_data(self):
+        """Test the data property; ensure we get a copy of the data structure."""
+
+        pco = self.pco
+
+        # Get our test victim, ensure expected values are present
+        pico1 = pco.people.people.get("34765191")
+
+        self.assertEqual(pico1.last_name, "Robot")
+
+        # Change an attribute in the datastructure copy we got back
+        data = pico1.data
+        data['attributes']['last_name'] = 'Human'
+
+        # Ensure we didn't change the original object
+        self.assertEqual(pico1.last_name, 'Robot')
