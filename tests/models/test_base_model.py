@@ -233,3 +233,31 @@ class TestModels(BasePCOVCRTestCase):
 
         # Ensure we didn't change the original object
         self.assertEqual(pico1.last_name, 'Robot')
+
+    def test_get_associations(self):
+        """Test getting associated objects from a model."""
+
+        pco = self.pco
+
+        # A simple test...get the association from an object
+        # created with a get request
+        pico = pco.people.people.get("34765191")
+        pico_email = pico.emails[0]
+
+        self.assertIsInstance(pico_email, pypco.models.people.Email)
+        self.assertEqual(pico_email.address, "pico@notarealaddress.com")
+
+        # A more difficult test...use the list function, then
+        # Get the email from an object retrieved with a call to "list"
+        pico2 = [person for person in pco.people.people.list(where={'id': '34765191'})][0]
+        pico2_email = pico2.emails[0]
+
+        self.assertIsInstance(pico2_email, pypco.models.people.Email)
+        self.assertEqual(pico2_email.address, "pico@notarealaddress.com")
+
+        # Make sure nothing breaks if we don't have any associations
+        addresses = pico.addresses
+
+        self.assertEqual(len(addresses), 0)
+
+    # TODO: Add tests for manipulating associations (delete, add, etc.) Need create ability first.

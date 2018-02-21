@@ -73,7 +73,7 @@ class BaseEndpoint:
 
         return self._auth_header
 
-    def _dispatch_single_request(self, url, params=None, payload=None, method=PCOAPIMethod.GET):
+    def dispatch_single_request(self, url, params=None, payload=None, method=PCOAPIMethod.GET):
         """Dispatches PCO requests to the API.
 
         Intelligently handles rate limiting; if a rate limit response is received,
@@ -148,7 +148,7 @@ class BaseEndpoint:
             BaseModel: an object that inherits from the BaseModel class.
         """
 
-        obj = self._dispatch_single_request(
+        obj = self.dispatch_single_request(
             "{}/{}".format(
                 self.get_full_endpoint_url(),
                 item_id
@@ -170,12 +170,48 @@ class BaseEndpoint:
             BaseModel: an object that inherits from the BaseModel class.
         """
 
-        obj = self._dispatch_single_request(url)
+        obj = self.dispatch_single_request(url)
 
         klass_info = self.resolve_model_type(obj['data'])
         klass = getattr(globals()[klass_info[0]], klass_info[1])
 
         return klass(self, obj['data'], from_get=True)
+
+    def get_associations_by_url(self, url):
+        """Get the associations for an object, given the direct URL
+
+        Args:
+            url (str): The url of the list of associations.
+
+        Returns:
+            The list of associations at the given URL.
+        """
+
+        query_params = []
+
+        results = []
+
+        while True:
+            
+            # Dispatch the request
+            response = self.dispatch_single_request(url, params=query_params)
+
+            # Iterate through and return results
+            for obj in response['data']:
+                klass_info = self.resolve_model_type(obj)
+                klass = getattr(globals()[klass_info[0]], klass_info[1])
+
+                results.append(klass(self, obj))
+
+            # Quit if we don't have further results
+            if not 'next' in response['meta']:
+                break
+
+            # If loop hasn't been exited, we have another page
+            # Add the offset parameter so we'll pull the next page
+            query_params.append(('offset', response['meta']['next']['offset'])) #pylint disable=W0101
+
+        return results
 
     def list(self, where={}, filter=[], per_page=None, order=None, **kwargs):
         """Execute a query to get a list of objects from the PCO API.
@@ -235,7 +271,7 @@ class BaseEndpoint:
         while True:
             
             # Dispatch the request
-            response = self._dispatch_single_request(self.get_full_endpoint_url(), params=query_params)
+            response = self.dispatch_single_request(self.get_full_endpoint_url(), params=query_params)
 
             # Iterate through and return results
             for obj in response['data']:
@@ -265,7 +301,7 @@ class BaseEndpoint:
             Dictionary returned from PCO representing the updated object.
         """
 
-        result = self._dispatch_single_request(
+        result = self.dispatch_single_request(
             url,
             payload = payload,
             method=PCOAPIMethod.PATCH
@@ -284,7 +320,7 @@ class BaseEndpoint:
             item_id (str): The PCO ID of the object you would like to delete.
         """
 
-        self._dispatch_single_request(
+        self.dispatch_single_request(
             url,
             method=PCOAPIMethod.DELETE
         )

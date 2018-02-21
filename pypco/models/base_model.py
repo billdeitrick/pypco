@@ -38,6 +38,7 @@ class BaseModel():
             AttributeError: Thrown if the property does not exist on the object.
         """
 
+        # Search this object's attribs
         search_dicts = [
             self._data,
             self._data['attributes']
@@ -47,7 +48,17 @@ class BaseModel():
             if name in search_dict.keys():
                 return search_dict[name]
 
-        raise AttributeError("'{}' is not an available attribute on this object.".format(name))
+        # No match in local attribs, we'll use associations
+        if not self._from_get:
+            self.refresh()
+
+        if name in self._data['links']:            
+            if self._data['links'] is None:
+                return []
+            else:
+                return self._endpoint.get_associations_by_url(self._data['links'][name])
+
+        raise AttributeError("'{}' is not an available attribute or association on this object.".format(name))
 
     def __setattr__(self, name, value):
         """Magic method to facilitate handling object properties.
@@ -104,11 +115,12 @@ class BaseModel():
         self._update_attribs = []
 
     def refresh(self):
-        """Refresh the current object with data from the PCO API."""
+        """Refresh the object with current data from the PCO API."""
 
         refr_obj = self._endpoint.get_by_url(self.links['self'])
 
         self._data = refr_obj.data
+        self._from_get = True
 
     def _get_updates(self):
         """Get updated attributes to be pushed to PCO.

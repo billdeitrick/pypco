@@ -1,12 +1,13 @@
 """Test the base PCO endpoint class"""
 #pylint: disable=E1101,W0212
 
+import unittest
 import json as jsonlib
 from unittest.mock import Mock, patch
 from pypco.endpoints import PCOAuthConfig
 from pypco.endpoints.base_endpoint import BaseEndpoint, NotValidRootEndpointError, PCOAPIMethod
 from pypco.endpoints.people import PeopleEndpoint, People, Addresses, Stats, FieldDefinitions
-from pypco.models.people import Person, Address, FieldDefinition
+from pypco.models.people import Person, Address, FieldDefinition, Email
 from tests import BasePCOTestCase
 
 RL_REQ_COUNT = 0
@@ -87,7 +88,7 @@ class TestBaseEndpoint(BasePCOTestCase):
         }
         mock_get.return_value = response
 
-        result = base_endpoint._dispatch_single_request(
+        result = base_endpoint.dispatch_single_request(
             "https://api.planningcenteronline.com/people/v2/people/1",
             {'bob': True}
         )
@@ -120,7 +121,7 @@ class TestBaseEndpoint(BasePCOTestCase):
         response.text = ""
         response.json = lambda: 1/0
 
-        result = base_endpoint._dispatch_single_request(
+        result = base_endpoint.dispatch_single_request(
             "https://api.planningcenteronline.com/people/v2/people/1",
             method=PCOAPIMethod.DELETE
         )
@@ -198,7 +199,7 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         base_endpoint = BaseEndpoint(PCOAuthConfig("app_id", "secret'"))
 
-        result = base_endpoint._dispatch_single_request(
+        result = base_endpoint.dispatch_single_request(
             "https://api.planningcenteronline.com/people/v2/people/1",
             {'bob': True}
         )
@@ -314,9 +315,9 @@ class TestBaseEndpoint(BasePCOTestCase):
             ("people", "OrganizationalStatistics")
         )
 
-    @patch('pypco.endpoints.people.People._dispatch_single_request')
-    @patch('pypco.endpoints.people.Addresses._dispatch_single_request')
-    @patch('pypco.endpoints.people.FieldDefinitions._dispatch_single_request')
+    @patch('pypco.endpoints.people.People.dispatch_single_request')
+    @patch('pypco.endpoints.people.Addresses.dispatch_single_request')
+    @patch('pypco.endpoints.people.FieldDefinitions.dispatch_single_request')
     def test_people_get(self, mock_field_definition_request, mock_address_request, mock_people_request): #pylint: disable=C0301
         """Test retrieving mocked object by ID"""
 
@@ -391,7 +392,7 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         #endregion
 
-    @patch('pypco.endpoints.people.People._dispatch_single_request')
+    @patch('pypco.endpoints.people.People.dispatch_single_request')
     def test_people_list(self, mock_people_request):
         """Test the list function to query endpoints."""
 
@@ -967,7 +968,7 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         #endregion
 
-    @patch('pypco.endpoints.people.People._dispatch_single_request')
+    @patch('pypco.endpoints.people.People.dispatch_single_request')
     def test_people_delete(self, mock_people_request):
         """Test delete function to delete objects from the PCO API."""
 
@@ -983,7 +984,7 @@ class TestBaseEndpoint(BasePCOTestCase):
             method = PCOAPIMethod.DELETE
         )
 
-    @patch('pypco.endpoints.people.People._dispatch_single_request')
+    @patch('pypco.endpoints.people.People.dispatch_single_request')
     def test_people_update(self, mock_people_request):
         """Test updating a mocked object using the update function."""
 
@@ -1093,7 +1094,7 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         self.assertEqual(result['data']['attributes']['gender'], 'M')
 
-    @patch('pypco.endpoints.people.People._dispatch_single_request')
+    @patch('pypco.endpoints.people.People.dispatch_single_request')
     def test_get_by_url(self, mock_people_request):
         """Test getting objects from PCO API directly by URL"""
 
@@ -1183,3 +1184,93 @@ class TestBaseEndpoint(BasePCOTestCase):
         self.assertIsInstance(result, Person)
         self.assertEquals(result.first_name, 'Pico')
         self.assertEqual(result.last_name, 'Robot')
+
+    @patch('pypco.endpoints.people.People.dispatch_single_request')
+    def test_get_associations_by_url(self, mock_people_request):
+        """Test getting lists of associations directly by URL."""
+
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"))
+
+        # Mock a page of results
+        mock_people_request.return_value = {
+            "links": {
+                "self": "https://api.planningcenteronline.com/people/v2/people/34765191/emails"
+            },
+            "data": [
+                {
+                    "type": "Email",
+                    "id": "23698235",
+                    "attributes": {
+                        "address": "pico@notarealaddress.com",
+                        "created_at": "2018-02-21T19:34:29Z",
+                        "location": "Home",
+                        "primary": False,
+                        "updated_at": "2018-02-21T19:34:29Z"
+                    },
+                    "links": {
+                        "self": "https://api.planningcenteronline.com/people/v2/emails/23698235"
+                    },
+                    "relationships": {
+                        "person": {
+                            "data": {
+                                "type": "Person",
+                                "id": "34765191"
+                            }
+                        }
+                    }
+                },
+                {
+                    "type": "Email",
+                    "id": "23698245",
+                    "attributes": {
+                        "address": "pico2@notarealaddress.com",
+                        "created_at": "2018-02-21T19:34:29Z",
+                        "location": "Home",
+                        "primary": False,
+                        "updated_at": "2018-02-21T19:34:29Z"
+                    },
+                    "links": {
+                        "self": "https://api.planningcenteronline.com/people/v2/emails/23698245"
+                    },
+                    "relationships": {
+                        "person": {
+                            "data": {
+                                "type": "Person",
+                                "id": "34765191"
+                            }
+                        }
+                    }
+                }
+            ],
+            "included": [],
+            "meta": {
+                "total_count": 4,
+                "count": 2,
+                "can_order_by": [
+                    "address",
+                    "location",
+                    "primary",
+                    "created_at",
+                    "updated_at"
+                ],
+                "can_query_by": [
+                    "address",
+                    "location",
+                    "primary"
+                ],
+                "parent": {
+                    "id": "34765191",
+                    "type": "Person"
+                }
+            }
+        }
+
+        results = people.people.get_associations_by_url("https://api.planningcenteronline.com/people/v2/people/34765191/emails")
+
+        for result in results:
+            self.assertIsInstance(result, Email)
+
+        self.assertEqual(results[0].address, 'pico@notarealaddress.com')
+        self.assertEqual(results[1].address, 'pico2@notarealaddress.com')
+        self.assertEqual(len(results), 2)
+        
