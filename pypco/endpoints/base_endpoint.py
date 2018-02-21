@@ -160,6 +160,23 @@ class BaseEndpoint:
 
         return klass(self, obj['data'], from_get=True)
 
+    def get_by_url(self, url):
+        """Get a single object from the API endpoint based on URL.
+
+        Args:
+            url (str): The object's full URL
+
+        Returns:
+            BaseModel: an object that inherits from the BaseModel class.
+        """
+
+        obj = self._dispatch_single_request(url)
+
+        klass_info = self.resolve_model_type(obj['data'])
+        klass = getattr(globals()[klass_info[0]], klass_info[1])
+
+        return klass(self, obj['data'], from_get=True)
+
     def list(self, where={}, filter=[], per_page=None, order=None, **kwargs):
         """Execute a query to get a list of objects from the PCO API.
 
