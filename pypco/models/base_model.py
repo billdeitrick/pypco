@@ -158,6 +158,16 @@ class BaseModel():
 
     # TODO: Handle OrganizationStatistics weirdness (or ignore for now?)
 
+    def __str__(self):
+        """Return the string representation of this object."""
+
+        return str(self._data)
+
+    def __repr__(self):
+        """Return the string representation of this object."""
+
+        return self.__str__()
+
 class PCOModelStateError(Exception):
     """An exception representing a function call against a model that is
     in an invalid state."""
