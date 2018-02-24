@@ -1,8 +1,8 @@
 language: python
 python: 
   - "3.6"
-sudo: required
 install:
   - pip install setuptools
   - pip install pipenv
   - pipenv install
+script: pytest
