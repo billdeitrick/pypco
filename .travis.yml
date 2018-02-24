@@ -1,6 +1,7 @@
 language: python
 python: 
   - "3.6"
+sudo: required
 install:
   - sudo apt-get install python3.6-dev
   - pip install setuptools
