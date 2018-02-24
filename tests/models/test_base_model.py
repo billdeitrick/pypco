@@ -260,4 +260,14 @@ class TestModels(BasePCOVCRTestCase):
 
         self.assertEqual(len(addresses), 0)
 
+    def test_str_repr(self):
+        """Test the __str__ and __repr__ functions on the base model object."""
+
+        pco = self.pco
+
+        pico = pco.people.people.get("34765191")
+
+        self.assertEqual(str(pico), str(pico._data))
+        self.assertEqual(repr(pico), str(pico._data))
+    
     # TODO: Add tests for manipulating associations (delete, add, etc.) Need create ability first.
