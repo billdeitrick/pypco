@@ -4,6 +4,7 @@ from pypco import PCO
 from pypco.pco import PCOAuthConfig
 import pypco.endpoints as endpoints
 import pypco.models as models
+import pypco
 from tests import BasePCOVCRTestCase
 
 #pylint: disable=E1101
@@ -43,3 +44,20 @@ class TestPCO(BasePCOVCRTestCase):
         # TODO: Test updating an object
         # TODO: Test creating an object
         # TODO: Test deleting an object
+
+    def test_new(self):
+        """Test the new function (a factory function to create new PCO API objects)"""
+
+        pco = self.pco
+
+        new_person = pco.new(pypco.models.people.Person)
+
+        # Verify our new person is an instance of the correct object and 
+        # that they are in the correct state.
+        self.assertIsInstance(new_person, pypco.models.people.Person)
+        self.assertIs(new_person._endpoint, pco.people)
+        self.assertEquals(new_person.type, "Person")
+        self.assertEquals(new_person.attributes, {})
+        self.assertEquals(new_person._update_attribs, [])
+        self.assertEquals(new_person._user_created, True)
+        self.assertEquals(new_person._from_get, False)

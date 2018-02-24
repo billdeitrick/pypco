@@ -27,6 +27,36 @@ class PCO(object):
 
         for klass in BaseEndpoint.__subclasses__():
             setattr(self, klass.resolve_root_endpoint_name(), klass(self.auth_config))
+       
+    def new(self, klass):
+        """Return a new instance of a PCO object that should be modified and pushed to the API.
 
-    # TODO: write "new" function that takes the model class as arg, returns new user-created object of that type
-    # From a user perspective, this looks like: new_guy = pco.new(pypco.models.people.Person)
+        Note: This factory function is the only supported way to create new objects in the PCO
+        API. You should not be creating new instances of the model classes directly.
+
+        Args:
+            klass (class): The class representing the new object to be created in the PCO API.
+
+        Returns:
+            Returns an initialized model object as specified by the klass argument. This new object
+            is ready to be modified and saved to the API using the model's create function.
+
+        Example:
+            >>> import pypco
+            >>> pco = pypco.PCO('<app_id>', '<app_secret>')
+            >>> # New takes the model class as an argument.
+            >>> # Model classes are resolved like: pypco.models.<endpoint>.<model>
+            >>> new_guy = pco.new(pypco.models.people.Person)
+            >>> new_guy.first_name = "Pico"
+            >>> new_guy.last_name = "Robot"
+            >>> new_guy.create()
+        """
+
+        endpoint = getattr(self, klass.__module__.split('.')[-1])
+
+        data = {
+            'type': klass.__name__,
+            'attributes': {}
+        }
+
+        return klass(endpoint, data, user_created=True)
