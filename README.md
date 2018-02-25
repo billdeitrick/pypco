@@ -1,6 +1,7 @@
 # Pypco ReadME
 
-[![Build Status](https://travis-ci.org/billdeitrick/pypco.svg?branch=master)](https://travis-ci.org/billdeitrick/pypco)
+[![Build Status](https://travis-ci.org/billdeitrick/pypco.svg?branch=master)](https://travis-ci.org/billdeitrick/pypco) [![codecov](https://codecov.io/gh/billdeitrick/pypco/branch/master/graph/badge.svg)](https://codecov.io/gh/billdeitrick/pypco)
+
 
 Pypco an object-oriented, Pythonic client for the [Planning Center Online](https://planning.center) API. The library is currently in very active development and not yet recommended for production use (but hopefully will be ready soon!).
 

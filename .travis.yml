@@ -4,5 +4,9 @@ python:
 install:
   - pip install setuptools
   - pip install pipenv
+  - pip install codecov
   - pipenv install
-script: pytest
+script:
+  - coverage run -m unittest discover
+after_success:
+  - codecov
