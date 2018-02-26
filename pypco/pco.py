@@ -52,7 +52,8 @@ class PCO(object):
             >>> new_guy.create()
         """
 
-        endpoint = getattr(self, klass.__module__.split('.')[-1])
+        base_endpoint = getattr(self, klass.__module__.split('.')[-1])
+        endpoint = getattr(base_endpoint, klass.ENDPOINT_NAME)
 
         data = {
             'type': klass.__name__,

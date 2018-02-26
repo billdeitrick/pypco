@@ -50,14 +50,28 @@ class TestPCO(BasePCOVCRTestCase):
 
         pco = self.pco
 
+        # Try a test person
         new_person = pco.new(pypco.models.people.Person)
 
         # Verify our new person is an instance of the correct object and 
         # that they are in the correct state.
         self.assertIsInstance(new_person, pypco.models.people.Person)
-        self.assertIs(new_person._endpoint, pco.people)
+        self.assertIs(new_person._endpoint, pco.people.people)
         self.assertEquals(new_person.type, "Person")
         self.assertEquals(new_person.attributes, {})
         self.assertEquals(new_person._update_attribs, [])
         self.assertEquals(new_person._user_created, True)
         self.assertEquals(new_person._from_get, False)
+
+        # Try a test person address
+        new_address = pco.new(pypco.models.people.Address)
+
+        # Verify our new person is an instance of the correct object and 
+        # that they are in the correct state.
+        self.assertIsInstance(new_address, pypco.models.people.Address)
+        self.assertIs(new_address._endpoint, pco.people.addresses)
+        self.assertEquals(new_address.type, "Address")
+        self.assertEquals(new_address.attributes, {})
+        self.assertEquals(new_address._update_attribs, [])
+        self.assertEquals(new_address._user_created, True)
+        self.assertEquals(new_address._from_get, False)
