@@ -1273,4 +1273,110 @@ class TestBaseEndpoint(BasePCOTestCase):
         self.assertEqual(results[0].address, 'pico@notarealaddress.com')
         self.assertEqual(results[1].address, 'pico2@notarealaddress.com')
         self.assertEqual(len(results), 2)
-        
+
+    @patch('pypco.endpoints.people.People.dispatch_single_request')
+    def test_create(self, mock_people_request):
+        """Test creating new objects against the PCO APi."""
+
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"))
+
+        mock_people_request.return_value = {
+            "data": {
+                "type": "Person",
+                "id": "34923107",
+                "attributes": {
+                    "anniversary": None,
+                    "avatar": "https://people.planningcenteronline.com/static/no_photo_thumbnail_boy_gray.svg",
+                    "birthdate": None,
+                    "child": True,
+                    "created_at": "2018-02-24T15:43:22Z",
+                    "demographic_avatar_url": "https://people.planningcenteronline.com/static/no_photo_thumbnail_boy_gray.svg",
+                    "first_name": "George",
+                    "gender": "M",
+                    "given_name": None,
+                    "grade": None,
+                    "graduation_year": None,
+                    "inactivated_at": None,
+                    "last_name": "Washington",
+                    "medical_notes": None,
+                    "membership": None,
+                    "middle_name": None,
+                    "name": "George Washington",
+                    "nickname": None,
+                    "people_permissions": None,
+                    "remote_id": None,
+                    "school_type": None,
+                    "site_administrator": False,
+                    "status": "active",
+                    "updated_at": "2018-02-24T15:43:22Z"
+                },
+                "links": {
+                    "addresses": "https://api.planningcenteronline.com/people/v2/people/34923107/addresses",
+                    "apps": "https://api.planningcenteronline.com/people/v2/people/34923107/apps",
+                    "connected_people": "https://api.planningcenteronline.com/people/v2/people/34923107/connected_people",
+                    "emails": "https://api.planningcenteronline.com/people/v2/people/34923107/emails",
+                    "field_data": "https://api.planningcenteronline.com/people/v2/people/34923107/field_data",
+                    "household_memberships": "https://api.planningcenteronline.com/people/v2/people/34923107/household_memberships",
+                    "households": "https://api.planningcenteronline.com/people/v2/people/34923107/households",
+                    "inactive_reason": None,
+                    "marital_status": None,
+                    "message_groups": "https://api.planningcenteronline.com/people/v2/people/34923107/message_groups",
+                    "messages": "https://api.planningcenteronline.com/people/v2/people/34923107/messages",
+                    "name_prefix": None,
+                    "name_suffix": None,
+                    "notes": "https://api.planningcenteronline.com/people/v2/people/34923107/notes",
+                    "person_apps": "https://api.planningcenteronline.com/people/v2/people/34923107/person_apps",
+                    "phone_numbers": "https://api.planningcenteronline.com/people/v2/people/34923107/phone_numbers",
+                    "school": None,
+                    "social_profiles": "https://api.planningcenteronline.com/people/v2/people/34923107/social_profiles",
+                    "workflow_cards": "https://api.planningcenteronline.com/people/v2/people/34923107/workflow_cards",
+                    "self": "https://api.planningcenteronline.com/people/v2/people/34923107"
+                }
+            },
+            "included": [],
+            "meta": {
+                "can_include": [
+                    "addresses",
+                    "emails",
+                    "field_data",
+                    "households",
+                    "inactive_reason",
+                    "marital_status",
+                    "name_prefix",
+                    "name_suffix",
+                    "person_apps",
+                    "phone_numbers",
+                    "school",
+                    "social_profiles"
+                ],
+                "parent": {
+                    "id": "197716",
+                    "type": "Organization"
+                }
+            }
+        }
+
+        new_person_dict = {
+            "data": {
+                "type": "Person",
+                "attributes": {
+                    "gender": "Male",
+                    "child": True,
+                    "first_name": "George",
+                    "last_name": "Washington"
+                }
+            }
+        }
+
+        result = people.people.create(
+            "https://api.planningcenteronline.com/people/v2/people/",
+            new_person_dict
+        )
+
+        mock_people_request.assert_called_with(
+            "https://api.planningcenteronline.com/people/v2/people/",
+            payload=new_person_dict,
+            method=PCOAPIMethod.POST
+        )
+
+        self.assertEqual(result, mock_people_request.return_value)

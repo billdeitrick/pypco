@@ -5,6 +5,7 @@
 import unittest
 from requests import HTTPError
 from .. import BasePCOVCRTestCase
+from pypco.models.base_model import PCOModelStateError
 import pypco
 
 class TestModels(BasePCOVCRTestCase):
@@ -269,5 +270,39 @@ class TestModels(BasePCOVCRTestCase):
 
         self.assertEqual(str(pico), str(pico._data))
         self.assertEqual(repr(pico), str(pico._data))
+    
+    def test_create(self):
+        """Test creating new simple objects in PCO."""
+
+        pco = self.pco
+
+        new_person = pco.new(pypco.models.people.Person)
+
+        new_person.first_name = "Nathan"
+        new_person.last_name = "Hale"
+
+        self.assertTrue(new_person._user_created)
+        self.assertFalse(new_person._from_get)
+
+        new_person.create()
+
+        self.assertIn('id', new_person._data)
+        self.assertFalse(new_person._user_created)
+        self.assertTrue(new_person._from_get)
+
+        with self.assertRaises(PCOModelStateError):
+            new_person.create()
+
+        search_results = pco.people.people.list(where={'first_name': 'Nathan', 'last_name': 'Hale'})
+        retrieved_person = next(search_results)
+
+        self.assertEqual(new_person.first_name, retrieved_person.first_name)
+        self.assertEqual(new_person.last_name, retrieved_person.last_name)
+        self.assertEqual(new_person.id, retrieved_person.id)
+
+        with self.assertRaises(PCOModelStateError):
+            retrieved_person.create()
+
+        retrieved_person.delete()
     
     # TODO: Add tests for manipulating associations (delete, add, etc.) Need create ability first.

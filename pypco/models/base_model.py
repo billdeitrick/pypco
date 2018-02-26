@@ -114,6 +114,27 @@ class BaseModel():
 
         self._update_attribs = []
 
+    def create(self):
+        """Create the current object as a new object in PCO.
+
+        Raises:
+            PCOModelStateError: Raised if the state of the current object is invalid
+            for this function call. This would be the case if the current object was
+            retrieved from PCO and/or has already been created in PCO.
+        """
+
+        if self._from_get or not self._user_created or 'id' in self._data:
+            raise PCOModelStateError()
+
+        self._data = self._endpoint.create(
+            self._endpoint.get_full_endpoint_url(),
+            {'data': self._data}
+        )['data']
+
+        self._from_get = True
+        self._user_created = False
+        self._update_attribs = []
+    
     def refresh(self):
         """Refresh the object with current data from the PCO API."""
 
@@ -147,8 +168,6 @@ class BaseModel():
         """
         
         return copy.deepcopy(self._data)
-
-    # TODO: Build capability for user to create new objects
 
     # TODO: Build the capability to manage link attributes (link_manager object?)
     # TODO: Build capability to access data in the relationships attribute

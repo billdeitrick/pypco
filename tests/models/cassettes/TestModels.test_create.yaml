@@ -1,0 +1,117 @@
+interactions:
+- request:
+    body: '{"data": {"type": "Person", "attributes": {"first_name": "Nathan", "last_name":
+      "Hale"}}}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['89']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.18.4]
+    method: POST
+    uri: https://api.planningcenteronline.com/people/v2/people
+  response:
+    body: {string: '{"data":{"type":"Person","id":"34985993","attributes":{"anniversary":null,"avatar":"https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.svg","birthdate":null,"child":false,"created_at":"2018-02-26T18:07:40Z","demographic_avatar_url":"https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.svg","first_name":"Nathan","gender":null,"given_name":null,"grade":null,"graduation_year":null,"inactivated_at":null,"last_name":"Hale","medical_notes":null,"membership":null,"middle_name":null,"name":"Nathan
+        Hale","nickname":null,"people_permissions":null,"remote_id":null,"school_type":null,"site_administrator":false,"status":"active","updated_at":"2018-02-26T18:07:40Z"},"links":{"addresses":"https://api.planningcenteronline.com/people/v2/people/34985993/addresses","apps":"https://api.planningcenteronline.com/people/v2/people/34985993/apps","connected_people":"https://api.planningcenteronline.com/people/v2/people/34985993/connected_people","emails":"https://api.planningcenteronline.com/people/v2/people/34985993/emails","field_data":"https://api.planningcenteronline.com/people/v2/people/34985993/field_data","household_memberships":"https://api.planningcenteronline.com/people/v2/people/34985993/household_memberships","households":"https://api.planningcenteronline.com/people/v2/people/34985993/households","inactive_reason":null,"marital_status":null,"message_groups":"https://api.planningcenteronline.com/people/v2/people/34985993/message_groups","messages":"https://api.planningcenteronline.com/people/v2/people/34985993/messages","name_prefix":null,"name_suffix":null,"notes":"https://api.planningcenteronline.com/people/v2/people/34985993/notes","person_apps":"https://api.planningcenteronline.com/people/v2/people/34985993/person_apps","phone_numbers":"https://api.planningcenteronline.com/people/v2/people/34985993/phone_numbers","school":null,"social_profiles":"https://api.planningcenteronline.com/people/v2/people/34985993/social_profiles","workflow_cards":"https://api.planningcenteronline.com/people/v2/people/34985993/workflow_cards","self":"https://api.planningcenteronline.com/people/v2/people/34985993"}},"included":[],"meta":{"can_include":["addresses","emails","field_data","households","inactive_reason","marital_status","name_prefix","name_suffix","person_apps","phone_numbers","school","social_profiles"],"parent":{"id":"197716","type":"Organization"}}}'}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Headers: ['Accept, Authorization, Content-Type, If-Match,
+          If-Modified-Since, If-None-Match, If-Unmodified-Since, Origin, X-Requested-With']
+      Access-Control-Allow-Methods: ['GET, POST, PATCH, PUT, DELETE, OPTIONS']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['ETag, Link, X-PCO-API-Auth-Method']
+      Cache-Control: ['max-age=0, private, must-revalidate']
+      Connection: [keep-alive]
+      Content-Type: [application/vnd.api+json; charset=utf-8; charset=utf-8]
+      Date: ['Mon, 26 Feb 2018 18:07:40 GMT']
+      ETag: [W/"7ee22dbf45ca62309a1a40ae4edc4fa0"]
+      Server: [nginx]
+      Status: [201 Created]
+      Strict-Transport-Security: [max-age=31536000]
+      Vary: ['Accept, Accept-Encoding, Origin']
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [SAMEORIGIN]
+      X-PCO-API-Auth-Method: [HTTPBasic]
+      X-PCO-API-Request-Rate-Count: ['1']
+      X-PCO-API-Request-Rate-Limit: ['100']
+      X-PCO-API-Request-Rate-Period: [20 seconds]
+      X-Request-Id: [b4a44ae3-be20-4c49-996c-9a8104d41243]
+      X-Runtime: ['0.152507']
+      X-XSS-Protection: [1; mode=block]
+    status: {code: 201, message: Created}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://api.planningcenteronline.com/people/v2/people?where%5Bfirst_name%5D=Nathan&where%5Blast_name%5D=Hale
+  response:
+    body: {string: '{"links":{"self":"https://api.planningcenteronline.com/people/v2/people?where[first_name]=Nathan&where[last_name]=Hale"},"data":[{"type":"Person","id":"34985993","attributes":{"anniversary":null,"avatar":"https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.svg","birthdate":null,"child":false,"created_at":"2018-02-26T18:07:40Z","demographic_avatar_url":"https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.svg","first_name":"Nathan","gender":null,"given_name":null,"grade":null,"graduation_year":null,"inactivated_at":null,"last_name":"Hale","medical_notes":null,"membership":null,"middle_name":null,"name":"Nathan
+        Hale","nickname":null,"people_permissions":null,"remote_id":null,"school_type":null,"site_administrator":false,"status":"active","updated_at":"2018-02-26T18:07:40Z"},"links":{"self":"https://api.planningcenteronline.com/people/v2/people/34985993"}}],"included":[],"meta":{"total_count":1,"count":1,"can_order_by":["given_name","first_name","nickname","middle_name","last_name","birthdate","anniversary","gender","grade","child","status","school_type","graduation_year","site_administrator","people_permissions","membership","inactivated_at","remote_id","medical_notes","created_at","updated_at"],"can_query_by":["given_name","first_name","nickname","middle_name","last_name","birthdate","anniversary","gender","grade","child","status","school_type","graduation_year","site_administrator","people_permissions","membership","inactivated_at","remote_id","medical_notes","created_at","updated_at","search_name","search_name_or_email","id"],"can_include":["addresses","emails","field_data","households","inactive_reason","marital_status","name_prefix","name_suffix","person_apps","phone_numbers","school","social_profiles"],"can_filter":["created_since","admins","organization_admins"],"parent":{"id":"197716","type":"Organization"}}}'}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Headers: ['Accept, Authorization, Content-Type, If-Match,
+          If-Modified-Since, If-None-Match, If-Unmodified-Since, Origin, X-Requested-With']
+      Access-Control-Allow-Methods: ['GET, POST, PATCH, PUT, DELETE, OPTIONS']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['ETag, Link, X-PCO-API-Auth-Method']
+      Cache-Control: ['max-age=0, private, must-revalidate']
+      Connection: [keep-alive]
+      Content-Type: [application/vnd.api+json; charset=utf-8; charset=utf-8]
+      Date: ['Mon, 26 Feb 2018 18:07:40 GMT']
+      ETag: [W/"8a13c0a42b7d0c3a347f07c41143b12a"]
+      Server: [nginx]
+      Status: [200 OK]
+      Strict-Transport-Security: [max-age=31536000]
+      Vary: ['Accept, Accept-Encoding, Origin']
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [SAMEORIGIN]
+      X-PCO-API-Auth-Method: [HTTPBasic]
+      X-PCO-API-Request-Rate-Count: ['2']
+      X-PCO-API-Request-Rate-Limit: ['100']
+      X-PCO-API-Request-Rate-Period: [20 seconds]
+      X-Request-Id: [b00f785c-66e4-44c2-819d-a8d339ecf7a7]
+      X-Runtime: ['0.046900']
+      X-XSS-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['0']
+      User-Agent: [python-requests/2.18.4]
+    method: DELETE
+    uri: https://api.planningcenteronline.com/people/v2/people/34985993
+  response:
+    body: {string: ''}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Headers: ['Accept, Authorization, Content-Type, If-Match,
+          If-Modified-Since, If-None-Match, If-Unmodified-Since, Origin, X-Requested-With']
+      Access-Control-Allow-Methods: ['GET, POST, PATCH, PUT, DELETE, OPTIONS']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['ETag, Link, X-PCO-API-Auth-Method']
+      Cache-Control: [no-cache]
+      Connection: [keep-alive]
+      Date: ['Mon, 26 Feb 2018 18:07:41 GMT']
+      Server: [nginx]
+      Status: [204 No Content]
+      Strict-Transport-Security: [max-age=31536000]
+      Vary: ['Accept, Accept-Encoding, Origin']
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [SAMEORIGIN]
+      X-PCO-API-Auth-Method: [HTTPBasic]
+      X-PCO-API-Request-Rate-Count: ['3']
+      X-PCO-API-Request-Rate-Limit: ['100']
+      X-PCO-API-Request-Rate-Period: [20 seconds]
+      X-Request-Id: [bbede0f0-e86b-4090-83d1-46113b575ba7]
+      X-Runtime: ['0.270467']
+      X-XSS-Protection: [1; mode=block]
+    status: {code: 204, message: No Content}
+version: 1

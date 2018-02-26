@@ -309,9 +309,24 @@ class BaseEndpoint:
 
         return result
 
-    # TODO: Add function to create new objects
-    def new(self):
-        raise NotImplementedError("Not implemented yet!")
+    def create(self, url, payload):
+        """Create a new object in the PCO API.
+        
+        Args:
+            url (str): The url to which the request should be made.
+            payload (dict): The payload to create the new object. Must conform to format expected by PCO.
+
+        Returns:
+            dict: The data returned from the API for the request as a dict object.        
+        """
+
+        result = self.dispatch_single_request(
+            url,
+            payload=payload,
+            method=PCOAPIMethod.POST
+        )
+
+        return result
 
     def delete(self, url):
         """Delete the specified object from PCO.
