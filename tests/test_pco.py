@@ -41,9 +41,7 @@ class TestPCO(BasePCOVCRTestCase):
             self.assertIsInstance(result, models.people.Person)
             self.assertEqual(result.last_name, 'Revere')
 
-        # TODO: Test updating an object
-        # TODO: Test creating an object
-        # TODO: Test deleting an object
+        # TODO: Add high-level tests to ensure user interface stability
 
     def test_new(self):
         """Test the new function (a factory function to create new PCO API objects)"""
@@ -59,7 +57,8 @@ class TestPCO(BasePCOVCRTestCase):
         self.assertIs(new_person._endpoint, pco.people.people)
         self.assertEquals(new_person.type, "Person")
         self.assertEquals(new_person.attributes, {})
-        self.assertEquals(new_person._update_attribs, [])
+        self.assertEquals(new_person._update_attribs, set())
+        self.assertEquals(new_person._update_relationships, set())
         self.assertEquals(new_person._user_created, True)
         self.assertEquals(new_person._from_get, False)
 
@@ -72,6 +71,7 @@ class TestPCO(BasePCOVCRTestCase):
         self.assertIs(new_address._endpoint, pco.people.addresses)
         self.assertEquals(new_address.type, "Address")
         self.assertEquals(new_address.attributes, {})
-        self.assertEquals(new_address._update_attribs, [])
+        self.assertEquals(new_address._update_attribs, set())
+        self.assertEquals(new_person._update_relationships, set())
         self.assertEquals(new_address._user_created, True)
         self.assertEquals(new_address._from_get, False)

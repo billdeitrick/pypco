@@ -10,7 +10,7 @@ interactions:
     uri: https://api.planningcenteronline.com/people/v2/people/34765191
   response:
     body: {string: '{"data":{"type":"Person","id":"34765191","attributes":{"anniversary":null,"avatar":"https://people.planningcenteronline.com/static/no_photo_thumbnail_man_gray.svg","birthdate":null,"child":false,"created_at":"2018-02-20T20:59:57Z","demographic_avatar_url":"https://people.planningcenteronline.com/static/no_photo_thumbnail_man_gray.svg","first_name":"Pico","gender":"M","given_name":null,"grade":null,"graduation_year":null,"inactivated_at":null,"last_name":"Robot","medical_notes":null,"membership":null,"middle_name":null,"name":"Pico
-        Robot","nickname":null,"people_permissions":null,"remote_id":null,"school_type":null,"site_administrator":false,"status":"active","updated_at":"2018-02-20T21:15:29Z"},"links":{"addresses":"https://api.planningcenteronline.com/people/v2/people/34765191/addresses","apps":"https://api.planningcenteronline.com/people/v2/people/34765191/apps","connected_people":"https://api.planningcenteronline.com/people/v2/people/34765191/connected_people","emails":"https://api.planningcenteronline.com/people/v2/people/34765191/emails","field_data":"https://api.planningcenteronline.com/people/v2/people/34765191/field_data","household_memberships":"https://api.planningcenteronline.com/people/v2/people/34765191/household_memberships","households":"https://api.planningcenteronline.com/people/v2/people/34765191/households","inactive_reason":null,"marital_status":null,"message_groups":"https://api.planningcenteronline.com/people/v2/people/34765191/message_groups","messages":"https://api.planningcenteronline.com/people/v2/people/34765191/messages","name_prefix":null,"name_suffix":null,"person_apps":"https://api.planningcenteronline.com/people/v2/people/34765191/person_apps","phone_numbers":"https://api.planningcenteronline.com/people/v2/people/34765191/phone_numbers","school":null,"social_profiles":"https://api.planningcenteronline.com/people/v2/people/34765191/social_profiles","workflow_cards":"https://api.planningcenteronline.com/people/v2/people/34765191/workflow_cards","self":"https://api.planningcenteronline.com/people/v2/people/34765191"}},"included":[],"meta":{"can_include":["addresses","emails","field_data","households","inactive_reason","marital_status","name_prefix","name_suffix","person_apps","phone_numbers","school","social_profiles"],"parent":{"id":"197716","type":"Organization"}}}'}
+        Robot","nickname":null,"people_permissions":null,"remote_id":null,"school_type":null,"site_administrator":false,"status":"active","updated_at":"2018-02-28T13:14:59Z"},"links":{"addresses":"https://api.planningcenteronline.com/people/v2/people/34765191/addresses","apps":"https://api.planningcenteronline.com/people/v2/people/34765191/apps","connected_people":"https://api.planningcenteronline.com/people/v2/people/34765191/connected_people","emails":"https://api.planningcenteronline.com/people/v2/people/34765191/emails","field_data":"https://api.planningcenteronline.com/people/v2/people/34765191/field_data","household_memberships":"https://api.planningcenteronline.com/people/v2/people/34765191/household_memberships","households":"https://api.planningcenteronline.com/people/v2/people/34765191/households","inactive_reason":null,"marital_status":null,"message_groups":"https://api.planningcenteronline.com/people/v2/people/34765191/message_groups","messages":"https://api.planningcenteronline.com/people/v2/people/34765191/messages","name_prefix":null,"name_suffix":null,"notes":"https://api.planningcenteronline.com/people/v2/people/34765191/notes","person_apps":"https://api.planningcenteronline.com/people/v2/people/34765191/person_apps","phone_numbers":"https://api.planningcenteronline.com/people/v2/people/34765191/phone_numbers","school":null,"social_profiles":"https://api.planningcenteronline.com/people/v2/people/34765191/social_profiles","workflow_cards":"https://api.planningcenteronline.com/people/v2/people/34765191/workflow_cards","self":"https://api.planningcenteronline.com/people/v2/people/34765191"}},"included":[],"meta":{"can_include":["addresses","emails","field_data","households","inactive_reason","marital_status","name_prefix","name_suffix","person_apps","phone_numbers","school","social_profiles"],"parent":{"id":"197716","type":"Organization"}}}'}
     headers:
       Access-Control-Allow-Credentials: ['true']
       Access-Control-Allow-Headers: ['Accept, Authorization, Content-Type, If-Match,
@@ -21,8 +21,8 @@ interactions:
       Cache-Control: ['max-age=0, private, must-revalidate']
       Connection: [keep-alive]
       Content-Type: [application/vnd.api+json; charset=utf-8; charset=utf-8]
-      Date: ['Wed, 21 Feb 2018 15:31:40 GMT']
-      ETag: [W/"64b5a69cf84bc09eb73a5d95bdda2cab"]
+      Date: ['Wed, 28 Feb 2018 13:15:06 GMT']
+      ETag: [W/"f2a35e38d987d159c81094d2fe1d3983"]
       Server: [nginx]
       Status: [200 OK]
       Strict-Transport-Security: [max-age=31536000]
@@ -33,8 +33,83 @@ interactions:
       X-PCO-API-Request-Rate-Count: ['1']
       X-PCO-API-Request-Rate-Limit: ['100']
       X-PCO-API-Request-Rate-Period: [20 seconds]
-      X-Request-Id: [34edb2d3-4101-4ad6-bfb2-a8c767961c9d]
-      X-Runtime: ['0.038768']
+      X-Request-Id: [ed86306c-2359-4b20-a76f-b3cc6095d021]
+      X-Runtime: ['0.041459']
+      X-XSS-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://api.planningcenteronline.com/people/v2/emails/12084502
+  response:
+    body: {string: '{"data":{"type":"Email","id":"12084502","attributes":{"address":"paul@notarealaddress.com","created_at":"2016-04-23T01:19:54Z","location":"Home","primary":false,"updated_at":"2018-02-27T14:36:48Z"},"links":{"person":"https://api.planningcenteronline.com/people/v2/people/16555904","self":"https://api.planningcenteronline.com/people/v2/emails/12084502"},"relationships":{"person":{"data":{"type":"Person","id":"16555904"}}}},"included":[],"meta":{"parent":{"id":"197716","type":"Organization"}}}'}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Headers: ['Accept, Authorization, Content-Type, If-Match,
+          If-Modified-Since, If-None-Match, If-Unmodified-Since, Origin, X-Requested-With']
+      Access-Control-Allow-Methods: ['GET, POST, PATCH, PUT, DELETE, OPTIONS']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['ETag, Link, X-PCO-API-Auth-Method']
+      Cache-Control: ['max-age=0, private, must-revalidate']
+      Connection: [keep-alive]
+      Content-Type: [application/vnd.api+json; charset=utf-8; charset=utf-8]
+      Date: ['Wed, 28 Feb 2018 13:15:06 GMT']
+      ETag: [W/"6ffef0dab7a6839960d2c048f88eedfd"]
+      Server: [nginx]
+      Status: [200 OK]
+      Strict-Transport-Security: [max-age=31536000]
+      Vary: ['Accept, Accept-Encoding, Origin']
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [SAMEORIGIN]
+      X-PCO-API-Auth-Method: [HTTPBasic]
+      X-PCO-API-Request-Rate-Count: ['2']
+      X-PCO-API-Request-Rate-Limit: ['100']
+      X-PCO-API-Request-Rate-Period: [20 seconds]
+      X-Request-Id: [7657a358-0546-4ce8-b420-cfaa2926e1ee]
+      X-Runtime: ['0.037786']
+      X-XSS-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://api.planningcenteronline.com/people/v2/people/23232372
+  response:
+    body: {string: '{"data":{"type":"Person","id":"23232372","attributes":{"anniversary":"1980-01-01","avatar":"https://people.planningcenteronline.com/static/no_photo_thumbnail_man_gray.svg","birthdate":"1960-10-01","child":false,"created_at":"2017-01-18T13:56:06Z","demographic_avatar_url":"https://people.planningcenteronline.com/static/no_photo_thumbnail_man_gray.svg","first_name":"George","gender":"M","given_name":null,"grade":null,"graduation_year":null,"inactivated_at":null,"last_name":"Washington","medical_notes":null,"membership":"Participant","middle_name":null,"name":"George
+        Washington","nickname":null,"people_permissions":null,"remote_id":null,"school_type":null,"site_administrator":false,"status":"active","updated_at":"2018-02-28T02:20:19Z"},"links":{"addresses":"https://api.planningcenteronline.com/people/v2/people/23232372/addresses","apps":"https://api.planningcenteronline.com/people/v2/people/23232372/apps","connected_people":"https://api.planningcenteronline.com/people/v2/people/23232372/connected_people","emails":"https://api.planningcenteronline.com/people/v2/people/23232372/emails","field_data":"https://api.planningcenteronline.com/people/v2/people/23232372/field_data","household_memberships":"https://api.planningcenteronline.com/people/v2/people/23232372/household_memberships","households":"https://api.planningcenteronline.com/people/v2/people/23232372/households","inactive_reason":null,"marital_status":"https://api.planningcenteronline.com/people/v2/marital_statuses/1764438","message_groups":"https://api.planningcenteronline.com/people/v2/people/23232372/message_groups","messages":"https://api.planningcenteronline.com/people/v2/people/23232372/messages","name_prefix":null,"name_suffix":null,"notes":"https://api.planningcenteronline.com/people/v2/people/23232372/notes","person_apps":"https://api.planningcenteronline.com/people/v2/people/23232372/person_apps","phone_numbers":"https://api.planningcenteronline.com/people/v2/people/23232372/phone_numbers","school":null,"social_profiles":"https://api.planningcenteronline.com/people/v2/people/23232372/social_profiles","workflow_cards":"https://api.planningcenteronline.com/people/v2/people/23232372/workflow_cards","self":"https://api.planningcenteronline.com/people/v2/people/23232372"}},"included":[],"meta":{"can_include":["addresses","emails","field_data","households","inactive_reason","marital_status","name_prefix","name_suffix","person_apps","phone_numbers","school","social_profiles"],"parent":{"id":"197716","type":"Organization"}}}'}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Headers: ['Accept, Authorization, Content-Type, If-Match,
+          If-Modified-Since, If-None-Match, If-Unmodified-Since, Origin, X-Requested-With']
+      Access-Control-Allow-Methods: ['GET, POST, PATCH, PUT, DELETE, OPTIONS']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['ETag, Link, X-PCO-API-Auth-Method']
+      Cache-Control: ['max-age=0, private, must-revalidate']
+      Connection: [keep-alive]
+      Content-Type: [application/vnd.api+json; charset=utf-8; charset=utf-8]
+      Date: ['Wed, 28 Feb 2018 13:15:06 GMT']
+      ETag: [W/"4e997c842adc511826b79a4b6852949e"]
+      Server: [nginx]
+      Status: [200 OK]
+      Strict-Transport-Security: [max-age=31536000]
+      Vary: ['Accept, Accept-Encoding, Origin']
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [SAMEORIGIN]
+      X-PCO-API-Auth-Method: [HTTPBasic]
+      X-PCO-API-Request-Rate-Count: ['3']
+      X-PCO-API-Request-Rate-Limit: ['100']
+      X-PCO-API-Request-Rate-Period: [20 seconds]
+      X-Request-Id: [09a1c80c-dd95-46a8-b8d1-dfa28f7e2a50]
+      X-Runtime: ['0.043181']
       X-XSS-Protection: [1; mode=block]
     status: {code: 200, message: OK}
 version: 1

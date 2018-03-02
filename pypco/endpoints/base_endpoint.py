@@ -37,17 +37,18 @@ class BaseEndpoint:
 
     API_BASE = "https://api.planningcenteronline.com"
 
-    def __init__(self, auth_config):
+    def __init__(self, auth_config, api_instance):
         """Initialize the BasePCOEndpoint."""
 
         self._auth_config = auth_config
         self._auth_header = None
         self._log = logging.getLogger(__name__)
+        self._api_instance = api_instance
 
         self._log.debug("Initialized the %s endpoint.", type(self).__name__)
 
         for subclass in self.__class__.__subclasses__():
-            setattr(self, subclass.resolve_class_name_url(), subclass(auth_config))
+            setattr(self, subclass.resolve_class_name_url(), subclass(auth_config, api_instance))
 
     def _get_auth_header(self):
         """Get the authorization header for the request."""
@@ -148,17 +149,12 @@ class BaseEndpoint:
             BaseModel: an object that inherits from the BaseModel class.
         """
 
-        obj = self.dispatch_single_request(
+        return self.get_by_url(
             "{}/{}".format(
                 self.get_full_endpoint_url(),
                 item_id
             )
         )
-
-        klass_info = self.resolve_model_type(obj['data'])
-        klass = getattr(globals()[klass_info[0]], klass_info[1])
-
-        return klass(self, obj['data'], from_get=True)
 
     def get_by_url(self, url):
         """Get a single object from the API endpoint based on URL.
@@ -177,42 +173,6 @@ class BaseEndpoint:
 
         return klass(self, obj['data'], from_get=True)
 
-    def get_associations_by_url(self, url):
-        """Get the associations for an object, given the direct URL
-
-        Args:
-            url (str): The url of the list of associations.
-
-        Returns:
-            The list of associations at the given URL.
-        """
-
-        query_params = []
-
-        results = []
-
-        while True:
-            
-            # Dispatch the request
-            response = self.dispatch_single_request(url, params=query_params)
-
-            # Iterate through and return results
-            for obj in response['data']:
-                klass_info = self.resolve_model_type(obj)
-                klass = getattr(globals()[klass_info[0]], klass_info[1])
-
-                results.append(klass(self, obj))
-
-            # Quit if we don't have further results
-            if not 'next' in response['meta']:
-                break
-
-            # If loop hasn't been exited, we have another page
-            # Add the offset parameter so we'll pull the next page
-            query_params.append(('offset', response['meta']['next']['offset'])) #pylint disable=W0101
-
-        return results
-
     def list(self, where={}, filter=[], per_page=None, order=None, **kwargs):
         """Execute a query to get a list of objects from the PCO API.
 
@@ -228,7 +188,30 @@ class BaseEndpoint:
             order (str): The field by which to order results. Defaults to PCO API default (sorted by ID).
             kwargs (str): Any additional kwargs will added directly to the request as query params.
         Returns:
-            The results of the query as a list of objects (subclasses of the BaseModel object) .
+            The results of the query as a list of objects (subclasses of the BaseModel object).
+        """
+
+        return self.list_by_url(
+            self.get_full_endpoint_url(),
+            where=where,
+            filter=filter,
+            per_page=per_page,
+            order=order,
+            **kwargs
+        )
+
+    def list_by_url(self, url, where={}, filter=[], per_page=None, order=None, **kwargs):
+        """Execute a query to get a list of objects from the PCO API.
+
+        Args:
+            url (str): The URL to use for this call
+            where (dict): Query parameters specified as a dictionary. See PCO API docs for valid params.
+            filter (list): Filter parameters for the query. See PCO API docs for valid filter params.
+            per_page (int): How many items to retrieve per page. Defaults to PCO default of 25.
+            order (str): The field by which to order results. Defaults to PCO API default (sorted by ID).
+            kwargs (str): Any additional kwargs will added directly to the request as query params.
+        Returns:
+            The results of the query as a list of objects (subclasses of the BaseModel object).
         """
 
         # Step 1: Build query params
@@ -271,7 +254,7 @@ class BaseEndpoint:
         while True:
             
             # Dispatch the request
-            response = self.dispatch_single_request(self.get_full_endpoint_url(), params=query_params)
+            response = self.dispatch_single_request(url, params=query_params)
 
             # Iterate through and return results
             for obj in response['data']:
@@ -341,6 +324,17 @@ class BaseEndpoint:
         )
 
     # TODO: File Uploads
+
+    @classmethod
+    def get_parent_endpoint_name(cls):
+        """Get the parent class's endpoint name.
+
+        This is intended to be called to resolve root endpoint
+        class names from child classes. Calling in other situations
+        will result in unexpected behavior.
+        """
+
+        return cls.__bases__[0].resolve_root_endpoint_name() #pylint: disable=E1101
 
     @classmethod
     def resolve_root_endpoint_name(cls):

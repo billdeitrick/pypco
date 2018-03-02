@@ -28,16 +28,17 @@ class TestBaseEndpoint(BasePCOTestCase):
         """Verify correct properties on the BaseEndpoint object."""
 
         auth_config = PCOAuthConfig("app_id", "app_secret")
-        base_endpoint = BaseEndpoint(auth_config)
+        base_endpoint = BaseEndpoint(auth_config, None)
 
         self.assertIsInstance(base_endpoint._auth_config, PCOAuthConfig) #pylint: disable=W0212
+        self.assertIsNone(base_endpoint._api_instance)
 
     def test_get_auth_header(self):
         """Test generating the authentication header"""
 
         # Test basic auth header generation
         auth_config = PCOAuthConfig("app_id", "app_secret")
-        base_endpoint = BaseEndpoint(auth_config)
+        base_endpoint = BaseEndpoint(auth_config, None)
 
         # Test getting the auth header the first time
         self.assertEqual(base_endpoint._get_auth_header(), "Basic YXBwX2lkOmFwcF9zZWNyZXQ=") #pylint: disable=W0212
@@ -47,7 +48,7 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         # Test OAuth header generation
         auth_config = PCOAuthConfig(token="abc123")
-        base_endpoint = BaseEndpoint(auth_config)
+        base_endpoint = BaseEndpoint(auth_config, None)
 
         # Test getting the auth header the first time
         self.assertEqual(base_endpoint._get_auth_header(), "Bearer abc123") #pylint: disable=W0212
@@ -76,7 +77,7 @@ class TestBaseEndpoint(BasePCOTestCase):
     def test_dispatch_get_success(self, mock_sleep, mock_get):
         """Test valid get request dispatching."""
 
-        base_endpoint = BaseEndpoint(PCOAuthConfig("app_id", "secret'"))
+        base_endpoint = BaseEndpoint(PCOAuthConfig("app_id", "secret"), None)
 
         # Mock a simple response to our request
         response = Mock()
@@ -97,7 +98,7 @@ class TestBaseEndpoint(BasePCOTestCase):
         mock_get.assert_called_with(
             'GET',
             'https://api.planningcenteronline.com/people/v2/people/1',
-            headers={'Authorization': 'Basic YXBwX2lkOnNlY3JldCc='},
+            headers={'Authorization': 'Basic YXBwX2lkOnNlY3JldA=='},
             params={'bob': True},
             json=None
         )
@@ -112,7 +113,7 @@ class TestBaseEndpoint(BasePCOTestCase):
     def test_dispatch_empty_response(self, mock_delete):
         """Verify we handle empty API responses gracefully"""
 
-        base_endpoint = BaseEndpoint(PCOAuthConfig("app_id", "secret'"))
+        base_endpoint = BaseEndpoint(PCOAuthConfig("app_id", "secret"), None)
 
         # Mock a simple response to our request
         response = Mock()
@@ -197,7 +198,7 @@ class TestBaseEndpoint(BasePCOTestCase):
     def test_dispatch_get_limited(self, mock_sleep, mock_get):
         """Test request dispatching with rate limit"""
 
-        base_endpoint = BaseEndpoint(PCOAuthConfig("app_id", "secret'"))
+        base_endpoint = BaseEndpoint(PCOAuthConfig("app_id", "secret"), None)
 
         result = base_endpoint.dispatch_single_request(
             "https://api.planningcenteronline.com/people/v2/people/1",
@@ -208,7 +209,7 @@ class TestBaseEndpoint(BasePCOTestCase):
         mock_get.assert_called_with(
             'GET',
             'https://api.planningcenteronline.com/people/v2/people/1',
-            headers={'Authorization': 'Basic YXBwX2lkOnNlY3JldCc='},
+            headers={'Authorization': 'Basic YXBwX2lkOnNlY3JldA=='},
             params={'bob': True},
             json=None
         )
@@ -221,7 +222,7 @@ class TestBaseEndpoint(BasePCOTestCase):
     def test_resolve_class_name_endpoint(self): #pylint: disable=C0103
         """Test resolving class names to endpoint name."""
 
-        people = PeopleEndpoint(PCOAuthConfig("app_id", "secret"))
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "secret"), None)
 
         self.assertEqual(
             'people',
@@ -234,7 +235,7 @@ class TestBaseEndpoint(BasePCOTestCase):
     def test_resolve_class_name_url(self):
         """Test resolving the class name to API url style."""
 
-        people = PeopleEndpoint(PCOAuthConfig("app_id", "secret"))
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "secret"), None)
 
         self.assertEqual(
             "people",
@@ -254,7 +255,7 @@ class TestBaseEndpoint(BasePCOTestCase):
     def test_get_full_endpoint_url(self):
         """Test the _get_upstream_url function."""
 
-        people = PeopleEndpoint(PCOAuthConfig("app_id", "secret"))
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "secret"), None)
 
         self.assertEqual(
             "https://api.planningcenteronline.com/people/v2",
@@ -321,7 +322,7 @@ class TestBaseEndpoint(BasePCOTestCase):
     def test_people_get(self, mock_field_definition_request, mock_address_request, mock_people_request): #pylint: disable=C0301
         """Test retrieving mocked object by ID"""
 
-        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"))
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"), None)
 
         # Test retrieving Person object by ID
         #region
@@ -360,7 +361,7 @@ class TestBaseEndpoint(BasePCOTestCase):
             "meta": {}
         }
 
-        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"))
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"), None)
         result = people.addresses.get("25253")
 
         mock_address_request.assert_called_with(
@@ -396,7 +397,7 @@ class TestBaseEndpoint(BasePCOTestCase):
     def test_people_list(self, mock_people_request):
         """Test the list function to query endpoints."""
 
-        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"))
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"), None)
 
         # Mock retrieving people over multiple pages with a simple query
         # This validates search parameters and multiple pages of results
@@ -972,7 +973,7 @@ class TestBaseEndpoint(BasePCOTestCase):
     def test_people_delete(self, mock_people_request):
         """Test delete function to delete objects from the PCO API."""
 
-        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"))
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"), None)
 
         # Mock an empty response for a deleted person
         mock_people_request.return_value = {}
@@ -988,7 +989,7 @@ class TestBaseEndpoint(BasePCOTestCase):
     def test_people_update(self, mock_people_request):
         """Test updating a mocked object using the update function."""
 
-        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"))
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"), None)
 
         mock_people_request.return_value = {
             "data": {
@@ -1098,7 +1099,7 @@ class TestBaseEndpoint(BasePCOTestCase):
     def test_get_by_url(self, mock_people_request):
         """Test getting objects from PCO API directly by URL"""
 
-        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"))
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"), None)
 
         mock_people_request.return_value = {
             "data": {
@@ -1186,10 +1187,10 @@ class TestBaseEndpoint(BasePCOTestCase):
         self.assertEqual(result.last_name, 'Robot')
 
     @patch('pypco.endpoints.people.People.dispatch_single_request')
-    def test_get_associations_by_url(self, mock_people_request):
+    def test_list_by_url(self, mock_people_request):
         """Test getting lists of associations directly by URL."""
 
-        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"))
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"), None)
 
         # Mock a page of results
         mock_people_request.return_value = {
@@ -1265,7 +1266,7 @@ class TestBaseEndpoint(BasePCOTestCase):
             }
         }
 
-        results = people.people.get_associations_by_url("https://api.planningcenteronline.com/people/v2/people/34765191/emails")
+        results = [result for result in people.people.list_by_url("https://api.planningcenteronline.com/people/v2/people/34765191/emails")]
 
         for result in results:
             self.assertIsInstance(result, Email)
@@ -1278,7 +1279,7 @@ class TestBaseEndpoint(BasePCOTestCase):
     def test_create(self, mock_people_request):
         """Test creating new objects against the PCO APi."""
 
-        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"))
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"), None)
 
         mock_people_request.return_value = {
             "data": {
@@ -1380,3 +1381,10 @@ class TestBaseEndpoint(BasePCOTestCase):
         )
 
         self.assertEqual(result, mock_people_request.return_value)
+
+    def test_get_parent_endpoint_name(self):
+        """Test getting the parent endpoint name from subclasses."""
+
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"), None)
+
+        self.assertEqual(people.people.get_parent_endpoint_name(), "people")

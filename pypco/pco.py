@@ -26,7 +26,7 @@ class PCO(object):
         self._log.debug("Initialized the auth_config object.")
 
         for klass in BaseEndpoint.__subclasses__():
-            setattr(self, klass.resolve_root_endpoint_name(), klass(self.auth_config))
+            setattr(self, klass.resolve_root_endpoint_name(), klass(self.auth_config, self))
        
     def new(self, klass):
         """Return a new instance of a PCO object that should be modified and pushed to the API.
