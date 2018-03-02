@@ -20,7 +20,7 @@ for person in pco.people.people.list():
     person.update()
 
 # Create and save a new person
-new_person = pco.new(pco.people, "Person")
+new_person = pco.new(pypco.models.people.Person)
 new_person.first_name = "John"
 new_person.last_name = "Doe"
 new_person.update()
