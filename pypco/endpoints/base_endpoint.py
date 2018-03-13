@@ -268,11 +268,13 @@ class BaseEndpoint:
                 break
 
             # If loop hasn't been exited, we have another page
-            # Add or replace the offset param to pull the next page
-            if 'offset' in query_params:
-                query_params['offset'] = response['meta']['next']['offset'] #pylint: disable=E1126
+            # Add the offset param, or replace if it already exists.
+            # We always append the offset param here, so it will always be
+            # last if it has been used already.
+            if len(query_params) > 0 and query_params[-1][0] == 'offset':
+                query_params[-1] = ('offset', response['meta']['next']['offset'])
             else:
-                query_params.append(('offset', response['meta']['next']['offset'])) #pylint disable=W0101
+                query_params.append(('offset', response['meta']['next']['offset']))
 
         #endregion
 

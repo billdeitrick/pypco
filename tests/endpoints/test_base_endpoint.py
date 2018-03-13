@@ -1190,8 +1190,6 @@ class TestBaseEndpoint(BasePCOTestCase):
     def test_list_by_url(self, mock_people_request):
         """Test getting lists of associations directly by URL."""
 
-        # TODO: Add better tests for this, that can test multiple pages of results.
-
         people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"), None)
 
         # Mock a page of results
@@ -1390,3 +1388,222 @@ class TestBaseEndpoint(BasePCOTestCase):
         people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"), None)
 
         self.assertEqual(people.people.get_parent_endpoint_name(), "people")
+
+    def get_pagination_mock(url, params=None, payload=None, method=PCOAPIMethod.GET): #pylint: disable=E0213
+        """Create an object to mock pagination in API responses."""
+
+        global OFFSET
+
+        try:
+            OFFSET
+        except NameError:
+            OFFSET = 0
+
+        OFFSET += 3
+
+        response = {
+            "links": {
+                "self": "https://api.planningcenteronline.com/people/v2/people?where[last_name]=Revere"
+            },
+            "data": [
+                {
+                    "type": "Person",
+                    "id": "16555904",
+                    "attributes": {
+                        "anniversary": None,
+                        "avatar": "https://people.planningcenteronline.com/static/no_photo_thumbnail_man_gray.svg",
+                        "birthdate": "1916-01-01",
+                        "child": False,
+                        "created_at": "2016-04-23T01:19:54Z",
+                        "demographic_avatar_url": "https://people.planningcenteronline.com/static/no_photo_thumbnail_man_gray.svg",
+                        "first_name": "Paul",
+                        "gender": "M",
+                        "given_name": None,
+                        "grade": None,
+                        "graduation_year": None,
+                        "inactivated_at": None,
+                        "last_name": "Revere",
+                        "medical_notes": None,
+                        "membership": "Participant",
+                        "middle_name": None,
+                        "name": "Paul Revere",
+                        "nickname": None,
+                        "people_permissions": "Editor",
+                        "remote_id": None,
+                        "school_type": None,
+                        "site_administrator": False,
+                        "status": "active",
+                        "updated_at": "2018-03-07T14:56:30Z"
+                    },
+                    "links": {
+                        "self": "https://api.planningcenteronline.com/people/v2/people/16555904"
+                    }
+                },
+                {
+                    "type": "Person",
+                    "id": "25423946",
+                    "attributes": {
+                        "anniversary": None,
+                        "avatar": "https://people.planningcenteronline.com/static/no_photo_thumbnail_boy_gray.svg",
+                        "birthdate": None,
+                        "child": True,
+                        "created_at": "2017-04-11T22:42:08Z",
+                        "demographic_avatar_url": "https://people.planningcenteronline.com/static/no_photo_thumbnail_boy_gray.svg",
+                        "first_name": "Paul",
+                        "gender": "M",
+                        "given_name": None,
+                        "grade": 4,
+                        "graduation_year": None,
+                        "inactivated_at": None,
+                        "last_name": "Revere",
+                        "medical_notes": None,
+                        "membership": "Former Attender",
+                        "middle_name": None,
+                        "name": "Paul Revere Jr.",
+                        "nickname": None,
+                        "people_permissions": None,
+                        "remote_id": None,
+                        "school_type": "elementary",
+                        "site_administrator": False,
+                        "status": "active",
+                        "updated_at": "2018-03-07T14:45:40Z"
+                    },
+                    "links": {
+                        "self": "https://api.planningcenteronline.com/people/v2/people/25423946"
+                    }
+                },
+                {
+                    "type": "Person",
+                    "id": "25423947",
+                    "attributes": {
+                        "anniversary": None,
+                        "avatar": "https://people.planningcenteronline.com/static/no_photo_thumbnail_woman_gray.svg",
+                        "birthdate": None,
+                        "child": False,
+                        "created_at": "2017-04-11T22:42:09Z",
+                        "demographic_avatar_url": "https://people.planningcenteronline.com/static/no_photo_thumbnail_woman_gray.svg",
+                        "first_name": "Rachel",
+                        "gender": "F",
+                        "given_name": None,
+                        "grade": None,
+                        "graduation_year": None,
+                        "inactivated_at": None,
+                        "last_name": "Revere",
+                        "medical_notes": None,
+                        "membership": "Former Attender",
+                        "middle_name": None,
+                        "name": "Rachel Revere",
+                        "nickname": None,
+                        "people_permissions": None,
+                        "remote_id": None,
+                        "school_type": None,
+                        "site_administrator": False,
+                        "status": "active",
+                        "updated_at": "2017-04-12T00:28:14Z"
+                    },
+                    "links": {
+                        "self": "https://api.planningcenteronline.com/people/v2/people/25423947"
+                    }
+                }
+            ],
+            "included": [],
+            "meta": {
+                "total_count": 30,
+                "count": 3,
+                "next": {
+                    "offset": OFFSET
+                },
+                "can_order_by": [
+                    "given_name",
+                    "first_name",
+                    "nickname",
+                    "middle_name",
+                    "last_name",
+                    "birthdate",
+                    "anniversary",
+                    "gender",
+                    "grade",
+                    "child",
+                    "status",
+                    "school_type",
+                    "graduation_year",
+                    "site_administrator",
+                    "people_permissions",
+                    "membership",
+                    "inactivated_at",
+                    "remote_id",
+                    "medical_notes",
+                    "created_at",
+                    "updated_at"
+                ],
+                "can_query_by": [
+                    "given_name",
+                    "first_name",
+                    "nickname",
+                    "middle_name",
+                    "last_name",
+                    "birthdate",
+                    "anniversary",
+                    "gender",
+                    "grade",
+                    "child",
+                    "status",
+                    "school_type",
+                    "graduation_year",
+                    "site_administrator",
+                    "people_permissions",
+                    "membership",
+                    "inactivated_at",
+                    "remote_id",
+                    "medical_notes",
+                    "created_at",
+                    "updated_at",
+                    "search_name",
+                    "search_name_or_email",
+                    "id"
+                ],
+                "can_include": [
+                    "addresses",
+                    "emails",
+                    "field_data",
+                    "households",
+                    "inactive_reason",
+                    "marital_status",
+                    "name_prefix",
+                    "name_suffix",
+                    "person_apps",
+                    "phone_numbers",
+                    "platform_notifications",
+                    "school",
+                    "social_profiles"
+                ],
+                "can_filter": [
+                    "created_since",
+                    "admins",
+                    "organization_admins"
+                ],
+                "parent": {
+                    "id": "197716",
+                    "type": "Organization"
+                }
+            }
+        } 
+
+        if OFFSET == 30:
+            del response['meta']['next']
+
+        return response
+
+    @patch('pypco.endpoints.people.People.dispatch_single_request', side_effect=get_pagination_mock)
+    def test_list_by_url_pagination(self, mock_people_request):
+        """Test pagination in the endpoint's list function."""
+
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"), None)
+
+        [person for person in people.people.list()]
+
+        # Ensure that our final call contains the expected offset
+        mock_people_request.assert_called_with(
+            "https://api.planningcenteronline.com/people/v2/people",
+            params=[('offset', 27)]
+        )
