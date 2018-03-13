@@ -1190,6 +1190,8 @@ class TestBaseEndpoint(BasePCOTestCase):
     def test_list_by_url(self, mock_people_request):
         """Test getting lists of associations directly by URL."""
 
+        # TODO: Add better tests for this, that can test multiple pages of results.
+
         people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"), None)
 
         # Mock a page of results
