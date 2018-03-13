@@ -293,8 +293,8 @@ class RelationManager():
         """
 
         # If this wasn't a direct get request, refresh to make sure
-        # we have all available links
-        if not self._model._from_get:
+        # we have all available links, unless the model is newly created
+        if not self._model._from_get and not self._model._user_created:
             self._model.refresh()
 
         # If we have a matching link, fetch via the links attribute
@@ -345,8 +345,8 @@ class RelationManager():
         """
 
         # If this wasn't a direct get request, refresh to make sure
-        # we have all available links
-        if not self._model._from_get:
+        # we have all available links, unless the model is newly created
+        if not self._model._from_get and not self._model._user_created:
             self._model.refresh()
 
         # If we have a matching link, fetch via the links attribute
@@ -422,7 +422,16 @@ class RelationManager():
         if model._user_created:
             raise PCOInvalidModelError("You must pass a newly created object!")
 
-        relationships = [existing for existing in self.list()]
+        # Try getting the existing relationships; if
+        # we get a PCOInvalidModelError, there aren't any
+        # on this object yet; create an empty key and set an
+        # empty list of existing relationships
+        try:
+            relationships = [existing for existing in self.list()]
+        except PCORelationDoesNotExistError:
+            self._relationships[self._rel_name] = {}
+            relationships = []
+
         relationships.append(model)
 
         self._relationships[self._rel_name]['data'] = []

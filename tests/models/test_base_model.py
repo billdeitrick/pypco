@@ -6,7 +6,7 @@ import unittest
 from requests import HTTPError
 from .. import BasePCOVCRTestCase
 from .. import BasePCOTestCase
-from pypco.models.base_model import *
+from pypco.models.base_model import * #pylint: disable=W0614
 import pypco
 
 class TestModels(BasePCOVCRTestCase):
@@ -770,3 +770,70 @@ class TestModels(BasePCOVCRTestCase):
         # Ensure an error is thrown if we pass a model that's not newly created
         with self.assertRaises(PCOInvalidModelError):
             person.rel.addresses.create(address)
+
+    def test_add_on_new_object(self):
+        """
+        Test adding to-many relationships on a new object.
+
+        An example of this in the People API would be creating households.
+        """
+
+        pco = self.pco
+
+        lincolns = {
+            'abraham': pco.people.people.get("35476772"),
+            'mary': pco.people.people.get("35476793"),
+            'robert': pco.people.people.get("35476796")
+        }
+
+        # Make sure we have people objects
+        for name,person in lincolns.items(): #pylint: disable=W0612
+            self.assertIsInstance(person, pypco.models.people.Person)
+
+        household = pco.new(pypco.models.people.Household)
+
+        # Set the household name
+        household.name = "Lincoln Household"
+
+        # Make sure we have a household object
+        self.assertIsInstance(household, pypco.models.people.Household)
+        household.rel.primary_contact.set(lincolns['abraham'])
+
+        # Make sure primary contact is set
+        self.assertEqual(lincolns['abraham'].id, household.rel.primary_contact.get().id)
+
+        for name,person in lincolns.items():
+            household.rel.people.add(person)
+
+        hh_members = [member for member in household.rel.people.list()]
+        hh_member_ids = [member.id for member in hh_members]
+
+        # We should have three members
+        self.assertEqual(len(hh_members), 3)
+
+        # Make sure expected members are present
+        for name,person in lincolns.items():
+            self.assertIn(person.id, hh_member_ids)
+
+        # Create the new household
+        household.create()
+
+        # Refresh the household object, for good measure
+        household.refresh()
+
+        # Check primary contact and members again on the refreshed copy
+
+        # Make sure primary contact is set
+        # Note that, oddly, this isn't returned as a relationship but
+        # is instead returned as an attribute
+        self.assertEqual(lincolns['abraham'].id, household.primary_contact_id)
+
+        hh_members = [member for member in household.rel.people.list()]
+        hh_member_ids = [member.id for member in hh_members]
+
+        # We should have three members
+        self.assertEqual(len(hh_members), 3)
+
+        # Make sure expected members are present
+        for name,person in lincolns.items():
+            self.assertIn(person.id, hh_member_ids)
