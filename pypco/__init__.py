@@ -24,6 +24,7 @@ Personal Access Token authentication.
 import pypco.models.people
 import pypco.models.services
 import pypco.models.check_ins
+import pypco.models.giving
 
 # Export the interface we present to clients
 
