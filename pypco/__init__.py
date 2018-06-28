@@ -25,6 +25,7 @@ import pypco.models.people
 import pypco.models.services
 import pypco.models.check_ins
 import pypco.models.giving
+import pypco.models.resources
 
 # Export the interface we present to clients
 
