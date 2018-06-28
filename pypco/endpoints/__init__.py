@@ -7,6 +7,7 @@ import pypco.endpoints.services
 import pypco.endpoints.check_ins
 import pypco.endpoints.giving
 import pypco.endpoints.resources
+import pypco.endpoints.webhooks
 
 from .utils import PCOAuthConfig, PCOAuthException, PCOAuthType
 from .base_endpoint import BaseEndpoint

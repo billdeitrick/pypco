@@ -14,7 +14,7 @@ import requests
 from .utils import PCOAuthType
 
 # Model imports
-from ..models import people, services, check_ins, giving, resources #pylint: disable=W0611
+from ..models import people, services, check_ins, giving, resources, webhooks #pylint: disable=W0611
 
 class PCOAPIMethod(): #pylint: disable=R0903
     """Defines API endpoint HTTP method types."""

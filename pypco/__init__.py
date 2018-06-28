@@ -26,6 +26,7 @@ import pypco.models.services
 import pypco.models.check_ins
 import pypco.models.giving
 import pypco.models.resources
+import pypco.models.webhooks
 
 # Export the interface we present to clients
 
