@@ -22,6 +22,7 @@ Personal Access Token authentication.
 
 # Ensure models are loaded
 import pypco.models.people
+import pypco.models.services
 
 # Export the interface we present to clients
 
