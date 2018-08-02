@@ -15,6 +15,7 @@ from .utils import PCOAuthType
 
 # Model imports
 from ..models import people #pylint: disable=W0611
+from ..models import services #pylint: disable=W0611
 from ..models import check_ins #pylint: disable=W0611
 
 class PCOAPIMethod(): #pylint: disable=R0903
