@@ -7,6 +7,7 @@ from unittest.mock import Mock, patch
 from pypco.endpoints import PCOAuthConfig
 from pypco.endpoints.base_endpoint import BaseEndpoint, NotValidRootEndpointError, PCOAPIMethod
 from pypco.endpoints.people import PeopleEndpoint, People, Addresses, Stats, FieldDefinitions
+from pypco.endpoints.check_ins import CheckInsEndpoint
 from pypco.models.people import Person, Address, FieldDefinition, Email
 from tests import BasePCOTestCase
 
@@ -231,6 +232,13 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         with self.assertRaises(NotValidRootEndpointError):
             people.addresses.resolve_root_endpoint_name()
+
+        checkins = CheckInsEndpoint(PCOAuthConfig("app_id", "secret"), None)
+
+        self.assertEqual(
+            'check_ins',
+            checkins.resolve_root_endpoint_name()
+        )
 
     def test_resolve_class_name_url(self):
         """Test resolving the class name to API url style."""

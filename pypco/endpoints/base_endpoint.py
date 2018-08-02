@@ -15,6 +15,7 @@ from .utils import PCOAuthType
 
 # Model imports
 from ..models import people #pylint: disable=W0611
+from ..models import check_ins #pylint: disable=W0611
 
 class PCOAPIMethod(): #pylint: disable=R0903
     """Defines API endpoint HTTP method types."""
@@ -355,7 +356,12 @@ class BaseEndpoint:
         if not cls.is_root_endpoint():
             raise NotValidRootEndpointError("This is a child endpoint, not a root endpoint!")
 
-        return cls.__name__[:-8].lower()
+        endpoint_name = cls.__name__[:-8]
+        endpoint_name = re.subn(r'([A-Z])', r'_\1', endpoint_name)[0]
+        endpoint_name = endpoint_name.strip('_')
+        endpoint_name = endpoint_name.lower()
+
+        return endpoint_name
 
     @classmethod
     def is_root_endpoint(cls):
