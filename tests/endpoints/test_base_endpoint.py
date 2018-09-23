@@ -1191,7 +1191,7 @@ class TestBaseEndpoint(BasePCOTestCase):
         )
 
         self.assertIsInstance(result, Person)
-        self.assertEquals(result.first_name, 'Pico')
+        self.assertEqual(result.first_name, 'Pico')
         self.assertEqual(result.last_name, 'Robot')
 
     @patch('pypco.endpoints.people.People.dispatch_single_request')
