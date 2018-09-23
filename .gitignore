@@ -1,5 +1,6 @@
 # General
 __pycache__
+*.pyc
 
 # IDEs
 .vscode
