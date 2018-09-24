@@ -5,6 +5,7 @@
 import pypco.endpoints.people
 import pypco.endpoints.services
 import pypco.endpoints.check_ins
+import pypco.endpoints.giving
 
 from .utils import PCOAuthConfig, PCOAuthException, PCOAuthType
 from .base_endpoint import BaseEndpoint
