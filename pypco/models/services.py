@@ -1,4 +1,4 @@
-"""Models for PCO people.
+"""Models for PCO services.
 
 To add additional models, simply add additional classes
 subclassing the ServicesModel class.
