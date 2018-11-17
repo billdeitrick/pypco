@@ -8,10 +8,9 @@ name = "pypi"
 [packages]
 
 requests = "*"
-pylint = "*"
-vcrpy = "*"
-vcrpy-unittest = "*"
-
 
 [dev-packages]
 
+pylint = "*"
+vcrpy = "*"
+vcrpy-unittest = "*"
