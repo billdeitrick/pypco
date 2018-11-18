@@ -9,8 +9,11 @@ name = "pypi"
 
 requests = "*"
 
+
 [dev-packages]
 
 pylint = "*"
 vcrpy = "*"
 vcrpy-unittest = "*"
+docopt = "*"
+"Jinja2" = "*"
