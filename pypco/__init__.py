@@ -21,10 +21,12 @@ Personal Access Token authentication.
 """
 
 # Ensure models are loaded
-import pypco.models.people
-import pypco.models.services
 import pypco.models.check_ins
 import pypco.models.giving
+import pypco.models.people
+import pypco.models.resources
+import pypco.models.services
+import pypco.models.webhooks
 
 # Export the interface we present to clients
 
