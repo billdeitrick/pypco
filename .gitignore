@@ -2,6 +2,10 @@
 __pycache__
 *.pyc
 
+# Python build
+dist
+*.egg-info
+
 # IDEs
 .vscode
 
