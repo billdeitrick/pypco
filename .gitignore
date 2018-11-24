@@ -12,3 +12,6 @@ dist
 # Project-specific
 .env
 logs
+
+# CI
+.tox
