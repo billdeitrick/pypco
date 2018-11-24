@@ -16,6 +16,7 @@ setup(
     url='https://github.com/billdeitrick/pypco',
     author='Bill Deitrick',
     author_email='hello@billdeitrick.com',
+    python_requires='>=3.6.0',
     license='MIT',
     packages=find_packages(
         exclude=[
