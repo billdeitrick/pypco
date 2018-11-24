@@ -20,6 +20,9 @@ pypco supports OAUTH (though you have to do some of the legwork) and
 Personal Access Token authentication.
 """
 
+# PyPCO Version
+__version__ = "0.0.0"
+
 # Ensure models are loaded
 import pypco.models.check_ins
 import pypco.models.giving
