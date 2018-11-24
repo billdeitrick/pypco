@@ -4,6 +4,7 @@ __pycache__
 
 # Python build
 dist
+build
 *.egg-info
 
 # IDEs
