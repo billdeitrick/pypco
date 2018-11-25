@@ -5,7 +5,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/people/23232372
   response:
@@ -43,7 +43,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/name_suffixes/1764422
   response:
@@ -80,7 +80,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/name_suffixes/1764422
   response:
@@ -117,7 +117,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/people?where%5Bid%5D=23232372
   response:
@@ -155,7 +155,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/people/23232372
   response:
@@ -193,7 +193,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/name_suffixes/1764422
   response:
@@ -230,7 +230,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/name_suffixes/1764422
   response:
@@ -267,7 +267,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/addresses/28330374
   response:
@@ -305,7 +305,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/people/16555904
   response:
@@ -343,7 +343,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/people/23232372
   response:
@@ -381,7 +381,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/addresses/28330374
   response:
@@ -419,7 +419,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/addresses/28330374
   response:
@@ -457,7 +457,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/people/34765191
   response:
@@ -495,7 +495,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/name_suffixes/1764420
   response:
@@ -532,7 +532,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/name_suffixes/1764420
   response:

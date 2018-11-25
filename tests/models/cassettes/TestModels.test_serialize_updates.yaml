@@ -5,7 +5,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/people/34765191
   response:
@@ -43,7 +43,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/emails/12084502
   response:
@@ -80,7 +80,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      User-Agent: [pypco]
     method: GET
     uri: https://api.planningcenteronline.com/people/v2/people/23232372
   response:

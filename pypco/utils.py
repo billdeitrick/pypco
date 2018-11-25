@@ -53,6 +53,9 @@ def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
             'code': code,
             'redirect_uri': redirect_uri,
             'grant_type': "authorization_code"
+        },
+        headers={
+            'User-Agent': 'pypco'
         }
     )
 

@@ -112,7 +112,8 @@ class BaseEndpoint:
                 params=params,
                 json=payload,
                 headers={
-                    "Authorization": self._get_auth_header()
+                    "Authorization": self._get_auth_header(),
+                    "User-Agent": 'pypco'
                 }
             )
 

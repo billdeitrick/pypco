@@ -99,7 +99,10 @@ class TestBaseEndpoint(BasePCOTestCase):
         mock_get.assert_called_with(
             'GET',
             'https://api.planningcenteronline.com/people/v2/people/1',
-            headers={'Authorization': 'Basic YXBwX2lkOnNlY3JldA=='},
+            headers={
+                'Authorization': 'Basic YXBwX2lkOnNlY3JldA==',
+                'User-Agent': 'pypco'
+            },
             params={'bob': True},
             json=None
         )
@@ -210,7 +213,10 @@ class TestBaseEndpoint(BasePCOTestCase):
         mock_get.assert_called_with(
             'GET',
             'https://api.planningcenteronline.com/people/v2/people/1',
-            headers={'Authorization': 'Basic YXBwX2lkOnNlY3JldA=='},
+            headers={
+                'Authorization': 'Basic YXBwX2lkOnNlY3JldA==',
+                'User-Agent': 'pypco'
+            },
             params={'bob': True},
             json=None
         )
