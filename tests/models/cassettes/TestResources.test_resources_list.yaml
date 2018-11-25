@@ -1,0 +1,48 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.20.1]
+    method: GET
+    uri: https://api.planningcenteronline.com/resources/v2/resources
+  response:
+    body: {string: '{"links":{"self":"https://api.planningcenteronline.com/resources/v2/resources"},"data":[{"type":"Resource","id":"371213","attributes":{"created_at":"2018-11-17T18:50:18Z","description":null,"expires_at":null,"home_location":null,"image":{"url":null,"thumb":{"url":null}},"kind":"Resource","name":"Food
+        Table [Sample]","quantity":10,"serial_number":null,"updated_at":"2018-11-17T18:50:19Z"},"relationships":{"resource_folder":{"data":null}},"links":{"self":"https://api.planningcenteronline.com/resources/v2/resources/371213"}},{"type":"Resource","id":"371214","attributes":{"created_at":"2018-11-17T18:50:18Z","description":null,"expires_at":null,"home_location":null,"image":{"url":null,"thumb":{"url":null}},"kind":"Room","name":"Main
+        Auditorium [Sample]","quantity":1,"serial_number":null,"updated_at":"2018-11-17T18:50:19Z"},"relationships":{"resource_folder":{"data":null}},"links":{"self":"https://api.planningcenteronline.com/resources/v2/resources/371214"}},{"type":"Resource","id":"371215","attributes":{"created_at":"2018-11-17T18:50:18Z","description":null,"expires_at":null,"home_location":null,"image":{"url":null,"thumb":{"url":null}},"kind":"Room","name":"Green
+        Room [Sample]","quantity":1,"serial_number":null,"updated_at":"2018-11-17T18:50:19Z"},"relationships":{"resource_folder":{"data":null}},"links":{"self":"https://api.planningcenteronline.com/resources/v2/resources/371215"}},{"type":"Resource","id":"371216","attributes":{"created_at":"2018-11-17T18:50:18Z","description":null,"expires_at":null,"home_location":null,"image":{"url":null,"thumb":{"url":null}},"kind":"Resource","name":"Mobile
+        Coffee Cart [Sample]","quantity":1,"serial_number":null,"updated_at":"2018-11-17T18:50:19Z"},"relationships":{"resource_folder":{"data":null}},"links":{"self":"https://api.planningcenteronline.com/resources/v2/resources/371216"}}],"included":[],"meta":{"total_count":4,"count":4,"can_order_by":["name","created_at","updated_at","expires_at"],"can_query_by":["name","kind","serial_number","created_at","updated_at"],"can_include":["event_resource_requests","resource_approval_groups","resource_questions","conflicts","room_setups"],"can_filter":["rooms","resources"],"parent":{"id":"263468","type":"Organization"}}}'}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Headers: ['Accept, Authorization, Content-Type, If-Match,
+          If-Modified-Since, If-None-Match, If-Unmodified-Since, Origin, X-Requested-With,
+          X-CSRF-Token, X-PCO-API-Version']
+      Access-Control-Allow-Methods: ['GET, POST, PATCH, PUT, DELETE, OPTIONS']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['ETag, Link, X-PCO-API-Auth-Method']
+      Cache-Control: ['max-age=0, private, must-revalidate']
+      Connection: [keep-alive]
+      Content-Type: [application/vnd.api+json; charset=utf-8]
+      Date: ['Sat, 24 Nov 2018 20:32:26 GMT']
+      ETag: [W/"fe899b628b7da9ec7851827c51c9918a"]
+      Referrer-Policy: [no-referrer-when-downgrade]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31536000; includeSubDomains]
+      Transfer-Encoding: [chunked]
+      Vary: ['Accept, Accept-Encoding, Origin']
+      X-Content-Type-Options: [nosniff]
+      X-Download-Options: [noopen]
+      X-Frame-Options: [SAMEORIGIN]
+      X-PCO-API-Auth-Method: [HTTPBasic]
+      X-PCO-API-Request-Rate-Count: ['1']
+      X-PCO-API-Request-Rate-Limit: ['100']
+      X-PCO-API-Request-Rate-Period: [20 seconds]
+      X-Pco-Api-Processed-As-Version: ['2018-08-01']
+      X-Permitted-Cross-Domain-Policies: [none]
+      X-Request-Id: [7fdeaed5-f784-41aa-bdf8-93b9bd18cb39]
+      X-Runtime: ['0.047074']
+      X-Xss-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+version: 1

@@ -1,0 +1,42 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.20.1]
+    method: GET
+    uri: https://api.planningcenteronline.com/giving/v2/donations
+  response:
+    body: {string: '{"links":{"self":"https://api.planningcenteronline.com/giving/v2/donations"},"data":[{"type":"Donation","id":"19575091","attributes":{"amount_cents":50000,"amount_currency":"USD","created_at":"2018-11-25T20:32:02Z","fee_cents":0,"fee_currency":"USD","payment_brand":null,"payment_check_dated_at":null,"payment_check_number":null,"payment_last4":null,"payment_method":"cash","payment_method_sub":null,"payment_status":"succeeded","received_at":"2018-11-25T05:00:00Z","refundable":true,"refunded":false,"updated_at":"2018-11-25T20:32:25Z"},"relationships":{"batch":{"data":{"type":"Batch","id":"1"}},"person":{"data":{"type":"Person","id":"45029164"}},"payment_source":{"data":{"type":"PaymentSource","id":"planning_center"}},"labels":{"data":[]}},"links":{"self":"https://api.planningcenteronline.com/giving/v2/donations/19575091"}}],"included":[],"meta":{"total_count":1,"count":1,"can_order_by":["created_at","updated_at","received_at"],"can_query_by":["payment_method","received_at","created_at","updated_at"],"can_include":["designations","labels"],"parent":{"id":"263468","type":"Organization"}}}'}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Headers: ['Accept, Authorization, Content-Type, If-Match,
+          If-Modified-Since, If-None-Match, If-Unmodified-Since, Origin, X-Requested-With,
+          X-CSRF-Token, X-PCO-API-Version']
+      Access-Control-Allow-Methods: ['GET, POST, PATCH, PUT, DELETE, OPTIONS']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['ETag, Link, X-PCO-API-Auth-Method']
+      Cache-Control: ['max-age=0, private, must-revalidate']
+      Connection: [keep-alive]
+      Content-Type: [application/vnd.api+json; charset=utf-8]
+      Date: ['Sun, 25 Nov 2018 20:34:47 GMT']
+      ETag: [W/"4c4b6e7f38e6a5f68a715ef0c79cbf57"]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=15552000; includeSubDomains]
+      Transfer-Encoding: [chunked]
+      Vary: ['Accept, Accept-Encoding, Origin']
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [SAMEORIGIN]
+      X-Newrelic-App-Data: [PxQGV1BWDAMGR1RVBwMOVlQGFB9AJQwMRBBXDlRdRh1DBlZOUBFaTRZZWBVJBF1HEkhRTAcBB19TAQ8CV1BbUQdTDVoKCAceA0sJUgNUBVJRDgFYVFoLAQFWWE4aABtEUQMGBAYDAQNVAQ1VDwgNBxE4]
+      X-PCO-API-Auth-Method: [HTTPBasic]
+      X-PCO-API-Request-Rate-Count: ['1']
+      X-PCO-API-Request-Rate-Limit: ['100']
+      X-PCO-API-Request-Rate-Period: [20 seconds]
+      X-Pco-Api-Processed-As-Version: ['2018-08-01']
+      X-Request-Id: [c5239f54-9286-4214-9ad7-81b57858667e]
+      X-Runtime: ['0.057402']
+      X-Xss-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+version: 1

@@ -1,0 +1,42 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.20.1]
+    method: GET
+    uri: https://api.planningcenteronline.com/check_ins/v2/events
+  response:
+    body: {string: '{"links":{"self":"https://api.planningcenteronline.com/check_ins/v2/events"},"data":[{"type":"Event","id":"200896","attributes":{"archived_at":null,"created_at":"2018-11-25T20:20:04Z","enable_services_integration":false,"frequency":"Weekly","integration_key":null,"name":"Weekly
+        Worship Services","updated_at":"2018-11-25T20:20:04Z"},"links":{"self":"https://api.planningcenteronline.com/check_ins/v2/events/200896"}}],"included":[],"meta":{"total_count":1,"count":1,"can_order_by":["name","created_at"],"can_query_by":["registration_event_id"],"can_include":["event_periods","attendance_types"],"can_filter":["archived","not_archived"],"parent":{"id":"263468","type":"Organization"}}}'}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Headers: ['Accept, Authorization, Content-Type, If-Match,
+          If-Modified-Since, If-None-Match, If-Unmodified-Since, Origin, X-Requested-With,
+          X-CSRF-Token, X-PCO-API-Version']
+      Access-Control-Allow-Methods: ['GET, POST, PATCH, PUT, DELETE, OPTIONS']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['ETag, Link, X-PCO-API-Auth-Method']
+      Cache-Control: ['max-age=0, private, must-revalidate']
+      Connection: [keep-alive]
+      Content-Type: [application/vnd.api+json; charset=utf-8]
+      Date: ['Sun, 25 Nov 2018 20:22:27 GMT']
+      ETag: [W/"fcdb714467a22fa6d836d17a87c28866"]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=15552000; includeSubDomains]
+      Transfer-Encoding: [chunked]
+      Vary: ['Accept, Accept-Encoding, Origin']
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [SAMEORIGIN]
+      X-PCO-API-Auth-Method: [HTTPBasic]
+      X-PCO-API-Request-Rate-Count: ['1']
+      X-PCO-API-Request-Rate-Limit: ['100']
+      X-PCO-API-Request-Rate-Period: [20 seconds]
+      X-Pco-Api-Processed-As-Version: ['2018-08-01']
+      X-Request-Id: [5249f6fe-73eb-4ada-8b2d-6357ff1b32ce]
+      X-Runtime: ['0.040466']
+      X-Xss-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+version: 1
