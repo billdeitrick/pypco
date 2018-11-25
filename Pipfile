@@ -1,19 +1,17 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
 requests = "*"
 
-
 [dev-packages]
-
 pylint = "*"
 vcrpy = "*"
 vcrpy-unittest = "*"
 docopt = "*"
 "jinja2" = "*"
+tox = "*"
+twine = "*"
+versionbump = "*"
