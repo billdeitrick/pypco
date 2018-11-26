@@ -21,7 +21,7 @@ Personal Access Token authentication.
 """
 
 # PyPCO Version
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 
 # Ensure models are loaded
 import pypco.models.check_ins
