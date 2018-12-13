@@ -17,3 +17,6 @@ logs
 # CI
 .tox
 .coverage
+
+# Finder
+.DS_Store
