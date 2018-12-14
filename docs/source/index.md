@@ -3,9 +3,7 @@
 
 # Contents
 
-* [Introduction](gettingstarted/introduction.md)
-* [Installlation](gettingstarted/installation.md)
-
+* [Getting Started](gettingstarted.md)
 # Indices and tables
 
 * [Index](genindex.html)
