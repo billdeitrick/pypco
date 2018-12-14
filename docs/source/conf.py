@@ -16,6 +16,13 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../../'))
 
+# -- AutoStructify -----------------------------------------------------
+
+# Import and enable AutoStructify...this enables rich support and cool stuff for
+# editing in md instead of rst.
+
+import recommonmark
+from recommonmark.transform import AutoStructify
 
 # -- Project information -----------------------------------------------------
 
@@ -183,6 +190,12 @@ epub_title = project
 # A list of files that should not be packed into the epub file
 epub_exclude_files = ['search.html']
 
-
 # -- Extension configuration -------------------------------------------------
 
+# Configure AutoStructify
+def setup(app):
+    app.add_config_value('recommonmark_config', {
+            'url_resolver': lambda url: url, # TODO: May need to adjust this when publishing to rtd, this works fine for local
+            'auto_toc_tree_section': 'Contents',
+            }, True)
+    app.add_transform(AutoStructify)
