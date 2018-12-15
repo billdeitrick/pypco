@@ -4,6 +4,7 @@
 # Contents
 
 * [Getting Started](gettingstarted.md)
+
 # Indices and tables
 
 * [Index](genindex.html)
