@@ -9,7 +9,9 @@ from pypco.endpoints.base_endpoint import BaseEndpoint, NotValidRootEndpointErro
 from pypco.endpoints.people import PeopleEndpoint, People, Addresses, Stats, FieldDefinitions
 from pypco.endpoints.check_ins import CheckInsEndpoint
 from pypco.models.people import Person, Address, FieldDefinition, Email
+from pypco import PCOTimeoutException
 from tests import BasePCOTestCase
+import requests.exceptions
 
 RL_REQ_COUNT = 0
 RL_REQ_COUNT_PREV = 0
@@ -104,7 +106,8 @@ class TestBaseEndpoint(BasePCOTestCase):
                 'User-Agent': 'pypco'
             },
             params={'bob': True},
-            json=None
+            json=None,
+            timeout=10
         )
 
         # Make sure we didn't sleep...this was a valid response
@@ -133,7 +136,7 @@ class TestBaseEndpoint(BasePCOTestCase):
 
         self.assertEqual(result, {})        
 
-    def get_rate_limit_mock(method, url, headers, params, json): #pylint: disable=R0201,E0213,W0613
+    def get_rate_limit_mock(method, url, headers, params, json, timeout): #pylint: disable=R0201,E0213,W0613
         """Create an object to mock rate limiting responses"""
 
         global RL_REQ_COUNT #pylint: disable=W0603
@@ -218,7 +221,8 @@ class TestBaseEndpoint(BasePCOTestCase):
                 'User-Agent': 'pypco'
             },
             params={'bob': True},
-            json=None
+            json=None,
+            timeout=10
         )
 
         mock_sleep.assert_called_once()
@@ -1620,4 +1624,77 @@ class TestBaseEndpoint(BasePCOTestCase):
         mock_people_request.assert_called_with(
             "https://api.planningcenteronline.com/people/v2/people",
             params=[('offset', 27)]
+        )
+
+    def get_requests_timeout_mock(method, url, params, json, headers, timeout): #pylint: disable=E0213
+        """A function to mock requests timeouts over multiple responses.
+        
+        You must set REQUEST_COUNT global variable to 0 and TIMEOUTS global variable to desired
+        number before this function is be called.
+
+        Returns:
+            Mock: A mock response object.
+        """
+
+        global REQUEST_COUNT
+        global TIMEOUTS
+
+        if REQUEST_COUNT == TIMEOUTS: #pylint: disable=E0601
+            response = Mock()
+            response.text = ''
+            response.status_code = 200
+            
+            return response
+
+        REQUEST_COUNT += 1 #pylint: disable=E0602
+
+        raise requests.exceptions.Timeout()
+
+    @patch('requests.request', side_effect=get_requests_timeout_mock)
+    def test_request_timeout_handling(self, mock_requests_request):
+        """Test timeout exception for hard timeout."""
+
+        global REQUEST_COUNT
+        global TIMEOUTS
+
+        people = PeopleEndpoint(PCOAuthConfig("app_id", "app_secret"), None)
+
+        # Ensure requests dispatched successfully with no timeouts
+        REQUEST_COUNT = 0
+        TIMEOUTS = 0
+
+        result = people.dispatch_single_request("/test")
+        self.assertEqual(result, {})
+
+        # Ensure requests dispatched successfully with 1 timeout
+        REQUEST_COUNT = 0
+        TIMEOUTS = 1
+
+        result = people.dispatch_single_request("/test")
+        self.assertEqual(result, {})
+
+        # Ensure requests dispatched successfully with 2 timeouts
+        REQUEST_COUNT = 0
+        TIMEOUTS = 2
+        
+        result = people.dispatch_single_request("/test")
+        self.assertEqual(result, {})
+
+        # Ensure exception raised with 3 timeouts
+        REQUEST_COUNT = 0
+        TIMEOUTS = 3
+
+        with self.assertRaises(PCOTimeoutException):
+            result = people.dispatch_single_request("/test")
+
+        mock_requests_request.assert_called_with(
+            "GET",
+            "/test",
+            params=None,
+            json=None,
+            headers={
+                "Authorization": "Basic YXBwX2lkOmFwcF9zZWNyZXQ=",
+                "User-Agent": 'pypco'
+            },
+            timeout=10
         )

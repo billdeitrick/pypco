@@ -39,3 +39,6 @@ from .pco import PCO
 # Utility functions for OAUTH
 from .utils import get_browser_redirect_url
 from .utils import get_oauth_access_token
+
+# Exceptions
+from .endpoints.base_endpoint import PCOTimeoutException
