@@ -360,8 +360,8 @@ class RelationManager():
                 self._model._data['links'][self._rel_name],
                 where=where,
                 filter=filter,
-                per_page=None,
-                order=None,
+                per_page=per_page,
+                order=order,
                 **kwargs
             )
 

@@ -3,6 +3,7 @@
 #pylint: disable=E1101
 
 import unittest
+from unittest.mock import patch
 from requests import HTTPError
 from .. import BasePCOVCRTestCase
 from .. import BasePCOTestCase
@@ -837,3 +838,30 @@ class TestModels(BasePCOVCRTestCase):
         # Make sure expected members are present
         for name,person in lincolns.items():
             self.assertIn(person.id, hh_member_ids)
+
+    @patch('pypco.endpoints.giving.GivingEndpoint.list_by_url')
+    def test_rel_list_params(self, mock_giving_list_by_url):
+        """Ensure params are passed as expected when listing related objects."""
+
+        pco = self.pco
+
+        paul = pco.giving.people.get('45029164')
+
+        donations = paul.rel.donations.list( #pylint: disable=W0612
+            where={
+                'payment_method': 'test'
+            },
+            filter=['test'],
+            per_page=23,
+            order='created_at'
+        )
+
+        mock_giving_list_by_url.assert_called_with(
+            paul._data['links']['donations'],
+            where={
+                'payment_method': 'test'
+            },
+            filter=['test'],
+            per_page=23,
+            order='created_at'
+        )

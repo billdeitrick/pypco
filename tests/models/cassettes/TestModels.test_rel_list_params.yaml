@@ -1,0 +1,42 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [pypco]
+    method: GET
+    uri: https://api.planningcenteronline.com/giving/v2/people/45029164
+  response:
+    body: {string: '{"data":{"type":"Person","id":"45029164","attributes":{"addresses":[],"donor_number":null,"email_addresses":[{"address":"paul.revere@mailinator.com","location":"Home","primary":true}],"first_name":"Paul","last_name":"Revere","permissions":null,"phone_numbers":[]},"links":{"batch_groups":null,"batches":null,"donations":"https://api.planningcenteronline.com/giving/v2/people/45029164/donations","payment_methods":"https://api.planningcenteronline.com/giving/v2/people/45029164/payment_methods","recurring_donations":"https://api.planningcenteronline.com/giving/v2/people/45029164/recurring_donations","self":"https://api.planningcenteronline.com/giving/v2/people/45029164"}},"included":[],"meta":{"parent":{"id":"263468","type":"Organization"}}}'}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Headers: ['Accept, Authorization, Content-Type, If-Match,
+          If-Modified-Since, If-None-Match, If-Unmodified-Since, Origin, X-Requested-With,
+          X-CSRF-Token, X-PCO-API-Version']
+      Access-Control-Allow-Methods: ['GET, POST, PATCH, PUT, DELETE, OPTIONS']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['ETag, Link, X-PCO-API-Auth-Method']
+      Cache-Control: ['max-age=0, private, must-revalidate']
+      Connection: [keep-alive]
+      Content-Type: [application/vnd.api+json; charset=utf-8]
+      Date: ['Wed, 02 Jan 2019 02:31:26 GMT']
+      ETag: [W/"551dfbd66ef5ffc9cfb31cae8bbc98ef"]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=15552000; includeSubDomains]
+      Transfer-Encoding: [chunked]
+      Vary: ['Accept, Accept-Encoding, Origin']
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [SAMEORIGIN]
+      X-Newrelic-App-Data: [PxQGV1BWDAMGR1RVBwMOVlQGFB9AJQwMRBBXDlRdRh1DBlZOUBFaTRZZWBVJBF1HEkhRTAcBBlRWCA8CV1ZTUQFVC1oKAAYeA0sJUwNRBlZQBQRZVFEOAAFcUlQbHAZKRgUDA1NfVlYGAQ1QCwwMAVdHZA==]
+      X-PCO-API-Auth-Method: [HTTPBasic]
+      X-PCO-API-Request-Rate-Count: ['1']
+      X-PCO-API-Request-Rate-Limit: ['100']
+      X-PCO-API-Request-Rate-Period: [20 seconds]
+      X-Pco-Api-Processed-As-Version: ['2018-08-01']
+      X-Request-Id: [42da0310-894a-487b-8f05-56bd2d9a88bc]
+      X-Runtime: ['0.047438']
+      X-Xss-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+version: 1
