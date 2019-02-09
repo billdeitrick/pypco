@@ -324,6 +324,49 @@ class RelationManager():
         return self._get_relation_endpoint().get(
             self._relationships[self._rel_name]['data']['id']
         )
+    
+    def get_id(self):
+        """Get the association in a to-one relationship.
+        
+        Returns:
+            BaseModel: An object inheriting from BaseModel that corresponds
+            to the PCO API object specified in the relationship. Returns None
+            if the requested relation has a None or null value.
+
+        Raises:
+            PCORelationDoesNotExistError: The requested relation does not exist on this model.
+        """
+
+        # If this wasn't a direct get request, refresh to make sure
+        # we have all available links, unless the model is newly created
+        if not self._model._from_get and not self._model._user_created:
+            self._model.refresh()
+
+        # If we have a matching link, fetch via the links attribute
+        # Unless we've made updates to the object's relationships
+        # In that case, fetch from relationships
+        if ('links' in self._model._data and 
+            self._rel_name in self._model._data['links'] and
+                not self._rel_name in self._model._update_relationships):
+            
+            # Return None/null value if that's what we have, and there's nothing in 
+            if self._model._data['links'][self._rel_name] == None:
+                return None
+            
+            # We now know we have a value in links and it's not null; fetch and return
+            return self._model._data['links'][self._rel_name].split("/")[-1]
+
+        # We don't have a matching link; raise an error if we don't have
+        # a matching relationship
+        if not self._rel_name in self._relationships:
+            raise PCORelationDoesNotExistError("The relation or link \"{}\" does not exist on this object.".format(self._rel_name))
+
+        # We know we have a matching relationship; let's check for a None value
+        if self._relationships[self._rel_name]['data'] == None:
+            return None
+
+        # The relationship exists and is not None; fetch and return
+        return self._relationships[self._rel_name]['data']['id']
 
     def list(self, where={}, filter=[], per_page=None, order=None, **kwargs):
         """Get the associated objects in a to-many relationship.
