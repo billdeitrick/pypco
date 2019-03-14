@@ -100,22 +100,39 @@ class BaseEndpoint:
             HTTPError: Raised by the requests module if there's an error we can't handle.
         """
 
+        # Loop to handle rate limiting
         while True:
 
             self._log.debug("Executing request to: \"%s\"", url)
 
             self._log.debug("Request payload is: \"%s\"", payload)
 
-            response = requests.request(
-                method,
-                url,
-                params=params,
-                json=payload,
-                headers={
-                    "Authorization": self._get_auth_header(),
-                    "User-Agent": 'pypco'
-                }
-            )
+            timeout_count = 0
+
+            # Loop to handle timeouts
+            while True:
+                try:
+                    response = requests.request(
+                        method,
+                        url,
+                        params=params,
+                        json=payload,
+                        headers={
+                            "Authorization": self._get_auth_header(),
+                            "User-Agent": 'pypco'
+                        },
+                        timeout=10
+                    )
+
+                    # No timeout, exit loop
+                    break
+                except requests.exceptions.Timeout as exc:
+                    timeout_count += 1
+
+                    if timeout_count == 3:
+                        raise PCOTimeoutException("The request to \"%s\" timed out after %d tries." % (url, timeout_count)) from exc
+
+                    continue
 
             self._log.debug("Request response code was: %d", response.status_code)
 
@@ -132,6 +149,7 @@ class BaseEndpoint:
 
             response.raise_for_status()
 
+            # No rate limit, exit loop
             break
 
         # The JSON module doesn't handle empty strings, so we return an
@@ -433,5 +451,10 @@ class BaseEndpoint:
 
 class NotValidRootEndpointError(Exception):
     """Exception raised when we attempt to find a root endpoint name for a non-root endpoint."""
+
+    pass
+
+class PCOTimeoutException(Exception):
+    """Exception raised when a call to the PCO API times out."""
 
     pass
