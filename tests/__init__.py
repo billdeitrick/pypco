@@ -80,7 +80,6 @@ def build_logging_environment():
 
 class CredsNotFoundError(Exception):
     """Exception indicating environment variables not found."""
-    pass
 
 class BasePCOTestCase(unittest.TestCase):
     """"A base class for unit tests on pypco library.

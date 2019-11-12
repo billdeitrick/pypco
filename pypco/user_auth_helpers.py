@@ -1,4 +1,4 @@
-"""Miscellaneous utility functions for pypco."""
+"""User-facing authentication helper functions for pypco."""
 
 import urllib
 import requests

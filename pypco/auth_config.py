@@ -1,4 +1,8 @@
-"""Utility classes for endpoints."""
+"""Internal authentication helper objects for pypco."""
+
+from enum import Enum, auto
+
+from .exceptions import PCOCredentialsException
 
 class PCOAuthConfig:
     """Auth configuration for PCO.
@@ -29,19 +33,14 @@ class PCOAuthConfig:
         elif self.token and not (self.application_id or self.secret):
             return PCOAuthType.OAUTH
         else:
-            raise PCOAuthException(
+            raise PCOCredentialsException(
                 "You have specified invalid authentication information."
                 "You must specify either an application id and a secret for"
                 "your Personal Access Token (PAT) or an OAuth token."
             )
 
-class PCOAuthType: #pylint: disable=R0903
+class PCOAuthType(Enum): #pylint: disable=R0903
     """Defines PCO authentication types."""
 
-    PAT = 0
-    OAUTH = 1
-
-class PCOAuthException(Exception):
-    """Defines an exception thrown when initializating a PCO object."""
-
-    pass
+    PAT = auto()
+    OAUTH = auto()

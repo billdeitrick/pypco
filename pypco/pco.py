@@ -1,7 +1,9 @@
-"""Module containing the main PCO object for the PCO API wrapper."""
-
+import time
 import logging
-from .endpoints import PCOAuthConfig, BaseEndpoint
+
+import requests
+
+from .auth_config import PCOAuthConfig
 
 class PCO(object):
     """The entry point to the PCO API.
@@ -10,8 +12,14 @@ class PCO(object):
         auth_config (PCOAuthConfig): The authentication configuration for this instance.
     """
 
-    def __init__(self, application_id=None, secret=None, token=None):
+    def __init__(self, api_base, application_id=None, secret=None, token=None):
         """Initialize the PCO entry point.
+
+        Args:
+            api_base (str): The base URL against which REST calls will be made.
+            application_id (str): The application_id; secret must also be specified.
+            secret (str): The secret for your app; application_id must also be specified.
+            token (str): The OAUTH token for your app; application_id and secret must not be specified.
 
         Note:
             You must specify either an application ID and a secret or an oauth token.
@@ -22,42 +30,64 @@ class PCO(object):
         self._log = logging.getLogger(__name__)
         self._log.info("Initializing the PCO wrapper.")
 
+        self.api_base = api_base
+
         self.auth_config = PCOAuthConfig(application_id, secret, token)
         self._log.debug("Initialized the auth_config object.")
 
-        for klass in BaseEndpoint.__subclasses__():
-            setattr(self, klass.resolve_root_endpoint_name(), klass(self.auth_config, self))
-       
-    def new(self, klass):
-        """Return a new instance of a PCO object that should be modified and pushed to the API.
+    def _get_auth(self):
+        pass
 
-        Note: This factory function is the only supported way to create new objects in the PCO
-        API. You should not be creating new instances of the model classes directly.
+    def _dispatch_request(self, method, url, params=None, json=None):
 
-        Args:
-            klass (class): The class representing the new object to be created in the PCO API.
+        while True:
 
-        Returns:
-            Returns an initialized model object as specified by the klass argument. This new object
-            is ready to be modified and saved to the API using the model's create function.
+            timeout_count = 0
 
-        Example:
-            >>> import pypco
-            >>> pco = pypco.PCO('<app_id>', '<app_secret>')
-            >>> # New takes the model class as an argument.
-            >>> # Model classes are resolved like: pypco.models.<endpoint>.<model>
-            >>> new_guy = pco.new(pypco.models.people.Person)
-            >>> new_guy.first_name = "Pico"
-            >>> new_guy.last_name = "Robot"
-            >>> new_guy.create()
-        """
+            while True:
+                try:
+                    headers = {'User-Agent': 'python-rocks'}
 
-        base_endpoint = getattr(self, klass.__module__.split('.')[-1])
-        endpoint = getattr(base_endpoint, klass.ENDPOINT_NAME)
+                    if method in ['POST', 'PUT']:
+                        headers['Content-Type'] = 'application/json'
 
-        data = {
-            'type': klass.__name__,
-            'attributes': {}
-        }
+                    response = requests.request(
+                        method,
+                        f'{self.api_base}{url}',
+                        auth=self._get_auth(),
+                        params=params,
+                        json=json,
+                        headers=headers,
+                        timeout=60
+                    )
 
-        return klass(endpoint, data, user_created=True)
+                    # No timeout, exit loop
+                    break
+
+                except requests.exceptions.Timeout as exc:
+                    timeout_count += 1
+
+                    if timeout_count == 3:
+                        raise Exception("The request to \"%s\" timed out after %d tries." % (url, timeout_count)) from exc
+
+                    continue
+
+            if response.status_code == 429:
+                time.sleep(int(response.headers['Retry-After']))
+                continue
+
+            response.raise_for_status()
+
+            return response.json()
+
+    def get(self, url, params=None, json=None):
+        return self._dispatch_request('GET', url, params, json)
+
+    def post(self, url, params=None, json=None):
+        return self._dispatch_request('POST', url, params, json)
+
+    def put(self, url, params=None, json=None):
+        return self._dispatch_request('PUT', url, params, json)
+
+    def delete(self, url, params=None, json=None):
+        return self._dispatch_request('DELETE', url, params, json)

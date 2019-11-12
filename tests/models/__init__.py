@@ -1,1 +1,0 @@
-"""Models test code."""

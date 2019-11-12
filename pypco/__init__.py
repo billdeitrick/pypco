@@ -1,35 +1,22 @@
 """
 A Pythonic Object-Oriented wrapper to the PCO API
 
-pypco is an object-oriented Python wrapper for the PCO REST API meant to
-simplify connecting to the PCO API from Python as much as possible. The
-goal is to create a simple interface that abstracts away all HTTP calls.
-Furthermore, pypco seeks to prevent the need to spend much time in the
-pypco documentation; once you've go thte library's basics down, all of your
-time should be spent directly in PCO API docs as the pypco library should
-mirror them exactly.
+pypco is a Python wrapper for the Planning Center Online (PCO) REST API
+intended to help you accomplish useful things with Python and the PCO API
+more quickly. pypco provides simple helpers wrapping the REST calls you'll
+place against the PCO API, meaning that you'll be spending your time
+directly in the PCO API docs rather than those specific to your API wrapper
+tool of choice.
 
 usage:
     >>> import pypco
     >>> pco = pypco.PCO()
-    >>> person = pco.people.get_single_result(ID=1)
-    >>> person.first_name = "bob"
-    >>> person.save()
 
-pypco supports OAUTH (though you have to do some of the legwork) and
-Personal Access Token authentication.
+pypco supports both OAUTH and Personal Access Token (PAT) authentication.
 """
 
 # PyPCO Version
-__version__ = "0.0.2"
-
-# Ensure models are loaded
-import pypco.models.check_ins
-import pypco.models.giving
-import pypco.models.people
-import pypco.models.resources
-import pypco.models.services
-import pypco.models.webhooks
+__version__ = "1.0a1"
 
 # Export the interface we present to clients
 
@@ -37,8 +24,4 @@ import pypco.models.webhooks
 from .pco import PCO
 
 # Utility functions for OAUTH
-from .utils import get_browser_redirect_url
-from .utils import get_oauth_access_token
-
-# Exceptions
-from .endpoints.base_endpoint import PCOTimeoutException
+from .user_auth_helpers import *

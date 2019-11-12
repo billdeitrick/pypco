@@ -1,6 +1,7 @@
-"""Test endpoint utility classes"""
+"""Test the PCO auth configuration module."""
 
-from pypco.endpoints.utils import PCOAuthConfig, PCOAuthException, PCOAuthType
+from pypco.auth_config import PCOAuthConfig, PCOAuthType
+from pypco.exceptions import PCOCredentialsException
 from tests import BasePCOTestCase
 
 class TestPCOAuthConfig(BasePCOTestCase):
@@ -33,21 +34,21 @@ class TestPCOAuthConfig(BasePCOTestCase):
         """Verify an error when we try to get auth type with bad auth."""
 
         # Test with only auth_id
-        with self.assertRaises(PCOAuthException):
+        with self.assertRaises(PCOCredentialsException):
             PCOAuthConfig('bad_app_id').auth_type #pylint: disable=W0106
 
         # Test with only secret
-        with self.assertRaises(PCOAuthException):
+        with self.assertRaises(PCOCredentialsException):
             PCOAuthConfig(secret='bad_app_secret').auth_type #pylint: disable=W0106
 
         # Test with token and auth_id
-        with self.assertRaises(PCOAuthException):
+        with self.assertRaises(PCOCredentialsException):
             PCOAuthConfig(application_id='bad_app_id', token='token').auth_type #pylint: disable=W0106
 
         # Test with token and secret
-        with self.assertRaises(PCOAuthException):
+        with self.assertRaises(PCOCredentialsException):
             PCOAuthConfig(secret='bad_secret', token='bad_token').auth_type #pylint: disable=W0106
 
         # Test with no args
-        with self.assertRaises(PCOAuthException):
+        with self.assertRaises(PCOCredentialsException):
             PCOAuthConfig().auth_type #pylint: disable=W0106

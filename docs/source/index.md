@@ -4,6 +4,7 @@
 # Contents
 
 * [Getting Started](gettingstarted.md)
+* [API Tour](apitour.md)
 
 # Indices and tables
 
