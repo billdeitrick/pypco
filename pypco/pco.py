@@ -19,7 +19,7 @@ class PCO(object):
             api_base (str): The base URL against which REST calls will be made.
             application_id (str): The application_id; secret must also be specified.
             secret (str): The secret for your app; application_id must also be specified.
-            token (str): The OAUTH token for your app; application_id and secret must not be specified.
+            token (str): OAUTH token for your app; application_id and secret must not be specified.
 
         Note:
             You must specify either an application ID and a secret or an oauth token.
