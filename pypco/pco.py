@@ -1,3 +1,5 @@
+"""The primary module for pypco containing main wrapper logic."""
+
 import time
 import logging
 
@@ -5,14 +7,23 @@ import requests
 
 from .auth_config import PCOAuthConfig
 
-class PCO(object):
+class PCO():
     """The entry point to the PCO API.
 
     Attributes:
         auth_config (PCOAuthConfig): The authentication configuration for this instance.
     """
 
-    def __init__(self, api_base, application_id=None, secret=None, token=None):
+    def __init__(
+            self,
+            api_base,
+            application_id=None,
+            secret=None,
+            token=None,
+            timeout=60,
+            upload_timeout=300,
+            timeout_retries=3
+        ):
         """Initialize the PCO entry point.
 
         Args:
@@ -20,6 +31,9 @@ class PCO(object):
             application_id (str): The application_id; secret must also be specified.
             secret (str): The secret for your app; application_id must also be specified.
             token (str): OAUTH token for your app; application_id and secret must not be specified.
+            timeout (int): How long to wait (seconds) for requests to timeout. Default 60.
+            upload_timeout (int): How long to wait (seconds) for uploads to timeout. Default 300.
+            timeout_retries (int): How many times to retry requests that have timed out.
 
         Note:
             You must specify either an application ID and a secret or an oauth token.
@@ -28,66 +42,115 @@ class PCO(object):
         """
 
         self._log = logging.getLogger(__name__)
-        self._log.info("Initializing the PCO wrapper.")
 
         self.api_base = api_base
 
-        self.auth_config = PCOAuthConfig(application_id, secret, token)
-        self._log.debug("Initialized the auth_config object.")
+        self._auth_config = PCOAuthConfig(application_id, secret, token)
+        self._auth_header = self._auth_config.auth_header
 
-    def _get_auth(self):
-        pass
+        self.timeout = timeout
+        self.upload_timeout = upload_timeout
+        self.timeout_retries = timeout_retries
 
-    def _dispatch_request(self, method, url, params=None, json=None):
+        self._log.info("Pypco has been initialized!")
+
+    def _do_request(self, method, url, payload=None, upload=None, **params):
+        """Builds, executes, and performs a single request against the PCO API.
+
+        Executed request could be one of the standard HTTP verbs or a file upload.
+
+        Args:
+            method (str): The HTTP method to use for this request.
+            url (str): The URL against which this request will be executed.
+            payload (obj): A json-serializable Python object to be sent as the post/put payload.
+            upload(str): The path to a file to upload.
+            params (obj): A dictionary or list of tuples or bytes to send in the query string.
+
+        Returns:
+            (requests.Response): The response to this request.
+        """
+
+        # Standard header
+        headers = {
+            'User-Agent': 'pypco',
+            'Authorization': self._auth_header,
+        }
+
+        # Standard params
+        request_params = {
+            'headers':headers,
+            'params':params,
+            'json':payload,
+            'timeout': self.upload_timeout if upload else self.timeout
+        }
+
+        # Add files param if upload specified
+        if upload:
+            request_params['files'] = {'file': open(upload, 'rb')}
+
+        self._log.debug("Executing %s request to '%s' with args %s", method, url, request_params)
+
+        # The moment we've been waiting for...execute the request
+        return requests.request(
+            method,
+            url,
+            **request_params
+        )
+
+    def _do_timeout_managed_request(self, method, url, payload=None, upload=None, **params):
+
+        timeout_count = 0
+
+        while True:
+            try:
+                return self._do_request(method, url, payload, upload, **params)
+
+            except requests.exceptions.Timeout as exc:
+                # TODO: Add logging here
+
+                timeout_count += 1
+
+                if timeout_count == 3:
+                    # TODO: Make this a custom error class
+                    raise Exception("The request to \"%s\" timed out after %d tries." \
+                        % (url, timeout_count)) from exc
+
+                continue
+
+    def _do_ratelimit_managed_request(self, method, url, payload=None, upload=None, **params):
 
         while True:
 
-            timeout_count = 0
-
-            while True:
-                try:
-                    headers = {'User-Agent': 'python-rocks'}
-
-                    if method in ['POST', 'PUT']:
-                        headers['Content-Type'] = 'application/json'
-
-                    response = requests.request(
-                        method,
-                        f'{self.api_base}{url}',
-                        auth=self._get_auth(),
-                        params=params,
-                        json=json,
-                        headers=headers,
-                        timeout=60
-                    )
-
-                    # No timeout, exit loop
-                    break
-
-                except requests.exceptions.Timeout as exc:
-                    timeout_count += 1
-
-                    if timeout_count == 3:
-                        raise Exception("The request to \"%s\" timed out after %d tries." % (url, timeout_count)) from exc
-
-                    continue
+            response = self._do_timeout_managed_request(method, url, payload, upload, **params)
 
             if response.status_code == 429:
+                # TODO: Add logging here
                 time.sleep(int(response.headers['Retry-After']))
                 continue
 
+            # TODO: Make this throw a custom error class
             response.raise_for_status()
 
             return response.json()
 
-    def get(self, url, params=None, json=None):
-        return self._dispatch_request('GET', url, params, json)
+    def _do_url_managed_request(self, method, url, payload=None, upload=None, **params):
+        pass
 
-    def post(self, url, params=None, json=None):
-        return self._dispatch_request('POST', url, params, json)
+    def get(self, url, **params):
+        return self._do_request('GET', url, **params)
 
-    def put(self, url, params=None, json=None):
-        return self._dispatch_request('PUT', url, params, json)
+    def post(self, url, payload=None, **params):
+        return self._do_request('POST', url, payload, **params)
 
-    def delete(self, url, params=None, json=None):
-        return self._dispatch_request('DELETE', url, params, json)
+    def put(self, url, payload=None, **params):
+        return self._do_request('PUT', url, payload, **params)
+
+    def delete(self, url, **params):
+        return self._do_request('DELETE', url, **params)
+
+    def iterate(self):
+        # TODO: Consider appropriate way to handle includes
+        pass
+
+    def upload(self, file_path):
+        pass
