@@ -33,7 +33,7 @@ class PCO():
             token (str): OAUTH token for your app; application_id and secret must not be specified.
             timeout (int): How long to wait (seconds) for requests to timeout. Default 60.
             upload_timeout (int): How long to wait (seconds) for uploads to timeout. Default 300.
-            timeout_retries (int): How many times to retry requests that have timed out.
+            timeout_retries (int): How many times to retry requests that have timed out. Default 3.
 
         Note:
             You must specify either an application ID and a secret or an oauth token.
