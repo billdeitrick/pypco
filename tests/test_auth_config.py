@@ -52,3 +52,16 @@ class TestPCOAuthConfig(BasePCOTestCase):
         # Test with no args
         with self.assertRaises(PCOCredentialsException):
             PCOAuthConfig().auth_type #pylint: disable=W0106
+
+    def test_auth_headers(self):
+        """Verify that we get the correct authentication headers."""
+
+        # PAT
+        auth_config = PCOAuthConfig('app_id', 'secret')
+        self.assertEqual(auth_config.auth_header, "Basic YXBwX2lkOnNlY3JldA==", \
+            "Invalid PAT authentication header.")
+
+        # OAUTH
+        auth_config = PCOAuthConfig(token="abcd1234")
+        self.assertEqual(auth_config.auth_header, "Bearer abcd1234", \
+            "Invalid OAUTH authentication header.")
