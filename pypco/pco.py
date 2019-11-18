@@ -154,3 +154,8 @@ class PCO():
 
     def upload(self, file_path):
         pass
+
+    @staticmethod
+    def new(object_type):
+        # TODO: Add quick template function to create new objects
+        pass
