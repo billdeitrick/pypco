@@ -6,6 +6,7 @@ import logging
 import requests
 
 from .auth_config import PCOAuthConfig
+from .exceptions import PCORequestTimeoutException
 
 class PCO():
     """The entry point to the PCO API.
@@ -106,13 +107,16 @@ class PCO():
                 return self._do_request(method, url, payload, upload, **params)
 
             except requests.exceptions.Timeout as exc:
-                # TODO: Add logging here
-
                 timeout_count += 1
 
-                if timeout_count == 3:
-                    # TODO: Make this a custom error class
-                    raise Exception("The request to \"%s\" timed out after %d tries." \
+                self._log.debug("The request to \"%s\" timed out after %d tries.", \
+                    url, timeout_count)
+
+                if timeout_count == self.timeout_retries:
+                    self._log.debug("Maximum retries (%d) hit. Will raise exception.", self.timeout_retries)
+
+                    raise PCORequestTimeoutException( \
+                        "The request to \"%s\" timed out after %d tries." \
                         % (url, timeout_count)) from exc
 
                 continue
