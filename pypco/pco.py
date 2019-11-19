@@ -129,14 +129,13 @@ class PCO():
             response = self._do_timeout_managed_request(method, url, payload, upload, **params)
 
             if response.status_code == 429:
-                # TODO: Add logging here
+                self._log.debug("Received rate limit response. Will try again after %d sec(s).", \
+                    int(response.headers['Retry-After']))
+
                 time.sleep(int(response.headers['Retry-After']))
                 continue
 
-            # TODO: Make this throw a custom error class
-            response.raise_for_status()
-
-            return response.json()
+            return response
 
     def _do_url_managed_request(self, method, url, payload=None, upload=None, **params):
         pass
@@ -145,6 +144,11 @@ class PCO():
         # TODO: The generic public entry point for requests
         # This will be called by shortcut methods or can be called
         # externally by the user
+
+        # TODO: Make this throw a custom error class
+        # response.raise_for_status()
+
+        # return response.json()
         pass
 
     def get(self, url, **params):
