@@ -53,7 +53,7 @@ class PCO():
         self.upload_timeout = upload_timeout
         self.timeout_retries = timeout_retries
 
-        self._log.info("Pypco has been initialized!")
+        self._log.debug("Pypco has been initialized!")
 
     def _do_request(self, method, url, payload=None, upload=None, **params):
         """Builds, executes, and performs a single request against the PCO API.
