@@ -113,7 +113,8 @@ class PCO():
                     url, timeout_count)
 
                 if timeout_count == self.timeout_retries:
-                    self._log.debug("Maximum retries (%d) hit. Will raise exception.", self.timeout_retries)
+                    self._log.debug("Maximum retries (%d) hit. Will raise exception.", \
+                        self.timeout_retries)
 
                     raise PCORequestTimeoutException( \
                         "The request to \"%s\" timed out after %d tries." \
@@ -138,6 +139,12 @@ class PCO():
             return response.json()
 
     def _do_url_managed_request(self, method, url, payload=None, upload=None, **params):
+        pass
+
+    def request(self):
+        # TODO: The generic public entry point for requests
+        # This will be called by shortcut methods or can be called
+        # externally by the user
         pass
 
     def get(self, url, **params):
