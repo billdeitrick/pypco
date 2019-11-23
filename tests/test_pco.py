@@ -447,3 +447,91 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
 
         err = exception_ctxt.exception
         self.assertEqual(err.status_code, 404)
+
+    def test_get(self):
+        """Test the get function."""
+
+        pco = self.pco
+
+        # A basic get
+        result = pco.get('/people/v2/people/45029164')
+        self.assertEqual(result['data']['attributes']['name'], 'Paul Revere')
+
+        # Get with includes
+        result = pco.get('/people/v2/people/45029164', include='emails,organization')
+        self.assertEqual(result['included'][0]['type'], 'Email')
+        self.assertEqual(result['included'][0]['attributes']['address'], \
+            'paul.revere@mailinator.com')
+        self.assertEqual(result['included'][1]['type'], 'Organization')
+        self.assertEqual(result['included'][1]['attributes']['name'], \
+            'Pypco Dev')
+
+        # Get with filter
+        params = {
+            'where[first_name]': 'paul'
+        }
+
+        result = pco.get('/people/v2/people', **params)
+        self.assertEqual(len(result['data']), 1)
+        self.assertEqual(result['data'][0]['attributes']['first_name'], 'Paul')
+
+    def test_post(self):
+        """Test the post function."""
+
+        pco = self.pco
+
+        new_song = pco.new(
+            'Song',
+            {
+                'title': 'Jesus Loves Me',
+                'author': 'Public Domain'
+            }
+        )
+
+        result = pco.post('/services/v2/songs', payload=new_song)
+
+        self.assertEqual(result['data']['attributes']['title'], 'Jesus Loves Me')
+
+    def test_patch(self):
+        """Test the patch function."""
+
+        pco = self.pco
+
+        song = pco.new(
+            'Song',
+            {
+                'author': 'Anna Bartlett Warner'
+            }
+        )
+
+        response = pco.patch('/services/v2/songs/18338876', song)
+
+        self.assertEqual(response['data']['attributes']['title'], 'Jesus Loves Me')
+        self.assertEqual(response['data']['attributes']['author'], 'Anna Bartlett Warner')
+
+    def test_new(self):
+        """Test the new function."""
+
+        pco = self.pco
+
+        template = pco.new('Test')
+
+        self.assertEqual(
+            template,
+            {
+                'type': 'Test',
+                'attributes': {}
+            }
+        )
+
+        template = pco.new('Test2', {'test_attr': 'hello'})
+
+        self.assertEqual(
+            template,
+            {
+                'type': 'Test2',
+                'attributes': {
+                    'test_attr': 'hello'
+                }
+            }
+        )

@@ -1,0 +1,240 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - pypco
+    method: GET
+    uri: https://api.planningcenteronline.com/people/v2/people/45029164
+  response:
+    body:
+      string: '{"data":{"type":"Person","id":"45029164","attributes":{"accounting_administrator":false,"anniversary":null,"avatar":"https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.png","birthdate":null,"child":false,"created_at":"2018-11-25T20:31:31Z","demographic_avatar_url":"https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.png","first_name":"Paul","gender":null,"given_name":null,"grade":null,"graduation_year":null,"inactivated_at":null,"last_name":"Revere","medical_notes":null,"membership":null,"middle_name":null,"name":"Paul
+        Revere","nickname":null,"passed_background_check":false,"people_permissions":null,"remote_id":null,"school_type":null,"site_administrator":false,"status":"active","updated_at":"2018-11-25T20:31:31Z"},"relationships":{"primary_campus":{"data":null}},"links":{"":"https://api.planningcenteronline.com/people/v2/people/45029164/","addresses":"https://api.planningcenteronline.com/people/v2/people/45029164/addresses","apps":"https://api.planningcenteronline.com/people/v2/people/45029164/apps","connected_people":"https://api.planningcenteronline.com/people/v2/people/45029164/connected_people","emails":"https://api.planningcenteronline.com/people/v2/people/45029164/emails","field_data":"https://api.planningcenteronline.com/people/v2/people/45029164/field_data","household_memberships":"https://api.planningcenteronline.com/people/v2/people/45029164/household_memberships","households":"https://api.planningcenteronline.com/people/v2/people/45029164/households","inactive_reason":null,"marital_status":null,"message_groups":"https://api.planningcenteronline.com/people/v2/people/45029164/message_groups","messages":"https://api.planningcenteronline.com/people/v2/people/45029164/messages","name_prefix":null,"name_suffix":null,"notes":"https://api.planningcenteronline.com/people/v2/people/45029164/notes","organization":"https://api.planningcenteronline.com/people/v2/people/45029164/organization","person_apps":"https://api.planningcenteronline.com/people/v2/people/45029164/person_apps","phone_numbers":"https://api.planningcenteronline.com/people/v2/people/45029164/phone_numbers","platform_notifications":"https://api.planningcenteronline.com/people/v2/people/45029164/platform_notifications","primary_campus":null,"school":null,"social_profiles":"https://api.planningcenteronline.com/people/v2/people/45029164/social_profiles","workflow_cards":"https://api.planningcenteronline.com/people/v2/people/45029164/workflow_cards","self":"https://api.planningcenteronline.com/people/v2/people/45029164"}},"included":[],"meta":{"can_include":["addresses","emails","field_data","households","inactive_reason","marital_status","name_prefix","name_suffix","organization","person_apps","phone_numbers","platform_notifications","primary_campus","school","social_profiles"],"parent":{"id":"263468","type":"Organization"}}}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Accept, Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match,
+        If-Unmodified-Since, Origin, X-Requested-With, X-CSRF-Token, X-PCO-API-Version,
+        X-PCO-API-Log-Level, X-PCO-API-Tracer-Class, X-PCO-API-Tracer-Secret
+      Access-Control-Allow-Methods:
+      - GET, POST, PATCH, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-PCO-API-Auth-Method
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/vnd.api+json; charset=utf-8
+      Date:
+      - Sat, 23 Nov 2019 21:12:37 GMT
+      ETag:
+      - W/"a1d4be2bfa39d9c8000228bcb9b50726"
+      Referrer-Policy:
+      - no-referrer-when-downgrade
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept, Accept-Encoding, Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-PCO-API-Auth-Method:
+      - HTTPBasic
+      X-PCO-API-Processed-As-Version:
+      - '2018-08-01'
+      X-PCO-API-Processor:
+      - ENG_2.2.2
+      X-PCO-API-Request-Rate-Count:
+      - '1'
+      X-PCO-API-Request-Rate-Limit:
+      - '100'
+      X-PCO-API-Request-Rate-Period:
+      - '20'
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - 19250fef-7e8a-444f-bc9b-5ce187cb1d47
+      X-Runtime:
+      - '0.031433'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - pypco
+    method: GET
+    uri: https://api.planningcenteronline.com/people/v2/people/45029164?include=emails%2Corganization
+  response:
+    body:
+      string: '{"data":{"type":"Person","id":"45029164","attributes":{"accounting_administrator":false,"anniversary":null,"avatar":"https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.png","birthdate":null,"child":false,"created_at":"2018-11-25T20:31:31Z","demographic_avatar_url":"https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.png","first_name":"Paul","gender":null,"given_name":null,"grade":null,"graduation_year":null,"inactivated_at":null,"last_name":"Revere","medical_notes":null,"membership":null,"middle_name":null,"name":"Paul
+        Revere","nickname":null,"passed_background_check":false,"people_permissions":null,"remote_id":null,"school_type":null,"site_administrator":false,"status":"active","updated_at":"2018-11-25T20:31:31Z"},"relationships":{"primary_campus":{"data":null},"emails":{"links":{"related":"https://api.planningcenteronline.com/people/v2/people/45029164/emails"},"data":[{"type":"Email","id":"29871166"}]},"organization":{"links":{"related":"https://api.planningcenteronline.com/people/v2/people/45029164/organization"},"data":{"type":"Organization","id":"263468"}}},"links":{"":"https://api.planningcenteronline.com/people/v2/people/45029164/","addresses":"https://api.planningcenteronline.com/people/v2/people/45029164/addresses","apps":"https://api.planningcenteronline.com/people/v2/people/45029164/apps","connected_people":"https://api.planningcenteronline.com/people/v2/people/45029164/connected_people","emails":"https://api.planningcenteronline.com/people/v2/people/45029164/emails","field_data":"https://api.planningcenteronline.com/people/v2/people/45029164/field_data","household_memberships":"https://api.planningcenteronline.com/people/v2/people/45029164/household_memberships","households":"https://api.planningcenteronline.com/people/v2/people/45029164/households","inactive_reason":null,"marital_status":null,"message_groups":"https://api.planningcenteronline.com/people/v2/people/45029164/message_groups","messages":"https://api.planningcenteronline.com/people/v2/people/45029164/messages","name_prefix":null,"name_suffix":null,"notes":"https://api.planningcenteronline.com/people/v2/people/45029164/notes","organization":"https://api.planningcenteronline.com/people/v2/people/45029164/organization","person_apps":"https://api.planningcenteronline.com/people/v2/people/45029164/person_apps","phone_numbers":"https://api.planningcenteronline.com/people/v2/people/45029164/phone_numbers","platform_notifications":"https://api.planningcenteronline.com/people/v2/people/45029164/platform_notifications","primary_campus":null,"school":null,"social_profiles":"https://api.planningcenteronline.com/people/v2/people/45029164/social_profiles","workflow_cards":"https://api.planningcenteronline.com/people/v2/people/45029164/workflow_cards","self":"https://api.planningcenteronline.com/people/v2/people/45029164"}},"included":[{"type":"Email","id":"29871166","attributes":{"address":"paul.revere@mailinator.com","created_at":"2018-11-25T20:31:31Z","location":"Home","primary":true,"updated_at":"2018-11-25T20:31:31Z"},"relationships":{"person":{"data":{"type":"Person","id":"45029164"}}},"links":{"self":"https://api.planningcenteronline.com/people/v2/emails/29871166"}},{"type":"Organization","id":"263468","attributes":{"country_code":null,"date_format":"%m/%d/%Y","name":"Pypco
+        Dev","time_zone":"America/New_York"},"links":{"self":"https://api.planningcenteronline.com/people/v2/people/45029164/organization"}}],"meta":{"can_include":["addresses","emails","field_data","households","inactive_reason","marital_status","name_prefix","name_suffix","organization","person_apps","phone_numbers","platform_notifications","primary_campus","school","social_profiles"],"parent":{"id":"263468","type":"Organization"}}}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Accept, Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match,
+        If-Unmodified-Since, Origin, X-Requested-With, X-CSRF-Token, X-PCO-API-Version,
+        X-PCO-API-Log-Level, X-PCO-API-Tracer-Class, X-PCO-API-Tracer-Secret
+      Access-Control-Allow-Methods:
+      - GET, POST, PATCH, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-PCO-API-Auth-Method
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/vnd.api+json; charset=utf-8
+      Date:
+      - Sat, 23 Nov 2019 21:12:37 GMT
+      ETag:
+      - W/"bc56094c1d944bf8064e97d9d7f0dee8"
+      Referrer-Policy:
+      - no-referrer-when-downgrade
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept, Accept-Encoding, Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-PCO-API-Auth-Method:
+      - HTTPBasic
+      X-PCO-API-Processed-As-Version:
+      - '2018-08-01'
+      X-PCO-API-Processor:
+      - ENG_2.2.2
+      X-PCO-API-Request-Rate-Count:
+      - '2'
+      X-PCO-API-Request-Rate-Limit:
+      - '100'
+      X-PCO-API-Request-Rate-Period:
+      - '20'
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - 63bfef40-e318-42d4-bb3f-5d7563739ba4
+      X-Runtime:
+      - '0.031582'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - pypco
+    method: GET
+    uri: https://api.planningcenteronline.com/people/v2/people?where%5Bfirst_name%5D=paul
+  response:
+    body:
+      string: '{"links":{"self":"https://api.planningcenteronline.com/people/v2/people?where[first_name]=paul"},"data":[{"type":"Person","id":"45029164","attributes":{"accounting_administrator":false,"anniversary":null,"avatar":"https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.png","birthdate":null,"child":false,"created_at":"2018-11-25T20:31:31Z","demographic_avatar_url":"https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.png","first_name":"Paul","gender":null,"given_name":null,"grade":null,"graduation_year":null,"inactivated_at":null,"last_name":"Revere","medical_notes":null,"membership":null,"middle_name":null,"name":"Paul
+        Revere","nickname":null,"passed_background_check":false,"people_permissions":null,"remote_id":null,"school_type":null,"site_administrator":false,"status":"active","updated_at":"2018-11-25T20:31:31Z"},"relationships":{"primary_campus":{"data":null}},"links":{"self":"https://api.planningcenteronline.com/people/v2/people/45029164"}}],"included":[],"meta":{"total_count":1,"count":1,"can_order_by":["given_name","first_name","nickname","middle_name","last_name","birthdate","anniversary","gender","grade","child","school_type","graduation_year","site_administrator","accounting_administrator","people_permissions","membership","inactivated_at","status","medical_notes","created_at","updated_at","remote_id"],"can_query_by":["given_name","first_name","nickname","middle_name","last_name","birthdate","anniversary","gender","grade","child","school_type","graduation_year","site_administrator","accounting_administrator","people_permissions","membership","inactivated_at","status","medical_notes","created_at","updated_at","search_name","search_name_or_email","search_name_or_email_or_phone_number","remote_id","id"],"can_include":["addresses","emails","field_data","households","inactive_reason","marital_status","name_prefix","name_suffix","organization","person_apps","phone_numbers","platform_notifications","primary_campus","school","social_profiles"],"can_filter":["created_since","admins","organization_admins"],"parent":{"id":"263468","type":"Organization"}}}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Accept, Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match,
+        If-Unmodified-Since, Origin, X-Requested-With, X-CSRF-Token, X-PCO-API-Version,
+        X-PCO-API-Log-Level, X-PCO-API-Tracer-Class, X-PCO-API-Tracer-Secret
+      Access-Control-Allow-Methods:
+      - GET, POST, PATCH, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-PCO-API-Auth-Method
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/vnd.api+json; charset=utf-8
+      Date:
+      - Sat, 23 Nov 2019 21:12:38 GMT
+      ETag:
+      - W/"0f70d17bf615f35ec3164dcf186a6491"
+      Referrer-Policy:
+      - no-referrer-when-downgrade
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept, Accept-Encoding, Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-PCO-API-Auth-Method:
+      - HTTPBasic
+      X-PCO-API-Processed-As-Version:
+      - '2018-08-01'
+      X-PCO-API-Processor:
+      - ENG_2.2.2
+      X-PCO-API-Request-Rate-Count:
+      - '3'
+      X-PCO-API-Request-Rate-Limit:
+      - '100'
+      X-PCO-API-Request-Rate-Period:
+      - '20'
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - 70c9eb4b-acf8-49e6-916a-48df87640942
+      X-Runtime:
+      - '0.023947'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1

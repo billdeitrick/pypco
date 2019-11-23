@@ -1,0 +1,85 @@
+interactions:
+- request:
+    body: '{"data": {"type": "Song", "attributes": {"title": "Jesus Loves Me", "author":
+      "Public Domain"}}}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '96'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - pypco
+    method: POST
+    uri: https://api.planningcenteronline.com/services/v2/songs
+  response:
+    body:
+      string: '{"data":{"type":"Song","id":"18338876","attributes":{"admin":null,"author":"Public
+        Domain","ccli_number":null,"copyright":null,"created_at":"2019-11-23T21:52:41Z","hidden":false,"last_scheduled_at":null,"last_scheduled_short_dates":null,"notes":null,"themes":null,"title":"Jesus
+        Loves Me","updated_at":"2019-11-23T21:52:41Z"},"links":{"arrangements":"https://api.planningcenteronline.com/services/v2/songs/18338876/arrangements","assign_tags":"https://api.planningcenteronline.com/services/v2/songs/18338876/assign_tags","attachments":"https://api.planningcenteronline.com/services/v2/songs/18338876/attachments","last_scheduled_item":"https://api.planningcenteronline.com/services/v2/songs/18338876/last_scheduled_item","song_schedules":"https://api.planningcenteronline.com/services/v2/songs/18338876/song_schedules","tags":"https://api.planningcenteronline.com/services/v2/songs/18338876/tags","self":"https://api.planningcenteronline.com/services/v2/songs/18338876"}},"included":[],"meta":{"parent":{"id":"263468","type":"Organization"}}}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Accept, Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match,
+        If-Unmodified-Since, Origin, X-Requested-With, X-CSRF-Token, X-PCO-API-Version,
+        X-PCO-API-Log-Level, X-PCO-API-Tracer-Class, X-PCO-API-Tracer-Secret
+      Access-Control-Allow-Methods:
+      - GET, POST, PATCH, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-PCO-API-Auth-Method
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/vnd.api+json; charset=utf-8
+      Date:
+      - Sat, 23 Nov 2019 21:52:41 GMT
+      ETag:
+      - W/"0e2954c4f87b54199de56030c7f6e11c"
+      Referrer-Policy:
+      - no-referrer-when-downgrade
+      Server:
+      - nginx
+      Set-Cookie:
+      - request_method=POST; path=/; secure
+      Strict-Transport-Security:
+      - max-age=15552000
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept, Accept-Encoding, Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-PCO-API-Auth-Method:
+      - HTTPBasic
+      X-PCO-API-Processed-As-Version:
+      - '2018-08-01'
+      X-PCO-API-Processor:
+      - ENG_2.2.2
+      X-PCO-API-Request-Rate-Count:
+      - '1'
+      X-PCO-API-Request-Rate-Limit:
+      - '100'
+      X-PCO-API-Request-Rate-Period:
+      - '20'
+      X-Request-Id:
+      - 178428a3-3031-4c5d-b7ba-b48a67659a6e
+      X-Runtime:
+      - '0.306442'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 201
+      message: Created
+version: 1

@@ -240,13 +240,60 @@ class PCO():
         return self.request_response(method, url, payload, upload, **params).json()
 
     def get(self, url, **params):
-        return self._do_request('GET', url, **params)
+        """Perform a GET request against the PCO API.
+
+        Performs a fully managed GET request (handles ratelimiting, timeouts, etc.).
+
+        Args:
+            url (str): The URL against which to perform the request. Can include
+                what's been set as api_base, which will be ignored if this value is also
+                present in your URL.
+            params: Any named arguments will be passed as query parameters. Values must
+                be of type str!
+
+        Returns:
+            (dict): The payload returned by the API for this request.
+        """
+
+        return self.request_json('GET', url, **params)
 
     def post(self, url, payload=None, **params):
-        return self._do_request('POST', url, payload, **params)
+        """Perform a POST request against the PCO API.
 
-    def put(self, url, payload=None, **params):
-        return self._do_request('PUT', url, payload, **params)
+        Performs a fully managed POST request (handles ratelimiting, timeouts, etc.).
+
+        Args:
+            url (str): The URL against which to perform the request. Can include
+                what's been set as api_base, which will be ignored if this value is also
+                present in your URL.
+            payload (dict): The payload for the POST request. Must be serializable to JSON!
+            params: Any named arguments will be passed as query parameters. Values must
+                be of type str!
+
+        Returns:
+            (dict): The payload returned by the API for this request.
+        """
+
+        return self.request_json('POST', url, payload, **params)
+
+    def patch(self, url, payload=None, **params):
+        """Perform a PATCH request against the PCO API.
+
+        Performs a fully managed PATCH request (handles ratelimiting, timeouts, etc.).
+
+        Args:
+            url (str): The URL against which to perform the request. Can include
+                what's been set as api_base, which will be ignored if this value is also
+                present in your URL.
+            payload (dict): The payload for the PUT request. Must be serializable to JSON!
+            params: Any named arguments will be passed as query parameters. Values must
+                be of type str!
+
+        Returns:
+            (dict): The payload returned by the API for this request.
+        """
+
+        return self.request_json('PATCH', url, payload, **params)
 
     def delete(self, url, **params):
         return self._do_request('DELETE', url, **params)
@@ -259,6 +306,20 @@ class PCO():
         pass
 
     @staticmethod
-    def new(object_type):
-        # TODO: Add quick template function to create new objects
-        pass
+    def new(object_type, attributes=None):
+        """Get template JSON for creating a new object.
+
+        Args:
+            object_type (str): The type of object to be created.
+            attributes (dict): The new objects attributes. Defaults to empty.
+
+        Returns:
+            (dict): A template from which to set the new object's attributes.
+        """
+
+        return {
+            'data': {
+                'type': object_type,
+                'attributes': {} if attributes is None else attributes
+            }
+        }
