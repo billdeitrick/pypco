@@ -306,7 +306,7 @@ class PCO():
         pass
 
     @staticmethod
-    def new(object_type, attributes=None):
+    def template(object_type, attributes=None):
         """Get template JSON for creating a new object.
 
         Args:

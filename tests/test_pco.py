@@ -480,7 +480,7 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
 
         pco = self.pco
 
-        new_song = pco.new(
+        new_song = pco.template(
             'Song',
             {
                 'title': 'Jesus Loves Me',
@@ -497,7 +497,7 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
 
         pco = self.pco
 
-        song = pco.new(
+        song = pco.template(
             'Song',
             {
                 'author': 'Anna Bartlett Warner'
@@ -509,29 +509,33 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
         self.assertEqual(response['data']['attributes']['title'], 'Jesus Loves Me')
         self.assertEqual(response['data']['attributes']['author'], 'Anna Bartlett Warner')
 
-    def test_new(self):
-        """Test the new function."""
+    def test_template(self):
+        """Test the template function."""
 
         pco = self.pco
 
-        template = pco.new('Test')
+        template = pco.template('Test')
 
         self.assertEqual(
             template,
             {
-                'type': 'Test',
-                'attributes': {}
+                'data': {
+                    'type': 'Test',
+                    'attributes': {}
+                }
             }
         )
 
-        template = pco.new('Test2', {'test_attr': 'hello'})
+        template = pco.template('Test2', {'test_attr': 'hello'})
 
         self.assertEqual(
             template,
             {
-                'type': 'Test2',
-                'attributes': {
-                    'test_attr': 'hello'
+                'data': {
+                    'type': 'Test2',
+                    'attributes': {
+                        'test_attr': 'hello'
+                    }
                 }
             }
         )
