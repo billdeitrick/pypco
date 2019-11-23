@@ -333,9 +333,74 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
         mock_sleep.assert_called_with(15)
         self.assertIsNotNone(result, "Didn't get response returned!")
 
+    @patch('requests.request')
+    def test_do_url_managed_request(self, mock_request):
+        """Test requests with URL cleanup."""
 
-    def test_do_url_managed_request(self):
-        pass
+        base = 'https://api.planningcenteronline.com'
+
+        # Setup PCO object
+        pco = pypco.PCO(
+            base,
+            application_id='app_id',
+            secret='secret'
+        )
+
+        pco._do_url_managed_request('GET', '/test')
+
+        mock_request.assert_called_with(
+            'GET',
+            f'{base}/test',
+            headers={'User-Agent': 'pypco', 'Authorization': 'Basic YXBwX2lkOnNlY3JldA=='},
+            json=None,
+            params={},
+            timeout=60
+        )
+
+        pco._do_url_managed_request('GET', 'https://api.planningcenteronline.com/test')
+
+        mock_request.assert_called_with(
+            'GET',
+            f'{base}/test',
+            headers={'User-Agent': 'pypco', 'Authorization': 'Basic YXBwX2lkOnNlY3JldA=='},
+            json=None,
+            params={},
+            timeout=60
+        )
+
+        pco._do_url_managed_request('GET', 'https://api.planningcenteronline.com//test')
+
+        mock_request.assert_called_with(
+            'GET',
+            f'{base}/test',
+            headers={'User-Agent': 'pypco', 'Authorization': 'Basic YXBwX2lkOnNlY3JldA=='},
+            json=None,
+            params={},
+            timeout=60
+        )
+
+        pco._do_url_managed_request('GET', 'https://api.planningcenteronline.com//test')
+
+        mock_request.assert_called_with(
+            'GET',
+            f'{base}/test',
+            headers={'User-Agent': 'pypco', 'Authorization': 'Basic YXBwX2lkOnNlY3JldA=='},
+            json=None,
+            params={},
+            timeout=60
+        )
+
+        pco._do_url_managed_request('GET', \
+            'https://api.planningcenteronline.com//test///test1/test2/////test3/test4')
+
+        mock_request.assert_called_with(
+            'GET',
+            f'{base}/test/test1/test2/test3/test4',
+            headers={'User-Agent': 'pypco', 'Authorization': 'Basic YXBwX2lkOnNlY3JldA=='},
+            json=None,
+            params={},
+            timeout=60
+        )
 
 class TestPublicRequestFunctions(BasePCOVCRTestCase):
     """Test public PCO request functions."""

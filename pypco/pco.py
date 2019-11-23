@@ -2,6 +2,7 @@
 
 import time
 import logging
+import re
 
 import requests
 
@@ -99,6 +100,21 @@ class PCO():
         )
 
     def _do_timeout_managed_request(self, method, url, payload=None, upload=None, **params):
+        """Performs a single request against the PCO API with automatic retried in case of timeout.
+
+        Executed request could be one of the standard HTTP verbs or a file upload.
+
+        Args:
+            method (str): The HTTP method to use for this request.
+            url (str): The URL against which this request will be executed.
+            payload (obj): A json-serializable Python object to be sent as the post/put payload.
+            upload(str): The path to a file to upload.
+            params (obj): A dictionary or list of tuples or bytes to send in the query string.
+
+        Returns:
+            (requests.Response): The response to this request.
+        """
+
 
         timeout_count = 0
 
@@ -123,6 +139,21 @@ class PCO():
                 continue
 
     def _do_ratelimit_managed_request(self, method, url, payload=None, upload=None, **params):
+        """Performs a single request against the PCO API with automatic rate limit handling.
+
+        Executed request could be one of the standard HTTP verbs or a file upload.
+
+        Args:
+            method (str): The HTTP method to use for this request.
+            url (str): The URL against which this request will be executed.
+            payload (obj): A json-serializable Python object to be sent as the post/put payload.
+            upload(str): The path to a file to upload.
+            params (obj): A dictionary or list of tuples or bytes to send in the query string.
+
+        Returns:
+            (requests.Response): The response to this request.
+        """
+
 
         while True:
 
@@ -138,9 +169,30 @@ class PCO():
             return response
 
     def _do_url_managed_request(self, method, url, payload=None, upload=None, **params):
-        pass
+        """Performs a single request against the PCO API, automatically cleaning up the URL.
 
-    def request(self):
+        Executed request could be one of the standard HTTP verbs or a file upload.
+
+        Args:
+            method (str): The HTTP method to use for this request.
+            url (str): The URL against which this request will be executed.
+            payload (obj): A json-serializable Python object to be sent as the post/put payload.
+            upload(str): The path to a file to upload.
+            params (obj): A dictionary or list of tuples or bytes to send in the query string.
+
+        Returns:
+            (requests.Response): The response to this request.
+        """
+
+        url = url if url.startswith(self.api_base) else f'{self.api_base}{url}'
+        url = re.subn(r'(?<!:)[/]{2,}', '/', url)[0]
+
+        return self._do_ratelimit_managed_request(method, url, payload, upload, **params)
+
+    def request_response(self, method, url, payload=None, upload=None, **params):
+        pass
+    
+    def request_json(self):
         # TODO: The generic public entry point for requests
         # This will be called by shortcut methods or can be called
         # externally by the user
