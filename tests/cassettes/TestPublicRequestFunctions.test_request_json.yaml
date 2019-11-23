@@ -63,7 +63,7 @@ interactions:
       X-PCO-API-Processor:
       - ENG_2.2.2
       X-PCO-API-Request-Rate-Count:
-      - '3'
+      - '1'
       X-PCO-API-Request-Rate-Limit:
       - '100'
       X-PCO-API-Request-Rate-Period:
@@ -71,9 +71,9 @@ interactions:
       X-Permitted-Cross-Domain-Policies:
       - none
       X-Request-Id:
-      - 35c2799f-2a3f-4b02-bb04-b0716965b0bc
+      - 45a26c37-95fd-4fcf-b069-c913d46a6d21
       X-Runtime:
-      - '0.060894'
+      - '0.043124'
       X-XSS-Protection:
       - 1; mode=block
     status:
@@ -133,99 +133,18 @@ interactions:
       X-Frame-Options:
       - SAMEORIGIN
       X-PCO-API-Request-Rate-Count:
-      - '2'
+      - '1'
       X-PCO-API-Request-Rate-Limit:
       - '100'
       X-PCO-API-Request-Rate-Period:
       - 20 seconds
       X-Request-Id:
-      - bb1f1fe0-8d96-49c0-ac62-835901e2b1bc
+      - 767a84fb-8c92-4208-b583-3bc21635c62a
       X-Runtime:
-      - '0.016988'
+      - '0.018828'
       X-XSS-Protection:
       - 1; mode=block
     status:
       code: 404
       message: Not Found
-- request:
-    body: '{}'
-    headers:
-      Accept:
-      - '*/*'
-      Accept-Encoding:
-      - gzip, deflate
-      Connection:
-      - keep-alive
-      Content-Length:
-      - '2'
-      Content-Type:
-      - application/json
-      User-Agent:
-      - pypco
-    method: POST
-    uri: https://api.planningcenteronline.com/people/v2/people
-  response:
-    body:
-      string: '{"errors":[{"status":"400","title":"Bad Request","code":"invalid_resource_payload","detail":"The
-        payload given does not contain a ''data'' key."}]}'
-    headers:
-      Access-Control-Allow-Credentials:
-      - 'true'
-      Access-Control-Allow-Headers:
-      - Accept, Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match,
-        If-Unmodified-Since, Origin, X-Requested-With, X-CSRF-Token, X-PCO-API-Version,
-        X-PCO-API-Log-Level, X-PCO-API-Tracer-Class, X-PCO-API-Tracer-Secret
-      Access-Control-Allow-Methods:
-      - GET, POST, PATCH, PUT, DELETE, OPTIONS
-      Access-Control-Allow-Origin:
-      - '*'
-      Access-Control-Expose-Headers:
-      - ETag, Link, X-PCO-API-Auth-Method
-      Cache-Control:
-      - no-cache
-      Connection:
-      - keep-alive
-      Content-Type:
-      - application/json; charset=utf-8
-      Date:
-      - Sat, 23 Nov 2019 06:14:10 GMT
-      Referrer-Policy:
-      - no-referrer-when-downgrade
-      Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=31536000; includeSubDomains
-      Transfer-Encoding:
-      - chunked
-      Vary:
-      - Accept, Accept-Encoding, Origin
-      X-Content-Type-Options:
-      - nosniff
-      X-Download-Options:
-      - noopen
-      X-Frame-Options:
-      - SAMEORIGIN
-      X-PCO-API-Auth-Method:
-      - HTTPBasic
-      X-PCO-API-Processed-As-Version:
-      - '2018-08-01'
-      X-PCO-API-Processor:
-      - ENG_2.2.2
-      X-PCO-API-Request-Rate-Count:
-      - '5'
-      X-PCO-API-Request-Rate-Limit:
-      - '100'
-      X-PCO-API-Request-Rate-Period:
-      - '20'
-      X-Permitted-Cross-Domain-Policies:
-      - none
-      X-Request-Id:
-      - 57d418c5-b002-424a-b27b-80310e79e6ee
-      X-Runtime:
-      - '0.022942'
-      X-XSS-Protection:
-      - 1; mode=block
-    status:
-      code: 400
-      message: Bad Request
 version: 1

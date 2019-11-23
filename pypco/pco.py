@@ -221,16 +221,23 @@ class PCO():
 
         return response
 
-    def request_json(self):
-        # TODO: The generic public entry point for requests
-        # This will be called by shortcut methods or can be called
-        # externally by the user
+    def request_json(self, method, url, payload=None, upload=None, **params):
+        """A generic entry point for making a managed request against PCO.
 
-        # TODO: Make this throw a custom error class
-        # response.raise_for_status()
+        This function will return the payload from the PCO response (a dict).
 
-        # return response.json()
-        pass
+        Args:
+            method (str): The HTTP method to use for this request.
+            url (str): The URL against which this request will be executed.
+            payload (obj): A json-serializable Python object to be sent as the post/put payload.
+            upload(str): The path to a file to upload.
+            params (obj): A dictionary or list of tuples or bytes to send in the query string.
+
+        Returns:
+            (dict): The payload from the response to this request.
+        """
+
+        return self.request_response(method, url, payload, upload, **params).json()
 
     def get(self, url, **params):
         return self._do_request('GET', url, **params)

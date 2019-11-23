@@ -431,3 +431,19 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
 
         err = exception_ctxt.exception
         self.assertEqual(err.status_code, 400)
+
+    def test_request_json(self):
+        """Test the request_json function."""
+
+        pco = self.pco
+
+        response = pco.request_json('GET', '/people/v2/people')
+
+        self.assertIsInstance(response, dict)
+        self.assertIsNotNone(response['data'])
+
+        with self.assertRaises(PCORequestException) as exception_ctxt:
+            pco.request_response('GET', '/bogus')
+
+        err = exception_ctxt.exception
+        self.assertEqual(err.status_code, 404)
