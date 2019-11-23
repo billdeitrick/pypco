@@ -8,7 +8,8 @@ from unittest.mock import Mock, patch
 import requests
 
 import pypco
-from pypco.exceptions import PCORequestTimeoutException
+from pypco.exceptions import PCORequestTimeoutException, \
+    PCORequestException
 from tests import BasePCOTestCase, BasePCOVCRTestCase
 
 # Side effect functions and global vars
@@ -405,4 +406,28 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
 class TestPublicRequestFunctions(BasePCOVCRTestCase):
     """Test public PCO request functions."""
 
-    pass
+    def test_request_response(self):
+        """Test the request_response function."""
+
+        pco = self.pco
+
+        response = pco.request_response('GET', '/people/v2/people')
+
+        self.assertIsInstance(response, requests.Response, "Wrong type of object returned.")
+        self.assertIsNotNone(response.json()['data'], "Expected to receive data but didn't.")
+
+        with self.assertRaises(PCORequestException) as exception_ctxt:
+            pco.request_response('GET', '/bogus')
+
+        err = exception_ctxt.exception
+        self.assertEqual(err.status_code, 404)
+
+        with self.assertRaises(PCORequestException) as exception_ctxt:
+            pco.request_response(
+                'POST',
+                '/people/v2/people',
+                payload={}
+            )
+
+        err = exception_ctxt.exception
+        self.assertEqual(err.status_code, 400)

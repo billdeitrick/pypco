@@ -7,13 +7,25 @@ import re
 import requests
 
 from .auth_config import PCOAuthConfig
-from .exceptions import PCORequestTimeoutException
+from .exceptions import PCORequestTimeoutException, \
+    PCORequestException
 
 class PCO():
     """The entry point to the PCO API.
 
-    Attributes:
-        auth_config (PCOAuthConfig): The authentication configuration for this instance.
+    Note:
+        You must specify either an application ID and a secret or an oauth token.
+        If you specify an invalid combination of these arguments, an exception will be
+        raised when you attempt to make API calls.
+
+    Args:
+        api_base (str): The base URL against which REST calls will be made.
+        application_id (str): The application_id; secret must also be specified.
+        secret (str): The secret for your app; application_id must also be specified.
+        token (str): OAUTH token for your app; application_id and secret must not be specified.
+        timeout (int): How long to wait (seconds) for requests to timeout. Default 60.
+        upload_timeout (int): How long to wait (seconds) for uploads to timeout. Default 300.
+        timeout_retries (int): How many times to retry requests that have timed out. Default 3.
     """
 
     def __init__(
@@ -26,22 +38,6 @@ class PCO():
             upload_timeout=300,
             timeout_retries=3
         ):
-        """Initialize the PCO entry point.
-
-        Args:
-            api_base (str): The base URL against which REST calls will be made.
-            application_id (str): The application_id; secret must also be specified.
-            secret (str): The secret for your app; application_id must also be specified.
-            token (str): OAUTH token for your app; application_id and secret must not be specified.
-            timeout (int): How long to wait (seconds) for requests to timeout. Default 60.
-            upload_timeout (int): How long to wait (seconds) for uploads to timeout. Default 300.
-            timeout_retries (int): How many times to retry requests that have timed out. Default 3.
-
-        Note:
-            You must specify either an application ID and a secret or an oauth token.
-            If you specify an invalid combination of these arguments, an exception will be
-            raised when you attempt to make API calls.
-        """
 
         self._log = logging.getLogger(__name__)
 
@@ -209,12 +205,21 @@ class PCO():
             params (obj): A dictionary or list of tuples or bytes to send in the query string.
 
         Raises:
-            PCORequestTransportException: Something was went wrong at the transport/protocol level.
-            PCORequestException: The PCO API responded to your request with an error.
+            PCORequestException: The response from the PCO API indicated an error with your request.
 
         Returns:
             (requests.Response): The response to this request.
         """
+
+        response = self._do_url_managed_request(method, url, payload, upload, **params)
+
+        try:
+            response.raise_for_status()
+        except requests.HTTPError as err:
+            self._log.debug("Request generated transport-level error: \"%s\"", str(err))
+            raise PCORequestException(response.status_code, str(err)) from err
+
+        return response
 
     def request_json(self):
         # TODO: The generic public entry point for requests

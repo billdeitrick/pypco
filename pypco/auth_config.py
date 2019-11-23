@@ -8,7 +8,7 @@ from .exceptions import PCOCredentialsException
 class PCOAuthConfig:
     """Auth configuration for PCO.
 
-        Attributes:
+        Args:
             application_id (str): The application ID for your application (PAT).
             secret (str): The secret for your application (PAT).
             token (str): The token for your application (OAUTH).

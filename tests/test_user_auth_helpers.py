@@ -60,15 +60,15 @@ class TestGetOAuthAccessToken(unittest.TestCase):
         """
 
         class MockOAuthResponse:
-            """Mocking class for OAuth response"""
-
-            def __init__(self, json_data, status_code):
-                """Initialize OAuth response mocking class.
+            """Mocking class for OAuth response
 
                 Args:
                     json_data (dict): JSON data returned by the mocked API.
                     status_code (int): The HTTP status code returned by the mocked API.
-                """
+            """
+
+            def __init__(self, json_data, status_code):
+
                 self.json_data = json_data
                 self.status_code = status_code
 
