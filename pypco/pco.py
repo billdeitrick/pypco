@@ -184,14 +184,38 @@ class PCO():
             (requests.Response): The response to this request.
         """
 
+        self._log.debug("URL cleaning input: \"%s\"", url)
+
         url = url if url.startswith(self.api_base) else f'{self.api_base}{url}'
         url = re.subn(r'(?<!:)[/]{2,}', '/', url)[0]
+
+        self._log.debug("URL cleaning output: \"%s\"", url)
 
         return self._do_ratelimit_managed_request(method, url, payload, upload, **params)
 
     def request_response(self, method, url, payload=None, upload=None, **params):
-        pass
-    
+        """A generic entry point for making a managed request against PCO.
+
+        This function will return a Requests response object, allowing access to
+        all request data and metadata. Executed request could be one of the standard
+        HTTP verbs or a file upload. If you're just looking for your data (json), use
+        the request_json() function or get(), post(), etc.
+
+        Args:
+            method (str): The HTTP method to use for this request.
+            url (str): The URL against which this request will be executed.
+            payload (obj): A json-serializable Python object to be sent as the post/put payload.
+            upload(str): The path to a file to upload.
+            params (obj): A dictionary or list of tuples or bytes to send in the query string.
+
+        Raises:
+            PCORequestTransportException: Something was went wrong at the transport/protocol level.
+            PCORequestException: The PCO API responded to your request with an error.
+
+        Returns:
+            (requests.Response): The response to this request.
+        """
+
     def request_json(self):
         # TODO: The generic public entry point for requests
         # This will be called by shortcut methods or can be called

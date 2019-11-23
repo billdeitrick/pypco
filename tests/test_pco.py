@@ -404,3 +404,5 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
 
 class TestPublicRequestFunctions(BasePCOVCRTestCase):
     """Test public PCO request functions."""
+
+    pass
