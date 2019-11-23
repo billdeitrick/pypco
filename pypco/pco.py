@@ -216,7 +216,7 @@ class PCO():
         try:
             response.raise_for_status()
         except requests.HTTPError as err:
-            self._log.debug("Request generated transport-level error: \"%s\"", str(err))
+            self._log.debug("Request resulted in API error: \"%s\"", str(err))
             raise PCORequestException(response.status_code, str(err)) from err
 
         return response
