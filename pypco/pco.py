@@ -296,6 +296,7 @@ class PCO():
         return self.request_json('PATCH', url, payload, **params)
 
     def delete(self, url, **params):
+        # TODO: Unit test this
         return self._do_request('DELETE', url, **params)
 
     def iterate(self):
@@ -303,6 +304,7 @@ class PCO():
         pass
 
     def upload(self, file_path):
+        # TODO: Build file upload capability
         pass
 
     @staticmethod
