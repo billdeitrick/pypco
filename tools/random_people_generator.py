@@ -13,7 +13,7 @@ import random
 import sys
 
 # Not quite sure why we're needing to do this for this import,
-# but it makes things work as expected.
+# but it makes the import work.
 sys.path.append('..')
 sys.path.append('.')
 
