@@ -509,6 +509,18 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
         self.assertEqual(response['data']['attributes']['title'], 'Jesus Loves Me')
         self.assertEqual(response['data']['attributes']['author'], 'Anna Bartlett Warner')
 
+    def test_delete(self):
+        """Test the delete function."""
+
+        pco = self.pco
+
+        response = pco.delete('/services/v2/songs/18420243')
+
+        self.assertEqual(response.status_code, 204)
+
+        with self.assertRaises(PCORequestException):
+            pco.get('/services/v2/songs/18420243')
+
     def test_template(self):
         """Test the template function."""
 

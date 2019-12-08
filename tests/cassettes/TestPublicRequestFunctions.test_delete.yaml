@@ -1,0 +1,151 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - pypco
+    method: DELETE
+    uri: https://api.planningcenteronline.com/services/v2/songs/18420243
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Accept, Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match,
+        If-Unmodified-Since, Origin, X-Requested-With, X-CSRF-Token, X-PCO-API-Version,
+        X-PCO-API-Log-Level, X-PCO-API-Tracer-Class, X-PCO-API-Tracer-Secret
+      Access-Control-Allow-Methods:
+      - GET, POST, PATCH, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-PCO-API-Auth-Method
+      Cache-Control:
+      - no-cache
+      Connection:
+      - keep-alive
+      Date:
+      - Sun, 08 Dec 2019 03:09:09 GMT
+      Referrer-Policy:
+      - no-referrer-when-downgrade
+      Server:
+      - nginx
+      Set-Cookie:
+      - request_method=DELETE; path=/; secure
+      Strict-Transport-Security:
+      - max-age=15552000
+      Vary:
+      - Accept, Accept-Encoding, Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-PCO-API-Auth-Method:
+      - HTTPBasic
+      X-PCO-API-Processed-As-Version:
+      - '2018-08-01'
+      X-PCO-API-Processor:
+      - ENG_2.2.2
+      X-PCO-API-Request-Rate-Count:
+      - '1'
+      X-PCO-API-Request-Rate-Limit:
+      - '100'
+      X-PCO-API-Request-Rate-Period:
+      - '20'
+      X-Request-Id:
+      - 2d72bfa8-c55c-498c-91c0-a76f6a74a6dd
+      X-Runtime:
+      - '0.252774'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 204
+      message: No Content
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - pypco
+    method: GET
+    uri: https://api.planningcenteronline.com/services/v2/songs/18420243
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAx2LMQqAQAwEvxJSW1hY+QBLKzuxUG9F4TCYSwoR/26wmxmYh6EqWrgdHy42mwdy
+        UzdcsR2WEdaLUSd+pmgJNh854rCDFEVcV9AtHnI5iiHRKp4TnXEtoO0f3+n9AEjrraVqAAAA
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Accept, Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match,
+        If-Unmodified-Since, Origin, X-Requested-With, X-CSRF-Token, X-PCO-API-Version,
+        X-PCO-API-Log-Level, X-PCO-API-Tracer-Class, X-PCO-API-Tracer-Secret
+      Access-Control-Allow-Methods:
+      - GET, POST, PATCH, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-PCO-API-Auth-Method
+      Cache-Control:
+      - no-cache
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 08 Dec 2019 03:09:09 GMT
+      Referrer-Policy:
+      - no-referrer-when-downgrade
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=15552000
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      - Accept, Accept-Encoding, Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-PCO-API-Auth-Method:
+      - HTTPBasic
+      X-PCO-API-Processed-As-Version:
+      - '2018-08-01'
+      X-PCO-API-Processor:
+      - ENG_2.2.2
+      X-PCO-API-Request-Rate-Count:
+      - '2'
+      X-PCO-API-Request-Rate-Limit:
+      - '100'
+      X-PCO-API-Request-Rate-Period:
+      - '20'
+      X-Request-Id:
+      - 12a37246-473f-4abd-9395-f9155b5c4eec
+      X-Runtime:
+      - '0.042480'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 404
+      message: Not Found
+version: 1

@@ -296,8 +296,24 @@ class PCO():
         return self.request_json('PATCH', url, payload, **params)
 
     def delete(self, url, **params):
-        # TODO: Unit test this
-        return self._do_request('DELETE', url, **params)
+        """Perform a DELETE request against the PCO API.
+
+        Performs a fully managed DELETE request (handles ratelimiting, timeouts, etc.).
+
+        Args:
+            url (str): The URL against which to perform the request. Can include
+                what's been set as api_base, which will be ignored if this value is also
+                present in your URL.
+            params: Any named arguments will be passed as query parameters. Values must
+                be of type str!
+
+        Returns:
+            (requests.response): The response object returned by the API for this request.
+                A successful delete request will return a response with an empty payload,
+                so we return the response object here instead.
+        """
+
+        return self.request_response('DELETE', url, **params)
 
     def iterate(self):
         # TODO: Consider appropriate way to handle includes
