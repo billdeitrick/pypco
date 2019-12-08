@@ -91,4 +91,4 @@ def generate_people(num_people):
     sys.stdout.write('\n')
 
 if __name__ == '__main__':
-    generate_people(sys.argv[1])
+    generate_people(int(sys.argv[1]))
