@@ -341,11 +341,11 @@ class PCO():
                 be of type str!
 
         Returns:
-            (Iterator[dict]): Each object returned by the API for this request. Returns "data", "included",
-            and "meta" nodes for each response. Note that data is processed somewhat before being returned
-            from the API. Namely, includes are injected into the object(s) which with they are associated.
-            This makes it easier to process includes associated with specific objects since they are accessible
-            directly from each returned object.
+            (Iterator[dict]): Each object returned by the API for this request. Returns "data",
+            "included", and "meta" nodes for each response. Note that data is processed somewhat
+            before being returned from the API. Namely, includes are injected into the object(s)
+            with which they are associated. This makes it easier to process includes associated with
+            specific objects since they are accessible directly from each returned object.
         """
 
         while True:
