@@ -86,7 +86,12 @@ class PCO():
         if upload:
             request_params['files'] = {'file': open(upload, 'rb')}
 
-        self._log.debug("Executing %s request to '%s' with args %s", method, url, request_params)
+        self._log.debug(
+            "Executing %s request to '%s' with args %s",
+            method,
+            url,
+            {param:value for (param, value) in request_params.items() if param != 'headers'}
+        )
 
         # The moment we've been waiting for...execute the request
         return requests.request(
