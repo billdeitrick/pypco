@@ -315,9 +315,70 @@ class PCO():
 
         return self.request_response('DELETE', url, **params)
 
-    def iterate(self):
-        # TODO: Consider appropriate way to handle includes
-        pass
+    def iterate(self, url, offset=0, per_page=25, **params):
+        """Iterate a list of objects in a response, handling pagination.
+
+        Basically, this function wraps get in a generator function designed for
+        processing requests that will return multiple objects. Pagination is
+        transparently handled.
+
+        Objects specified as includes will be injected into their associated
+        object and returned.
+
+        Args:
+            url (str): The URL against which to perform the request. Can include
+                what's been set as api_base, which will be `ignored if this value is also
+                present in your URL.
+            offset (int): The offset at which to start. Usually going to be 0 (the default).
+            per_page (int): The number of results that should be requested in a single page.
+                Valid values are 1 - 100, defaults to the PCO default of 25.
+            params: Any additional named arguments will be passed as query parameters. Values must
+                be of type str!
+
+        Returns:
+            (Iterator[dict]): Each object returned by the API for this request. Returns the "data"
+                and "included" nodes for each response.
+        """
+
+        while True:
+
+            response = self.get(url, offset=offset, per_page=per_page, **params)
+
+            for cur in response['data']:
+                record = {
+                    'data': cur,
+                    'included': [],
+                    'meta': {
+                        'can_include': response['meta']['can_include'],
+                        'parent': response['meta']['parent'],
+                    }
+                }
+
+                for key in cur['relationships']:
+                    relationships = cur['relationships'][key]['data']
+
+                    if relationships is not None:
+                        if isinstance(relationships, dict):
+                            for include in response['included']:
+                                if include['type'] == relationships['type'] and \
+                                    include['id'] == relationships['id']:
+
+                                    record['included'].append(include)
+
+                        elif isinstance(relationships, list):
+                            for relationship in relationships:
+                                for include in response['included']:
+                                    if include['type'] == relationship['type'] and \
+                                        include['id'] == relationship['id']:
+
+                                        record['included'].append(include)
+
+                yield record
+
+            offset += per_page
+
+            if not 'next' in response['links']:
+                break
 
     def upload(self, file_path):
         # TODO: Build file upload capability

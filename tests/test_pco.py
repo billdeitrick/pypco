@@ -521,6 +521,100 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
         with self.assertRaises(PCORequestException):
             pco.get('/services/v2/songs/18420243')
 
+    def test_iterate(self):
+        """Test the iterate function."""
+
+        pco = self.pco
+
+        # Get all people w/ default page size of 25
+        all_people = [row for row in pco.iterate('/people/v2/people')]
+        self.assertEqual(200, len(all_people), 'Should have been 200 results in People query.')
+
+        # Make sure we got all 200 unique ids
+        id_set = {person['data']['id'] for person in all_people}
+        self.assertEqual(200, len(id_set), 'Expected 200 unique people ids.')
+
+        # Change default page size to 50
+        all_people = [row for row in pco.iterate('/people/v2/people', per_page=50)]
+        self.assertEqual(200, len(all_people), 'Should have been 200 results in People query.')
+
+        # Make sure we got all 200 unique ids
+        id_set = {person['data']['id'] for person in all_people}
+        self.assertEqual(200, len(id_set), 'Expected 200 unique people ids.')
+
+        # Start with a non-zero offset
+        all_people = [row for row in pco.iterate('/people/v2/people', offset=25)]
+        self.assertEqual(175, len(all_people), 'Should have been 150 results in People query.')
+
+        # Make sure we got all 200 unique ids
+        id_set = {person['data']['id'] for person in all_people}
+        self.assertEqual(175, len(id_set), 'Expected 150 unique people ids.')
+
+        # Get a single include, excluding admins to avoid publishing email in VCR data
+        query = {
+            'where[site_administrator]': 'false',
+        }
+
+        all_people = [row for row in pco.iterate('/people/v2/people', include='emails', **query)]
+        self.assertEqual(199, len(all_people), 'Query did not return expected number of people.')
+
+        for person in all_people:
+            self.assertEqual(1, len(person['included']), 'Expected exactly one include.')
+            self.assertEqual('Email', person['included'][0]['type'], 'Unexpected include type.')
+            self.assertEqual(
+                person['data']['relationships']['emails']['data'][0]['id'],
+                person['included'][0]['id'],
+                'Email id did not match as expected.'
+            )
+
+        # Test multiple includes, again excluding admins
+        query = {
+            'where[site_administrator]': 'false',
+        }
+
+        all_people = [row for row in pco.iterate(
+            '/people/v2/people',
+            include='emails,organization',
+            **query
+        )]
+
+        for person in all_people:
+            self.assertEqual(2, len(person['included']), 'Expected exactly two includes.')
+
+            for included in person['included']:
+                self.assertIn(
+                    included['type'],
+                    ['Email', 'Organization'],
+                    'Unexpected include type'
+                )
+
+                if included['type'] == 'Email':
+                    self.assertEqual(
+                        included['relationships']['person']['data']['id'],
+                        person['data']['id'],
+                        'Email id did not match as expected.'
+                    )
+
+        # Test multiple included objects of same type
+        query = {
+            'where[first_name]': 'Paul',
+        }
+
+        all_pauls = [row for row in pco.iterate('/people/v2/people', include='addresses', **query)]
+
+        self.assertEqual(2, len(all_pauls), 'Unexpected number of people returned.')
+
+        for person in all_pauls:
+
+            included_person_ids = set()
+
+            for included in person['included']:
+                self.assertEqual(included['type'], 'Address')
+                included_person_ids.add(included['relationships']['person']['data']['id'])
+
+            self.assertEqual(1, len(included_person_ids))
+            self.assertEqual(included_person_ids.pop(), person['data']['id'])
+
     def test_template(self):
         """Test the template function."""
 
