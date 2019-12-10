@@ -320,7 +320,7 @@ class PCO():
 
         return self.request_response('DELETE', url, **params)
 
-    def iterate(self, url, offset=0, per_page=25, **params):
+    def iterate(self, url, offset=0, per_page=25, **params): #pylint: disable=too-many-branches
         """Iterate a list of objects in a response, handling pagination.
 
         Basically, this function wraps get in a generator function designed for
