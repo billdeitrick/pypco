@@ -353,11 +353,14 @@ class PCO():
                 record = {
                     'data': cur,
                     'included': [],
-                    'meta': {
-                        'can_include': response['meta']['can_include'],
-                        'parent': response['meta']['parent'],
-                    }
+                    'meta': {}
                 }
+
+                if 'can_include' in response['meta']:
+                    record['meta']['can_include']: response['meta']['can_include']
+
+                if 'parent' in response['meta']:
+                    record['meta']['parent']: response['meta']['parent']
 
                 for key in cur['relationships']:
                     relationships = cur['relationships'][key]['data']
