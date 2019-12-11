@@ -56,7 +56,8 @@ def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
         },
         headers={
             'User-Agent': 'pypco'
-        }
+        },
+        timeout=30
     )
 
     return response.json()
