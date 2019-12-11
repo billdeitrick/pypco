@@ -1,16 +1,24 @@
 pypco package
 =============
 
-Subpackages
------------
-
-.. toctree::
-
-    pypco.endpoints
-    pypco.models
-
 Submodules
 ----------
+
+pypco.auth\_config module
+-------------------------
+
+.. automodule:: pypco.auth_config
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+pypco.exceptions module
+-----------------------
+
+.. automodule:: pypco.exceptions
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 pypco.pco module
 ----------------
@@ -20,10 +28,10 @@ pypco.pco module
     :undoc-members:
     :show-inheritance:
 
-pypco.utils module
-------------------
+pypco.user\_auth\_helpers module
+--------------------------------
 
-.. automodule:: pypco.utils
+.. automodule:: pypco.user_auth_helpers
     :members:
     :undoc-members:
     :show-inheritance:
