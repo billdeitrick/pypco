@@ -2,6 +2,7 @@
 
 #pylint: disable=protected-access,global-statement
 
+import os
 import json
 from unittest.mock import Mock, patch
 
@@ -670,6 +671,43 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
                 }
             }
         )
+
+    def test_upload(self):
+        """Test the file upload function."""
+
+        pco = self.pco
+
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        file_path = '/assets/test_upload.jpg'
+
+        upload_response = pco.upload(f'{base_path}{file_path}')
+
+        self.assertEqual(upload_response['data'][0]['type'], 'File')
+        self.assertIsInstance(upload_response['data'][0]['id'], str)
+        self.assertEqual(upload_response['data'][0]['attributes']['name'], 'test_upload.jpg')
+
+    def test_upload_and_use_file(self):
+        """Verify we can use an uploaded file in PCO."""
+
+        pco = self.pco
+
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        file_path = '/assets/test_upload.jpg'
+
+        upload_response = pco.upload(f'{base_path}{file_path}')
+
+        query = {
+            'where[first_name]': 'Paul',
+            'where[last_name]': 'Revere',
+        }
+
+        paul = next(pco.iterate('/people/v2/people', **query))
+
+        user_template = pco.template('Person', {'avatar': upload_response['data'][0]['id']})
+
+        patch_result = pco.patch(paul['data']['links']['self'], user_template)
+
+        self.assertNotRegex(patch_result['data']['attributes']['avatar'], r'.*no_photo_thumbnail.*')
 
 class TestPCOInitialization(BasePCOTestCase):
     """Test initializing PCO objects with various argument combinations."""

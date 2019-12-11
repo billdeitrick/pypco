@@ -398,9 +398,19 @@ class PCO():
             if not 'next' in response['links']:
                 break
 
-    def upload(self, file_path):
-        # TODO: Build file upload capability
-        pass
+    def upload(self, file_path, **params):
+        """Upload the file at the specified path to PCO.
+
+        Args:
+            file_path (str): The path to the file to be uploaded to PCO.
+            params: Any named arguments will be passed as query parameters. Values must
+                be of type str!
+
+        Returns:
+            (dict): The PCO response from the file upload.
+        """
+
+        return self.request_json('POST', self.upload_url, upload=file_path, **params)
 
     @staticmethod
     def template(object_type, attributes=None):
