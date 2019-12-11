@@ -7,7 +7,7 @@ def get_browser_redirect_url(client_id, redirect_uri, scopes):
     """Get the URL to which the user's browser should be redirected.
 
     This helps you perform step 1 of PCO OAUTH as described at:
-    http://planningcenter.github.io/api-docs/#personal-access-token
+    https://developer.planning.center/docs/#/introduction/authentication
 
     Note: Valid PCO OAUTH scopes are: check_ins, giving, people, resources, and services
 
@@ -15,6 +15,9 @@ def get_browser_redirect_url(client_id, redirect_uri, scopes):
         client_id (str): The client id for your app.
         redirect_uri (str): The redirect URI, identical to what was used in step 1.
         scopes (list): A list of the scopes to which you will authenticate (see above).
+
+    Returns:
+        (str): The url to which a user's browser should be directed for OAUTH.
     """
 
     url = "https://api.planningcenteronline.com/oauth/authorize?"
@@ -36,13 +39,16 @@ def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
     """Get the access token for the client.
 
     This assumes you have already completed steps 1 and 2 as described at:
-    http://planningcenter.github.io/api-docs/#personal-access-token
+    https://developer.planning.center/docs/#/introduction/authentication
 
     Args:
         client_id (str): The client id for your app.
         client_secret (str): The client secret for your app.
-        code (int): The code code returned by step one of your OAUTH sequence.
+        code (int): The code returned by step one of your OAUTH sequence.
         redirect_uri (str): The redirect URI, identical to what was used in step 1.
+
+    Returns:
+        (requests.response): The PCO response to your OAUTH request.
     """
 
     response = requests.post(
@@ -63,5 +69,3 @@ def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
     return response
 
 # TODO: Add function to get refresh token
-
-# TODO: Add function to tie all this together with a CherryPy (or similar) server
