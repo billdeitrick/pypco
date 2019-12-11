@@ -32,9 +32,9 @@ class PCOAuthConfig:
             (PCOAuthType): The authentication type for this config.
         """
 
-        if self.application_id and self.secret and not self.token:
+        if self.application_id and self.secret and not self.token: #pylint: disable=no-else-return
             return PCOAuthType.PAT
-        if self.token and not (self.application_id or self.secret):
+        elif self.token and not (self.application_id or self.secret):
             return PCOAuthType.OAUTH
         else:
             raise PCOCredentialsException(
