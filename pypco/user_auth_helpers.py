@@ -9,8 +9,6 @@ def get_browser_redirect_url(client_id, redirect_uri, scopes):
     This helps you perform step 1 of PCO OAUTH as described at:
     https://developer.planning.center/docs/#/introduction/authentication
 
-    Note: Valid PCO OAUTH scopes are: check_ins, giving, people, resources, and services
-
     Args:
         client_id (str): The client id for your app.
         redirect_uri (str): The redirect URI, identical to what was used in step 1.
