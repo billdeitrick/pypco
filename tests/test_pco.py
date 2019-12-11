@@ -12,6 +12,8 @@ from pypco.exceptions import PCORequestTimeoutException, \
     PCORequestException
 from tests import BasePCOTestCase, BasePCOVCRTestCase
 
+# region Side Effect Functions
+
 # Side effect functions and global vars
 
 ## Timeout testing
@@ -111,6 +113,8 @@ def ratelimit_se(*args, **kwargs): #pylint: disable=unused-argument
             """Placeholder function for requests.response"""
 
     return RateLimitResponse()
+
+# endregion
 
 class TestPrivateRequestFunctions(BasePCOTestCase):
     """Test low-level request mechanisms."""
@@ -666,3 +670,59 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
                 }
             }
         )
+
+class TestPCOInitialization(BasePCOTestCase):
+    """Test initializing PCO objects with various argument combinations."""
+
+    def test_pco_initialization(self):
+        """Test initializing the PCO object with various combinations of arguments."""
+
+        # region Minimal Args: PAT Auth
+        pco = pypco.PCO(
+            'app_id',
+            'app_secret',
+        )
+
+        self.assertIsInstance(pco._auth_config, pypco.auth_config.PCOAuthConfig)
+        self.assertIsInstance(pco._auth_header, str)
+        self.assertEqual(pco.api_base, 'https://api.planningcenteronline.com')
+        self.assertEqual(pco.timeout, 60)
+        self.assertEqual(pco.upload_url, 'https://upload.planningcenteronline.com/v2/files')
+        self.assertEqual(pco.upload_timeout, 300)
+        self.assertEqual(pco.timeout_retries, 3)
+
+        # endregion
+
+        # region Minimal Args: OAUTH
+        pco = pypco.PCO(
+            token='abc'
+        )
+
+        self.assertIsInstance(pco._auth_config, pypco.auth_config.PCOAuthConfig)
+        self.assertIsInstance(pco._auth_header, str)
+        self.assertEqual(pco.api_base, 'https://api.planningcenteronline.com')
+        self.assertEqual(pco.timeout, 60)
+        self.assertEqual(pco.upload_url, 'https://upload.planningcenteronline.com/v2/files')
+        self.assertEqual(pco.upload_timeout, 300)
+        self.assertEqual(pco.timeout_retries, 3)
+
+        # endregion
+
+        # region: Change all defaults
+        pco = pypco.PCO(
+            'app_id',
+            'app_secret',
+            api_base='https://bogus.base',
+            timeout=120,
+            upload_url='https://upload.files',
+            upload_timeout=50,
+            timeout_retries=500,
+        )
+
+        self.assertIsInstance(pco._auth_config, pypco.auth_config.PCOAuthConfig)
+        self.assertIsInstance(pco._auth_header, str)
+        self.assertEqual(pco.api_base, 'https://bogus.base')
+        self.assertEqual(pco.timeout, 120)
+        self.assertEqual(pco.upload_url, 'https://upload.files')
+        self.assertEqual(pco.upload_timeout, 50)
+        self.assertEqual(pco.timeout_retries, 500)
