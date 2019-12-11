@@ -34,7 +34,7 @@ class PCOAuthConfig:
 
         if self.application_id and self.secret and not self.token:
             return PCOAuthType.PAT
-        elif self.token and not (self.application_id or self.secret):
+        if self.token and not (self.application_id or self.secret):
             return PCOAuthType.OAUTH
         else:
             raise PCOCredentialsException(
