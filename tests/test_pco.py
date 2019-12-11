@@ -122,7 +122,6 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
 
         # Setup PCO object and request mock
         pco = pypco.PCO(
-            'https://api.planningcenteronline.com',
             application_id='app_id',
             secret='secret'
         )
@@ -205,7 +204,6 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
 
         # Setup PCO object and request mock
         pco = pypco.PCO(
-            'https://api.planningcenteronline.com',
             application_id='app_id',
             secret='secret'
         )
@@ -270,7 +268,6 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
 
         # Let's try with only two retries permitted
         pco = pypco.PCO(
-            'https://api.planningcenteronline.com',
             application_id='app_id',
             secret='secret',
             timeout_retries=2
@@ -294,9 +291,8 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
 
         # Setup PCO object
         pco = pypco.PCO(
-            'https://api.planningcenteronline.com',
-            application_id='app_id',
-            secret='secret'
+            'app_id',
+            'secret'
         )
 
         # Test with no rate limiting
@@ -342,9 +338,8 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
 
         # Setup PCO object
         pco = pypco.PCO(
-            base,
-            application_id='app_id',
-            secret='secret'
+            'app_id',
+            'secret'
         )
 
         pco._do_url_managed_request('GET', '/test')
@@ -398,6 +393,32 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
             'GET',
             f'{base}/test/test1/test2/test3/test4',
             headers={'User-Agent': 'pypco', 'Authorization': 'Basic YXBwX2lkOnNlY3JldA=='},
+            json=None,
+            params={},
+            timeout=60
+        )
+
+    @patch('pypco.PCO._do_ratelimit_managed_request')
+    def _test_do_url_managed_upload_request(self, mock_request):
+        """Test upload request with URL cleanup (should ignore)."""
+
+       # Setup PCO object
+        pco = pypco.PCO(
+            'app_id',
+            'secret'
+        )
+
+        pco._do_url_managed_request(
+            'POST',
+            'https://upload.planningcenteronline.com/v2/files',
+            upload='test',
+        )
+
+        mock_request.assert_called_with(
+            'POST',
+            'https://upload.planningcenteronline.com/v2/files',
+            headers={'User-Agent': 'pypco', 'Authorization': 'Basic YXBwX2lkOnNlY3JldA=='},
+            upload='test',
             json=None,
             params={},
             timeout=60

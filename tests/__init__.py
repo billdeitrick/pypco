@@ -116,9 +116,8 @@ class BasePCOVCRTestCase(vcr_unittest.VCRTestCase):
             self.creds['secret'] = 'robot'
 
         self.pco = pypco.PCO(
-            'https://api.planningcenteronline.com/',
-            application_id=self.creds['application_id'],
-            secret=self.creds['secret']
+            self.creds['application_id'],
+            self.creds['secret']
             )
 
         build_logging_environment()

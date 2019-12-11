@@ -19,35 +19,41 @@ class PCO():
         raised when you attempt to make API calls.
 
     Args:
-        api_base (str): The base URL against which REST calls will be made.
         application_id (str): The application_id; secret must also be specified.
         secret (str): The secret for your app; application_id must also be specified.
         token (str): OAUTH token for your app; application_id and secret must not be specified.
+        api_base (str): The base URL against which REST calls will be made.
+            Default: https://api.planningcenteronline.com
         timeout (int): How long to wait (seconds) for requests to timeout. Default 60.
+        upload_url (str): The URL to which files will be uploaded.
+            Default: https://upload.planningcenteronline.com/v2/files
         upload_timeout (int): How long to wait (seconds) for uploads to timeout. Default 300.
         timeout_retries (int): How many times to retry requests that have timed out. Default 3.
     """
 
     def __init__(
             self,
-            api_base,
             application_id=None,
             secret=None,
             token=None,
+            api_base='https://api.planningcenteronline.com',
             timeout=60,
+            upload_url='https://upload.planningcenteronline.com/v2/files',
             upload_timeout=300,
-            timeout_retries=3
+            timeout_retries=3,
         ):
 
         self._log = logging.getLogger(__name__)
 
-        self.api_base = api_base
-
         self._auth_config = PCOAuthConfig(application_id, secret, token)
         self._auth_header = self._auth_config.auth_header
 
+        self.api_base = api_base
         self.timeout = timeout
+
+        self.upload_url = upload_url
         self.upload_timeout = upload_timeout
+
         self.timeout_retries = timeout_retries
 
         self._log.debug("Pypco has been initialized!")
@@ -187,8 +193,9 @@ class PCO():
 
         self._log.debug("URL cleaning input: \"%s\"", url)
 
-        url = url if url.startswith(self.api_base) else f'{self.api_base}{url}'
-        url = re.subn(r'(?<!:)[/]{2,}', '/', url)[0]
+        if not upload:
+            url = url if url.startswith(self.api_base) else f'{self.api_base}{url}'
+            url = re.subn(r'(?<!:)[/]{2,}', '/', url)[0]
 
         self._log.debug("URL cleaning output: \"%s\"", url)
 
