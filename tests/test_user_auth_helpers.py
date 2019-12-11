@@ -39,16 +39,6 @@ class TestGetBrowserRedirectUrl(unittest.TestCase):
             redirect_url
         )
 
-    def test_bad_scope(self):
-        """Ensure a value error is thrown on invalid scope"""
-
-        with self.assertRaises(ValueError):
-            pypco.get_browser_redirect_url(
-                'abc123',
-                'https://nowhere.com?someurl',
-                ['people', 'giving', 'bogus']
-            )
-
 class TestGetOAuthAccessToken(unittest.TestCase):
     """Test pypco functionality for getting oauth access tokens"""
 

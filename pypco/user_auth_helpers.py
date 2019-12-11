@@ -22,10 +22,6 @@ def get_browser_redirect_url(client_id, redirect_uri, scopes):
 
     url = "https://api.planningcenteronline.com/oauth/authorize?"
 
-    for scope in scopes:
-        if scope not in ['check_ins', 'giving', 'people', 'resources', 'services']:
-            raise ValueError("\"{}\" is not a valid PCO OAUTH scope.".format(scope))
-
     params = [
         ('client_id', client_id),
         ('redirect_uri', redirect_uri),
