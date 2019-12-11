@@ -61,7 +61,6 @@ def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
         }
     )
 
-    # TODO: Consider returning JSON here instead
-    return response
+    return response.json()
 
 # TODO: Add function to get refresh token

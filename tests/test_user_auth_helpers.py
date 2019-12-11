@@ -105,7 +105,7 @@ class TestGetOAuthAccessToken(unittest.TestCase):
                     'id',
                     'secret',
                     'good',
-                    'https://www.site.com/').json().keys()
+                    'https://www.site.com/').keys()
             )
         )
 
@@ -121,6 +121,6 @@ class TestGetOAuthAccessToken(unittest.TestCase):
                     'secret',
                     'bad',
                     'https://www.site.com/'
-                ).json().keys()
+                ).keys()
             )
         )
