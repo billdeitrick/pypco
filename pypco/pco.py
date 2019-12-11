@@ -10,7 +10,7 @@ from .auth_config import PCOAuthConfig
 from .exceptions import PCORequestTimeoutException, \
     PCORequestException
 
-class PCO():
+class PCO(): #pylint: disable=too-many-instance-attributes
     """The entry point to the PCO API.
 
     Note:
@@ -31,7 +31,7 @@ class PCO():
         timeout_retries (int): How many times to retry requests that have timed out. Default 3.
     """
 
-    def __init__(
+    def __init__( #pylint: disable=too-many-arguments
             self,
             application_id=None,
             secret=None,
@@ -355,7 +355,7 @@ class PCO():
             specific objects since they are accessible directly from each returned object.
         """
 
-        while True:
+        while True: #pylint: disable=too-many-nested-blocks
 
             response = self.get(url, offset=offset, per_page=per_page, **params)
 
