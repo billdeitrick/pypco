@@ -2,7 +2,11 @@
 
 import unittest
 from unittest import mock
+
+from requests import HTTPError
+
 import pypco
+from pypco.exceptions import PCORequestException
 
 class TestGetBrowserRedirectUrl(unittest.TestCase):
     """Test pypco functionality for getting browser redirect URL."""
@@ -67,6 +71,20 @@ class TestGetOAuthAccessToken(unittest.TestCase):
 
                 return self.json_data
 
+            def raise_for_status(self):
+                """Raise HTTP exception if status code >= 400."""
+
+                if 400 <= self.status_code <= 500:
+                    raise HTTPError(
+                        u'%s Client Error: %s for url: %s' % \
+                            (
+                                self.status_code,
+                                'Unauthorized',
+                                'https://api.planningcenteronline.com/oauth/token'
+                            ),
+                        response=self
+                    )
+
         if args[0] != "https://api.planningcenteronline.com/oauth/token":
             return MockOAuthResponse(None, 404)
 
@@ -113,14 +131,12 @@ class TestGetOAuthAccessToken(unittest.TestCase):
     def test_invalid_code(self, mock_post): #pylint: disable=W0613
         """Ensure error response with invalid status code"""
 
-        self.assertIn(
-            'error',
-            list(
-                pypco.get_oauth_access_token(
-                    'id',
-                    'secret',
-                    'bad',
-                    'https://www.site.com/'
-                ).keys()
+        with self.assertRaises(PCORequestException) as err_cm:
+            pypco.get_oauth_access_token(
+                'id',
+                'secret',
+                'bad',
+                'https://www.site.com/'
             )
-        )
+
+        self.assertEqual(401, err_cm.exception.status_code)

@@ -3,6 +3,8 @@
 import urllib
 import requests
 
+from .exceptions import PCORequestException
+
 def get_browser_redirect_url(client_id, redirect_uri, scopes):
     """Get the URL to which the user's browser should be redirected.
 
@@ -59,6 +61,11 @@ def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
         },
         timeout=30
     )
+
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as err:
+        raise PCORequestException(response.status_code, str(err)) from err
 
     return response.json()
 
