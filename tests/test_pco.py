@@ -7,10 +7,11 @@ import json
 from unittest.mock import Mock, patch
 
 import requests
+from requests.exceptions import SSLError
 
 import pypco
 from pypco.exceptions import PCORequestTimeoutException, \
-    PCORequestException
+    PCORequestException, PCOUnexpectedRequestException
 from tests import BasePCOTestCase, BasePCOVCRTestCase
 
 # region Side Effect Functions
@@ -114,6 +115,11 @@ def ratelimit_se(*args, **kwargs): #pylint: disable=unused-argument
             """Placeholder function for requests.response"""
 
     return RateLimitResponse()
+
+def connection_error_se(*args, **kwargs):
+    """Simulate a requests SSLError being thrown."""
+
+    raise SSLError()
 
 # endregion
 
@@ -431,6 +437,15 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
 
 class TestPublicRequestFunctions(BasePCOVCRTestCase):
     """Test public PCO request functions."""
+
+    @patch('requests.request', side_effect=connection_error_se)
+    def test_request_resonse_general_err(self, mock_request):
+        """Test the request_response() function when a general error is thrown."""
+
+        pco = self.pco
+
+        with self.assertRaises(PCOUnexpectedRequestException):
+            pco.request_response('GET', '/test')
 
     def test_request_response(self):
         """Test the request_response function."""

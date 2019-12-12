@@ -8,7 +8,7 @@ import requests
 
 from .auth_config import PCOAuthConfig
 from .exceptions import PCORequestTimeoutException, \
-    PCORequestException
+    PCORequestException, PCOUnexpectedRequestException
 
 class PCO(): #pylint: disable=too-many-instance-attributes
     """The entry point to the PCO API.
@@ -223,7 +223,11 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             (requests.Response): The response to this request.
         """
 
-        response = self._do_url_managed_request(method, url, payload, upload, **params)
+        try:
+            response = self._do_url_managed_request(method, url, payload, upload, **params)
+        except Exception as err:
+            self._log.debug("Request resulted in unexpected error: \"%s\"", str(err))
+            raise PCOUnexpectedRequestException(str(err)) from err
 
         try:
             response.raise_for_status()

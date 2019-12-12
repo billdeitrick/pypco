@@ -4,6 +4,8 @@ import urllib
 import requests
 
 from .exceptions import PCORequestException
+from .exceptions import PCORequestTimeoutException
+from .exceptions import PCOUnexpectedRequestException
 
 def get_browser_redirect_url(client_id, redirect_uri, scopes):
     """Get the URL to which the user's browser should be redirected.
@@ -47,20 +49,25 @@ def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
         (requests.response): The PCO response to your OAUTH request.
     """
 
-    response = requests.post(
-        "https://api.planningcenteronline.com/oauth/token",
-        data={
-            'client_id': client_id,
-            'client_secret': client_secret,
-            'code': code,
-            'redirect_uri': redirect_uri,
-            'grant_type': "authorization_code"
-        },
-        headers={
-            'User-Agent': 'pypco'
-        },
-        timeout=30
-    )
+    try:
+        response = requests.post(
+            "https://api.planningcenteronline.com/oauth/token",
+            data={
+                'client_id': client_id,
+                'client_secret': client_secret,
+                'code': code,
+                'redirect_uri': redirect_uri,
+                'grant_type': "authorization_code"
+            },
+            headers={
+                'User-Agent': 'pypco'
+            },
+            timeout=30
+        )
+    except requests.exceptions.Timeout as err:
+        raise PCORequestTimeoutException() from err
+    except Exception as err:
+        raise PCOUnexpectedRequestException(str(err)) from err
 
     try:
         response.raise_for_status()

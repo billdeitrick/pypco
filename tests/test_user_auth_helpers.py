@@ -4,9 +4,13 @@ import unittest
 from unittest import mock
 
 from requests import HTTPError
+from requests import ConnectionError as RequestsConnectionError
+from requests import Timeout
 
 import pypco
 from pypco.exceptions import PCORequestException
+from pypco.exceptions import PCORequestTimeoutException
+from pypco.exceptions import PCOUnexpectedRequestException
 
 class TestGetBrowserRedirectUrl(unittest.TestCase):
     """Test pypco functionality for getting browser redirect URL."""
@@ -111,6 +115,12 @@ class TestGetOAuthAccessToken(unittest.TestCase):
                 401
             )
 
+        if kwargs.get('data')['code'] == 'timeout':
+            raise Timeout()
+
+        if kwargs.get('data')['code'] == 'connection':
+            raise RequestsConnectionError()
+
         return MockOAuthResponse(None, 400)
 
     @mock.patch('requests.post', side_effect=mock_oauth_response)
@@ -142,3 +152,23 @@ class TestGetOAuthAccessToken(unittest.TestCase):
 
         self.assertEqual(401, err_cm.exception.status_code)
         self.assertEqual('{"test_key": "test_value"}', err_cm.exception.response_body)
+
+    @mock.patch('requests.post', side_effect=mock_oauth_response)
+    def test_get_oauth_access_errors(self, mock_post): #pylint: disable=W0613
+        """Ensure error response with invalid status code"""
+
+        with self.assertRaises(PCORequestTimeoutException):
+            pypco.get_oauth_access_token(
+                'id',
+                'secret',
+                'timeout',
+                'https://www.site.com/'
+            )
+
+        with self.assertRaises(PCOUnexpectedRequestException):
+            pypco.get_oauth_access_token(
+                'id',
+                'secret',
+                'connection',
+                'https://www.site.com/'
+            )

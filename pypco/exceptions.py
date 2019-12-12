@@ -9,6 +9,12 @@ class PCOCredentialsException(PCOException):
 class PCORequestTimeoutException(PCOException):
     """Request to PCO timed out after the maximum number of retries."""
 
+class PCOUnexpectedRequestException(PCOException):
+    """An unexpected exception has occurred attempting to make the request.
+
+    We don't have any additional information associated with this exception.
+    """
+
 class PCORequestException(PCOException):
     """The response from the PCO API indicated an error with your request.
 
