@@ -351,8 +351,8 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             params: Any additional named arguments will be passed as query parameters. Values must
                 be of type str!
 
-        Returns:
-            (Iterator[dict]): Each object returned by the API for this request. Returns "data",
+        Yields:
+            dict: Each object returned by the API for this request. Returns "data",
             "included", and "meta" nodes for each response. Note that data is processed somewhat
             before being returned from the API. Namely, includes are injected into the object(s)
             with which they are associated. This makes it easier to process includes associated with
