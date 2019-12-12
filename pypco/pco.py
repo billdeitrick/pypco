@@ -229,7 +229,11 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             response.raise_for_status()
         except requests.HTTPError as err:
             self._log.debug("Request resulted in API error: \"%s\"", str(err))
-            raise PCORequestException(response.status_code, str(err)) from err
+            raise PCORequestException(
+                response.status_code,
+                str(err),
+                response_body=response.text
+            ) from err
 
         return response
 

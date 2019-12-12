@@ -15,8 +15,18 @@ class PCORequestException(PCOException):
     Args:
         status_code (int): The HTTP status code corresponding to the error.
         message (str): The error message string.
+        response_body (str): The body of the response (may include helpful information).
+            Defaults to None.
+
+    Attributes:
+        status_code (int): The HTTP status code returned.
+        message (str): The error message string.
+        response_body (str): Text included in the response body. Often
+            includes additional informative errors describing the problem
+            encountered.
     """
 
-    def __init__(self, status_code, message): #pylint: disable=super-init-not-called
+    def __init__(self, status_code, message, response_body=None): #pylint: disable=super-init-not-called
         self.status_code = status_code
         self.message = message
+        self.response_body = response_body

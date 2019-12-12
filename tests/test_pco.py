@@ -447,6 +447,11 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
 
         err = exception_ctxt.exception
         self.assertEqual(err.status_code, 404)
+        self.assertEqual(
+            err.response_body,
+            '{"errors":[{"status":"404","title":"Not Found",' \
+                '"detail":"The resource you requested could not be found"}]}'
+        )
 
         with self.assertRaises(PCORequestException) as exception_ctxt:
             pco.request_response(
@@ -457,6 +462,12 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
 
         err = exception_ctxt.exception
         self.assertEqual(err.status_code, 400)
+        self.assertEqual(
+            err.response_body,
+            '{"errors":[{"status":"400","title":"Bad Request",' \
+                '"code":"invalid_resource_payload",' \
+                    '"detail":"The payload given does not contain a \'data\' key."}]}'
+        )
 
     def test_request_json(self):
         """Test the request_json function."""

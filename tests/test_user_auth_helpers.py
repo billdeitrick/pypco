@@ -65,6 +65,7 @@ class TestGetOAuthAccessToken(unittest.TestCase):
 
                 self.json_data = json_data
                 self.status_code = status_code
+                self.text = '{"test_key": "test_value"}'
 
             def json(self):
                 """Return our mock JSON data"""
@@ -140,3 +141,4 @@ class TestGetOAuthAccessToken(unittest.TestCase):
             )
 
         self.assertEqual(401, err_cm.exception.status_code)
+        self.assertEqual('{"test_key": "test_value"}', err_cm.exception.response_body)

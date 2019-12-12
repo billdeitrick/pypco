@@ -65,7 +65,11 @@ def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
     try:
         response.raise_for_status()
     except requests.HTTPError as err:
-        raise PCORequestException(response.status_code, str(err)) from err
+        raise PCORequestException(
+            response.status_code,
+            str(err),
+            response_body=response.text
+        ) from err
 
     return response.json()
 
