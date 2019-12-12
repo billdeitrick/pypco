@@ -439,7 +439,7 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
     """Test public PCO request functions."""
 
     @patch('requests.request', side_effect=connection_error_se)
-    def test_request_resonse_general_err(self, mock_request):
+    def test_request_resonse_general_err(self, mock_request): #pylint: disable=unused-argument
         """Test the request_response() function when a general error is thrown."""
 
         pco = self.pco
