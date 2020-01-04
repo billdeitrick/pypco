@@ -90,7 +90,8 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         # Add files param if upload specified
         if upload:
-            request_params['files'] = {'file': open(upload, 'rb')}
+            upload_fh = open(upload, 'rb')
+            request_params['files'] = {'file': upload_fh}
 
         self._log.debug(
             "Executing %s request to '%s' with args %s",
@@ -100,11 +101,17 @@ class PCO(): #pylint: disable=too-many-instance-attributes
         )
 
         # The moment we've been waiting for...execute the request
-        return requests.request(
-            method,
-            url,
-            **request_params
-        )
+        try:
+            response = requests.request(
+                method,
+                url,
+                **request_params
+            )
+        finally:
+            if upload:
+                upload_fh.close()
+
+        return response
 
     def _do_timeout_managed_request(self, method, url, payload=None, upload=None, **params):
         """Performs a single request against the PCO API with automatic retried in case of timeout.
