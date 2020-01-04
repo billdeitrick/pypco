@@ -108,7 +108,7 @@ def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
         grant_type="authorization_code"
     ).json()
 
-def refresh_access_token(client_id, client_secret, refresh_token):
+def get_oauth_refresh_token(client_id, client_secret, refresh_token):
     """Refresh the access token.
 
     This assumes you have already completed steps 1, 2, and 3 as described at:

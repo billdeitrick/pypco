@@ -299,7 +299,7 @@ class TestGetOAuthAccessToken(unittest.TestCase):
             timeout=30
         )
 
-class TestRefreshAccessToken(unittest.TestCase):
+class TestGetOAuthRefreshToken(unittest.TestCase):
     """Test pypco functionality for getting oauth refresh tokens"""
 
     @mock.patch('requests.post', side_effect=mock_oauth_response)
@@ -309,7 +309,7 @@ class TestRefreshAccessToken(unittest.TestCase):
         self.assertIn(
             'access_token',
             list(
-                pypco.refresh_access_token(
+                pypco.get_oauth_refresh_token(
                     'id',
                     'secret',
                     'refresh_good'
@@ -336,7 +336,7 @@ class TestRefreshAccessToken(unittest.TestCase):
         """Verify refresh fails with invalid token."""
 
         with self.assertRaises(PCORequestException) as err_cm:
-            pypco.refresh_access_token(
+            pypco.get_oauth_refresh_token(
                 'id',
                 'secret',
                 'refresh_bad'
