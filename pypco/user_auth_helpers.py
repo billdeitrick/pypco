@@ -15,7 +15,7 @@ def get_browser_redirect_url(client_id, redirect_uri, scopes):
 
     Args:
         client_id (str): The client id for your app.
-        redirect_uri (str): The redirect URI, identical to what was used in step 1.
+        redirect_uri (str): The redirect URI.
         scopes (list): A list of the scopes to which you will authenticate (see above).
 
     Returns:
@@ -33,31 +33,29 @@ def get_browser_redirect_url(client_id, redirect_uri, scopes):
 
     return "{}{}".format(url, urllib.parse.urlencode(params))
 
-def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
-    """Get the access token for the client.
+def _do_oauth_post(url, **kwargs):
+    """Do a Post request to facilitate the OAUTH process.
 
-    This assumes you have already completed steps 1 and 2 as described at:
-    https://developer.planning.center/docs/#/introduction/authentication
+    Handles error handling appropriately and raises pypco exceptions.
 
     Args:
-        client_id (str): The client id for your app.
-        client_secret (str): The client secret for your app.
-        code (int): The code returned by step one of your OAUTH sequence.
-        redirect_uri (str): The redirect URI, identical to what was used in step 1.
+        url (str): The url to which the request should be made.
+        **kwargs: Data fields sent as the request payload.
 
     Returns:
-        (requests.response): The PCO response to your OAUTH request.
+        requests.Response: The response object from the request.
+
+    Raises:
+        PCORequestTimeoutException: The request timed out.
+        PCOUnexpectedRequestException: Something unexpected went wrong with the request.
+        PCORequestException: The HTTP response from PCO indicated an error.
     """
 
     try:
         response = requests.post(
-            "https://api.planningcenteronline.com/oauth/token",
+            url,
             data={
-                'client_id': client_id,
-                'client_secret': client_secret,
-                'code': code,
-                'redirect_uri': redirect_uri,
-                'grant_type': "authorization_code"
+                **kwargs
             },
             headers={
                 'User-Agent': 'pypco'
@@ -78,6 +76,62 @@ def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
             response_body=response.text
         ) from err
 
-    return response.json()
+    return response
 
-# TODO: Add function to get refresh token
+def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
+    """Get the access token for the client.
+
+    This assumes you have already completed steps 1 and 2 as described at:
+    https://developer.planning.center/docs/#/introduction/authentication
+
+    Args:
+        client_id (str): The client id for your app.
+        client_secret (str): The client secret for your app.
+        code (int): The code returned by step one of your OAUTH sequence.
+        redirect_uri (str): The redirect URI, identical to what was used in step 1.
+
+    Returns:
+        dict: The PCO response to your OAUTH request.
+
+    Raises:
+        PCORequestTimeoutException: The request timed out.
+        PCOUnexpectedRequestException: Something unexpected went wrong with the request.
+        PCORequestException: The HTTP response from PCO indicated an error.
+    """
+
+    return _do_oauth_post(
+        'https://api.planningcenteronline.com/oauth/token',
+        client_id=client_id,
+        client_secret=client_secret,
+        code=code,
+        redirect_uri=redirect_uri,
+        grant_type="authorization_code"
+    ).json()
+
+def refresh_access_token(client_id, client_secret, refresh_token):
+    """Refresh the access token.
+
+    This assumes you have already completed steps 1, 2, and 3 as described at:
+    https://developer.planning.center/docs/#/introduction/authentication
+
+    Args:
+        client_id (str): The client id for your app.
+        client_secret (str): The client secret for your app.
+        refresh_token (str): The refresh token for the user.
+
+    Returns:
+        dict: The PCO response to your token refresh request.
+
+    Raises:
+        PCORequestTimeoutException: The request timed out.
+        PCOUnexpectedRequestException: Something unexpected went wrong with the request.
+        PCORequestException: The HTTP response from PCO indicated an error.
+    """
+
+    return _do_oauth_post(
+        'https://api.planningcenteronline.com/oauth/token',
+        client_id=client_id,
+        client_secret=client_secret,
+        refresh_token=refresh_token,
+        grant_type='refresh_token'
+    ).json()
