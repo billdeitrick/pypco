@@ -8,7 +8,13 @@ Stop writing boilerplate code to communicate with the [Planning Center Online](h
 
 ## Features
 
-* *Boilerplate Done for You:* No need to manage HTTP requests, and useful helper functions included (authentication, iteration/pagination, new object templating, etc.)! With pypco, you can do stuff like this:
+* *Boilerplate Done for You:* No need to manage HTTP requests, and useful helper functions included (authentication, iteration/pagination, new object templating, etc.)! 
+* *Automatic rate limit handling:* If you hit your rate limit, pypco will automatically pause requests and continue once your rate limit period has expired.
+* *Simple Wrapper API:* Using API wrappers can feel like learning *two* new APIs: the REST API itself and the wrapper you're using. Pypco's simple approach is built around the HTTP verbs you already know: GET, POST, PATCH, and DELETE. As a result, after a few minutes with the pypco docs you'll be spending your time in the PCO API docs instead and be on your way to getting things done.
+* *Full API Support:* Pypco supports all versions of the PCO v2 REST API, and supports any combination of API versions you might use for each of the PCO apps.
+
+## Examples
+
 ```python
 import pypco
 pco = pypco.PCO("<app_id>", "<app_secret>")
@@ -57,9 +63,6 @@ for email in pco.iterate(
   print(email['data']['attributes']['address'])
   
 ```
-* *Automatic rate limit handling:* If you hit your rate limit, pypco will automatically pause requests and continue once your rate limit period has expired.
-* *Simple Wrapper API:* Using API wrappers can feel like learning *two* new APIs: the REST API itself and the wrapper you're using. Pypco's simple approach is built around the HTTP verbs you already know: GET, POST, PATCH, and DELETE. As a result, after a few minutes with the pypco docs you'll be spending your time in the PCO API docs instead and be on your way to getting things done.
-* *Full API Support:* Pypco supports all versions of the PCO v2 REST API, and supports any combination of API versions you might use for each of the PCO apps.
 
 ## Version 1.0
 
