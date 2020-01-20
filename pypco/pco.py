@@ -379,25 +379,27 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
                 if 'parent' in response['meta']:
                     record['meta']['parent']: response['meta']['parent']
+                try:
+                    for key in cur['relationships']:
+                        relationships = cur['relationships'][key]['data']
 
-                for key in cur['relationships']:
-                    relationships = cur['relationships'][key]['data']
-
-                    if relationships is not None:
-                        if isinstance(relationships, dict):
-                            for include in response['included']:
-                                if include['type'] == relationships['type'] and \
-                                    include['id'] == relationships['id']:
-
-                                    record['included'].append(include)
-
-                        elif isinstance(relationships, list):
-                            for relationship in relationships:
+                        if relationships is not None:
+                            if isinstance(relationships, dict):
                                 for include in response['included']:
-                                    if include['type'] == relationship['type'] and \
-                                        include['id'] == relationship['id']:
+                                    if include['type'] == relationships['type'] and \
+                                        include['id'] == relationships['id']:
 
                                         record['included'].append(include)
+
+                            elif isinstance(relationships, list):
+                                for relationship in relationships:
+                                    for include in response['included']:
+                                        if include['type'] == relationship['type'] and \
+                                            include['id'] == relationship['id']:
+
+                                            record['included'].append(include)
+                except KeyError:
+                    pass
 
                 yield record
 
