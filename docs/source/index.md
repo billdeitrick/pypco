@@ -1,5 +1,5 @@
 
-# Welcome to pypco's documentation!
+# Welcome to the pypco Documentation!
 
 # Contents
 

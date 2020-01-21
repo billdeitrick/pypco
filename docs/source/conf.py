@@ -14,6 +14,7 @@
 #
 import os
 import sys
+from datetime import datetime
 sys.path.insert(0, os.path.abspath('../../'))
 
 # -- AutoStructify -----------------------------------------------------
@@ -27,13 +28,13 @@ from recommonmark.transform import AutoStructify
 # -- Project information -----------------------------------------------------
 
 project = 'pypco'
-copyright = '2018, Bill Deitrick'
+copyright = f'{datetime.now().year}, Bill Deitrick'
 author = 'Bill Deitrick'
 
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = '1.0.0'
 
 
 # -- General configuration ---------------------------------------------------

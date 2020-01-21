@@ -10,6 +10,7 @@ Stop writing boilerplate code to communicate with the [Planning Center Online](h
 
 * *Boilerplate Done for You:* No need to manage HTTP requests, and useful helper functions included (authentication, iteration/pagination, new object templating, etc.)! 
 * *Automatic rate limit handling:* If you hit your rate limit, pypco will automatically pause requests and continue once your rate limit period has expired.
+* *Automatic Pagination:* Pypco provides automatic pagination/object iteration, allowing you to quickly and easily retrieve large numbers of objects off from the PCO API.
 * *Simple Wrapper API:* Using API wrappers can feel like learning *two* new APIs: the REST API itself and the wrapper you're using. Pypco's simple approach is built around the HTTP verbs you already know: GET, POST, PATCH, and DELETE. As a result, after a few minutes with the pypco docs you'll be spending your time in the PCO API docs instead and be on your way to getting things done.
 * *Full API Support:* Pypco supports all versions of the PCO v2 REST API, and supports any combination of API versions you might use for each of the PCO apps.
 
@@ -66,7 +67,7 @@ for email in pco.iterate(
 
 ## Version 1.0
 
-Code written for pypco v0 will not be compatible with the v1 release. Because of changes in the PCO API (primarily the introduction of versioning) and the need for significantly improved performance, v1 is almost a complete rewrite. The result is a much more flexible, performant, robust, and efficient API wrapper. Though perhaps a bit less "pythonic", pypco v1.0.x will be much more maintainable going forward. 
+Code written for pypco v0 will not be compatible with the v1 release. Because of changes in the PCO API (primarily the introduction of versioning) and the need for significantly improved performance, v1 is almost a complete rewrite. The result is a much more flexible, performant, and robust API wrapper. Though perhaps a bit less "pythonic", pypco v1.0.x will be much more maintainable going forward. 
 
 If you're relying on pypco v0, the pypco-legacy package is available for you on PyPi. No new features will be added to the v0 release, but bug fixes may be considered and released. Open an issue and plead your case. 🙂
 
