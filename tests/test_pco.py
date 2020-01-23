@@ -674,7 +674,11 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
 
         report_templates = [record for record in pco.iterate('/services/v2/report_templates')]
 
-        self.assertEqual(36, len(report_templates), 'Unexpected number of report templates returned.')
+        self.assertEqual(
+            36,
+            len(report_templates),
+            'Unexpected number of report templates returned.'
+        )
 
     def test_template(self):
         """Test the template function."""
