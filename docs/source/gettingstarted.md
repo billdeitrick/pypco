@@ -1,9 +1,5 @@
 # Getting Started
 
-## Introduction
-
-Pypco provides a simple Python interface to communicate with the [Planning Center Online](https://planning.center) REST API. With automatic rate limit handling, pagination handling, object templating, and support for the full breadth of the PCO API, pypco can support any Python application or script needing to utilize the PCO API.
-
 ## Installation
 
 [`pip`](https://pypi.org/project/pip/) is the easiest way to install pypco. Run the single command below and you're done.
@@ -78,15 +74,15 @@ person = next(people)
 print(person)
 ```
 
-If you can run the above example and see output for one of the people in your PCO account, you have successfully connected to the API. Continue to the [API Tour](apitour.md) to learn more, or learn about OAuth Authentication below.
+If you can run the above example and see output for one of the people in your PCO account, you have successfully connected to the API. Continue to the [API Tour](apitour) to learn more, or learn about OAuth Authentication below.
 
 ### OAuth Authentication
 
 OAuth is the more complex method for authenticating against PCO, but is what you'll want to use if you're building an app that accesses third-party data. 
 
-Before diving in, it's helpful to have an understanding of OAuth basics, both in general and as they apply to the PCO API specifically. You can learn more than you'll probably ever want to know about OAuth over at [oauth.net](<https://oauth.net/2/), and you'll also want to familiarize yourself with [PCO's Authentication docs](<https://developer.planning.center/docs/#/introduction/authentication>).
+Before diving in, it's helpful to have an understanding of OAuth basics, both in general and as they apply to the PCO API specifically. You'll want to familiarize yourself with [PCO's Authentication docs](https://developer.planning.center/docs/#/introduction/authentication), and if you're looking to learn more about OAuth in particular you can learn everything you need to know over at [oauth.net](https://oauth.net/2/).
 
-To get started, you'll need to register your OAuth app with PCO. To do this, sign  into your account at [api.planningcenteronline.com](https://api.planningcenteronline.com/). Click **Applications** in the toolbar and then click **New Application** in under the My Developer Tokens (OAuth) heading. Fill out the required information and click **Submit**, and you'll see your generated client id and secret.
+To get started, you'll need to register your OAuth app with PCO. To do this, sign  into your account at [api.planningcenteronline.com](https://api.planningcenteronline.com/). Click **Applications** in the toolbar and then click **New Application** under the My Developer Tokens (OAuth) heading. Fill out the required information and click **Submit**, and you'll see your generated client id and secret.
 
 Now, you're ready to connect to the PCO API. The example below demonstrates authentication with OAuth. Note that you'll have significantly more work to do than with PAT; you'll need to use a browser to display PCO's authentication page with the appropriate parameters and have a redirect page which will be able to hand you the returned code parameter (which you'll use to get your access and refresh tokens). While most of the heavy lifting is up to you, pypco does provide a few convenience functions to help with the process as demonstrated in the example below.
 
@@ -94,7 +90,11 @@ Now, you're ready to connect to the PCO API. The example below demonstrates auth
 import pypco
 
 # Generate the login URI
-redirect_url = pypco.get_browser_redirect_url("<CLIENT_ID_HERE>", "<REDIRECT_URI_HERE>", ["scope_1", "scope_2"])
+redirect_url = pypco.get_browser_redirect_url(
+    "<CLIENT_ID_HERE>",
+    "<REDIRECT_URI_HERE>",
+    ["scope_1", "scope_2"]
+)
 
 # Now, you'll have the URI to which you need to send the user for authentication
 # Here is where you would handle that and get back the code parameter PCO returns.
@@ -103,7 +103,12 @@ redirect_url = pypco.get_browser_redirect_url("<CLIENT_ID_HERE>", "<REDIRECT_URI
 # parameter returned from the API
 
 # Now, we'll get the OAuth access token json response using the code we received from PCO
-token_response = pypco.get_oauth_access_token("<CLIENT_ID_HERE>", "<CLIENT_SECRET_HERE>", "<CODE_HERE>", "<REDIRECT_URI_HERE>")
+token_response = pypco.get_oauth_access_token(
+    "<CLIENT_ID_HERE>",
+    "<CLIENT_SECRET_HERE>",
+    "<CODE_HERE>",
+    "<REDIRECT_URI_HERE>"
+)
 
 # The response you'll receive from the get_oauth_access_token function will include your
 # access token, your refresh token, and other metadata you may need later.
@@ -137,4 +142,4 @@ print(person)
 
 ## Conclusion
 
-Once you've authenticated and been able to make a simple API call, you're good to go. Head over to the [API Tour](apitour.md) document for a brief tour of the pypco API; this document will show you how pypco calls relate to their PCO API counterparts. Once you've read through the API Tour, you should be ready to fully leverage the capabilities of pypco (and be done reading pypco documentation…you'll be able to know exactly what pypco calls to make by reading the PCO API docs).
+Once you've authenticated and been able to make a simple API call, you're good to go. Head over to the [API Tour](apitour) document for a brief tour of the pypco API; this document will show you how pypco calls relate to their PCO API counterparts. Once you've read through the API Tour, you should be ready to fully leverage the capabilities of pypco (and hopefully be done reading pypco documentation…you'll be able to know exactly what pypco calls to make by reading the PCO API docs).

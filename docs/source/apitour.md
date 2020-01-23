@@ -16,7 +16,7 @@ Also for purposes of this guide, we'll assume you're already somewhat familiar w
 
 ### URL Passing and `api_base`
 
-As you'll see shortly, for most requests you'll specify portions of the URL corresponding to the API endpoint against which you would like to make a REST call. You don't need to specify the protocol and hostname portions of the URL; these are automatically prepended for you whenever you pass a URL into pypco. Pypco refers to the automatically prepended protocol and hostname as `api_base`. By default, `api_base` is `https://api.planningcenteronline.com` (though an alternative can be [passed as an argument](pypco.html#module-pypco.pco)). So, you'll want to include a forward slash at the beginning of any URL argument you'll pass. Don't worry if this is confusing right now; it will all make sense once you've read the examples below.
+As you'll see shortly, for most requests you'll specify portions of the URL corresponding to the API endpoint against which you would like to make a REST call. You don't need to specify the protocol and hostname portions of the URL; these are automatically prepended for you whenever you pass a URL into pypco. Pypco refers to the automatically prepended protocol and hostname as `api_base`. By default, `api_base` is `https://api.planningcenteronline.com` (though an alternative can be [passed as an argument](pypco.html#module-pypco.pco)). So, you'll want to include a forward slash at the beginning of any URL argument you pass. Don't worry if this is confusing right now; it will all make sense once you've read the examples below.
 
 Often times, you may find it would be easier to pass a URL to pypco that includes `api_base`. You might want to do this in situations where you've pulled a URL to a specific object in the PCO API directly from an attribute on an object you've already retrieved (such as a "links" attribute). Pypco has no problem if you include the `api_base` in a URL you pass in; it's smart enough to detect that it doesn't need to prepend `api_base` again in this situation so there's no need for you to worry about stripping it out.
 
@@ -60,9 +60,9 @@ You can learn more about the `get()` function in the  [PCO module docs](pypco.ht
 
 ### PATCH: Updating Objects
 
-When altering existing objects in the PCO API, you only need to pass the attributes in your request payload that you wish to change. The easiest way to to generate the necessary payload for your request is using the [`template()` function](pypco.html#pypco.pco.PCO.template). The `template()` function takes the object type and attributes as arguments, and returns a `dict` object that you can pass to `patch()`, which will serialize the object to JSON for you. There is, of course, no reason you have to use the `template()` function, but this is provided for you to help speed the process of generating request payloads.
+When altering existing objects in the PCO API, you only need to pass the attributes in your request payload that you wish to change. The easiest way to to generate the necessary payload for your request is using the [`template()` function](pypco.html#pypco.pco.PCO.template). The `template()` function takes the object type and attributes as arguments and returns a `dict` object that you can pass to `patch()` (which will serialize the object to JSON for you). There is, of course, no reason you have to use the `template()` function, but this is provided for you to help speed the process of generating request payloads.
 
-In this example, we'll change an existing person object's last name, using the `template()` function to generate the appropriate payload.
+In this example we'll change an existing person object's last name, using the `template()` function to generate the appropriate payload.
 
 ```python
 # First we'll retrieve the existing person and print their last name
@@ -143,15 +143,13 @@ Let's look at a simple example, where we iterate through all of the `person` obj
 
 ```python
 >>> for person in pco.iterate('/people/v2/people'):
->>>		print(person['data']['attributes']['name'])
+>>>   print(person['data']['attributes']['name'])
 John Rolfe
 Benjamin Franklin
 ...
 ```
 
-Just like `get()`, any keyword arguments you pass to `iterate()` will be added to your HTTP request as query parameters. For many API endpoints, this will allow you to build specific queries to pull data from PCO. In the example below, we demonstrate searching for all `person` objects with the last name "Franklin". Note the use of the double splat operator to pass parameters as explained [above](#get-retrieving-objects).
-
-Here's another example where we query PCO People for all person objects with the `last_name` of "Rolfe":
+Just like `get()`, any keyword arguments you pass to `iterate()` will be added to your HTTP request as query parameters. For many API endpoints, this will allow you to build specific queries to pull data from PCO. In the example below, we demonstrate searching for all `person` objects with the last name "Rolfe". Note the use of the double splat operator to pass parameters as explained [above](#get-retrieving-objects).
 
 ```python
 >>> params = {
@@ -162,6 +160,8 @@ Here's another example where we query PCO People for all person objects with the
 John Rolfe
 ...
 ```
+
+Often you will want to use includes to return associated objects with your call to `iterate()`. To accomplish this, you can simply pass `includes` as a keyword argument to the `iterate()` function. To save you from having to find which includes are associated with a particular object yourself, `iterate()` will return objects to you with only their associated includes.
 
 You can learn more about the `iterate()` function in the [PCO module docs](pypco.html#pypco.pco.PCO.iterate).
 
@@ -187,13 +187,13 @@ https://avatars.planningcenteronline.com/uploads/person/71059458-1578368234/avat
 
 As usual, any keyword arguments you pass to `upload()` will be passed to the PCO API as query parameters (though you typically won't need query parameters for file uploads).
 
-You can learn more about the `upload()` function in the [PCO module docs](#pypco.pco.PCO.upload).
+You can learn more about the `upload()` function in the [PCO module docs](pypco.html#pypco.pco.PCO.upload).
 
 ## Exception Handling
 
-Pypco provides custom exception types for error handling purposes. All exceptions are defined in the [exceptions](pypco.html#module-pypco.exceptions) module, and inherit from the base [PCOExceptions](#pypco.exceptions.PCOException) class.
+Pypco provides custom exception types for error handling purposes. All exceptions are defined in the [exceptions](pypco.html#module-pypco.exceptions) module, and inherit from the base [PCOExceptions](pypco.html#pypco.exceptions.PCOException) class.
 
-Most of the pypco exception classes are fairly mundane, though the [PCORequestException](#pypco.exceptions.PCORequestException) class is worth a closer look. This exception is raised in circumstances where a connection was made to the API, but the API responds with a status code indicative of an error with your request (other than a rate limit error, as these are handled transparently as discussed below). To provide as much helpful diagnostic information as possible, `PCORequestException` provides three attributes with more data about the failed request: `status_code`, `message`, and `response_body`. You can find more details about each of these attributes in the [PCORequestException Docs](#pypco.exceptions.PCORequestException). A brief example is provided below showing what sort of information each of these variables might contain when a request raises this exception:
+Most of the pypco exception classes are fairly mundane, though the [PCORequestException](pypco.html#pypco.exceptions.PCORequestException) class is worth a closer look. This exception is raised in circumstances where a connection was made to the API, but the API responds with a status code indicative of an error (other than a rate limit error, as these are handled transparently as discussed below). To provide as much helpful diagnostic information as possible, `PCORequestException` provides three attributes with more data about the failed request: `status_code`, `message`, and `response_body`. You can find more details about each of these attributes in the [PCORequestException Docs](pypco.html#pypco.exceptions.PCORequestException). A brief example is provided below showing what sort of information each of these variables might contain when a request raises this exception:
 
 ```python
 # Create an invalid payload to use as an example
@@ -205,9 +205,9 @@ Most of the pypco exception classes are fairly mundane, though the [PCORequestEx
 # Our bad payload will raise an exception...print out attributes
 # from PCORequestException
 >>> try:
->>>		result = pco.patch('/people/v2/people/71059458', payload=bad_payload)
+>>>   result = pco.patch('/people/v2/people/71059458', payload=bad_payload)
 >>>	except Exception as e:
->>>		print(f'{e.status_code}\n-\n{e.message}\n-\n{e.response_body}')
+>>>   print(f'{e.status_code}\n-\n{e.message}\n-\n{e.response_body}')
 422
 -
 422 Client Error: Unprocessable Entity for url:

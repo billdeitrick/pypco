@@ -354,7 +354,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         Args:
             url (str): The URL against which to perform the request. Can include
-                what's been set as api_base, which will be `ignored if this value is also
+                what's been set as api_base, which will be ignored if this value is also
                 present in your URL.
             offset (int): The offset at which to start. Usually going to be 0 (the default).
             per_page (int): The number of results that should be requested in a single page.
