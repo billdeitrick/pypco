@@ -667,6 +667,15 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
             self.assertEqual(1, len(included_person_ids))
             self.assertEqual(included_person_ids.pop(), person['data']['id'])
 
+    def test_iterate_no_relationships(self):
+        """Test iterate when the relationships attribute is missing."""
+
+        pco = self.pco
+
+        report_templates = [record for record in pco.iterate('/services/v2/report_templates')]
+
+        self.assertEqual(36, len(report_templates), 'Unexpected number of report templates returned.')
+
     def test_template(self):
         """Test the template function."""
 
