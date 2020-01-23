@@ -11,6 +11,9 @@ MODULEDIR     = ../pypco
 
 # Put it first so that "make" without argument is like "make help".
 help:
+	$(info ** Run `make apidoc` first to build automatic API docs. **)
+	$(info Generally, run `make apidoc` then `make html` to build pypco docs.)
+	$(info `make apidoc` produces output that should be committed.)
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 .PHONY: help Makefile
