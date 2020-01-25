@@ -29,7 +29,7 @@ class PCOAuthConfig:
             PCOAuthException: You have specified invalid authentication information.
 
         Returns:
-            (PCOAuthType): The authentication type for this config.
+            PCOAuthType: The authentication type for this config.
         """
 
         if self.application_id and self.secret and not self.token: #pylint: disable=no-else-return
@@ -48,7 +48,7 @@ class PCOAuthConfig:
         """Get the authorization header for this authentication configuration scheme.
 
         Returns:
-            (str): The authorization header text to pass as a request header.
+            str: The authorization header text to pass as a request header.
         """
 
         # If PAT, use Basic auth

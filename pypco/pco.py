@@ -71,7 +71,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             params (obj): A dictionary or list of tuples or bytes to send in the query string.
 
         Returns:
-            (requests.Response): The response to this request.
+            requests.Response: The response to this request.
         """
 
         # Standard header
@@ -125,8 +125,11 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             upload(str): The path to a file to upload.
             params (obj): A dictionary or list of tuples or bytes to send in the query string.
 
+        Raises:
+            PCORequestTimeoutException: The request to PCO timed out the maximum number of times.
+
         Returns:
-            (requests.Response): The response to this request.
+            requests.Response: The response to this request.
         """
 
 
@@ -164,8 +167,11 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             upload(str): The path to a file to upload.
             params (obj): A dictionary or list of tuples or bytes to send in the query string.
 
+        Raises:
+            PCORequestTimeoutException: The request to PCO timed out the maximum number of times.
+
         Returns:
-            (requests.Response): The response to this request.
+            requests.Response: The response to this request.
         """
 
 
@@ -194,8 +200,11 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             upload(str): The path to a file to upload.
             params (obj): A dictionary or list of tuples or bytes to send in the query string.
 
+        Raises:
+            PCORequestTimeoutException: The request to PCO timed out the maximum number of times.
+
         Returns:
-            (requests.Response): The response to this request.
+            requests.Response: The response to this request.
         """
 
         self._log.debug("URL cleaning input: \"%s\"", url)
@@ -224,10 +233,12 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             params (obj): A dictionary or list of tuples or bytes to send in the query string.
 
         Raises:
+            PCORequestTimeoutException: The request to PCO timed out the maximum number of times.
+            PCOUnexpectedRequestException: An unexpected error occurred when making your request.
             PCORequestException: The response from the PCO API indicated an error with your request.
 
         Returns:
-            (requests.Response): The response to this request.
+            requests.Response: The response to this request.
         """
 
         try:
@@ -260,8 +271,13 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             upload(str): The path to a file to upload.
             params (obj): A dictionary or list of tuples or bytes to send in the query string.
 
+        Raises:
+            PCORequestTimeoutException: The request to PCO timed out the maximum number of times.
+            PCOUnexpectedRequestException: An unexpected error occurred when making your request.
+            PCORequestException: The response from the PCO API indicated an error with your request.
+
         Returns:
-            (dict): The payload from the response to this request.
+            dict: The payload from the response to this request.
         """
 
         return self.request_response(method, url, payload, upload, **params).json()
@@ -278,8 +294,13 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             params: Any named arguments will be passed as query parameters. Values must
                 be of type str!
 
+        Raises:
+            PCORequestTimeoutException: The request to PCO timed out the maximum number of times.
+            PCOUnexpectedRequestException: An unexpected error occurred when making your request.
+            PCORequestException: The response from the PCO API indicated an error with your request.
+
         Returns:
-            (dict): The payload returned by the API for this request.
+            dict: The payload returned by the API for this request.
         """
 
         return self.request_json('GET', url, **params)
@@ -297,8 +318,13 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             params: Any named arguments will be passed as query parameters. Values must
                 be of type str!
 
+        Raises:
+            PCORequestTimeoutException: The request to PCO timed out the maximum number of times.
+            PCOUnexpectedRequestException: An unexpected error occurred when making your request.
+            PCORequestException: The response from the PCO API indicated an error with your request.
+
         Returns:
-            (dict): The payload returned by the API for this request.
+            dict: The payload returned by the API for this request.
         """
 
         return self.request_json('POST', url, payload, **params)
@@ -316,8 +342,13 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             params: Any named arguments will be passed as query parameters. Values must
                 be of type str!
 
+        Raises:
+            PCORequestTimeoutException: The request to PCO timed out the maximum number of times.
+            PCOUnexpectedRequestException: An unexpected error occurred when making your request.
+            PCORequestException: The response from the PCO API indicated an error with your request.
+
         Returns:
-            (dict): The payload returned by the API for this request.
+            dict: The payload returned by the API for this request.
         """
 
         return self.request_json('PATCH', url, payload, **params)
@@ -334,10 +365,15 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             params: Any named arguments will be passed as query parameters. Values must
                 be of type str!
 
+        Raises:
+            PCORequestTimeoutException: The request to PCO timed out the maximum number of times.
+            PCOUnexpectedRequestException: An unexpected error occurred when making your request.
+            PCORequestException: The response from the PCO API indicated an error with your request.
+
         Returns:
-            (requests.response): The response object returned by the API for this request.
-                A successful delete request will return a response with an empty payload,
-                so we return the response object here instead.
+            requests.response: The response object returned by the API for this request.
+            A successful delete request will return a response with an empty payload,
+            so we return the response object here instead.
         """
 
         return self.request_response('DELETE', url, **params)
@@ -361,6 +397,11 @@ class PCO(): #pylint: disable=too-many-instance-attributes
                 Valid values are 1 - 100, defaults to the PCO default of 25.
             params: Any additional named arguments will be passed as query parameters. Values must
                 be of type str!
+
+        Raises:
+            PCORequestTimeoutException: The request to PCO timed out the maximum number of times.
+            PCOUnexpectedRequestException: An unexpected error occurred when making your request.
+            PCORequestException: The response from the PCO API indicated an error with your request.
 
         Yields:
             dict: Each object returned by the API for this request. Returns "data",
@@ -432,8 +473,13 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             params: Any additional named arguments will be passed as query parameters. Values must
                 be of type str!
 
+        Raises:
+            PCORequestTimeoutException: The request to PCO timed out the maximum number of times.
+            PCOUnexpectedRequestException: An unexpected error occurred when making your request.
+            PCORequestException: The response from the PCO API indicated an error with your request.
+
         Returns:
-            dict: Each object returned by the API for this request. Returns "data",
+            list: Each object returned by the API for this request. Returns "data",
             "included", and "meta" nodes for each response. Note that data is processed somewhat
             before being returned from the API. Namely, includes are injected into the object(s)
             with which they are associated. This makes it easier to process includes associated with
@@ -450,8 +496,13 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             params: Any named arguments will be passed as query parameters. Values must
                 be of type str!
 
+        Raises:
+            PCORequestTimeoutException: The request to PCO timed out the maximum number of times.
+            PCOUnexpectedRequestException: An unexpected error occurred when making your request.
+            PCORequestException: The response from the PCO API indicated an error with your request.
+
         Returns:
-            (dict): The PCO response from the file upload.
+            dict: The PCO response from the file upload.
         """
 
         return self.request_json('POST', self.upload_url, upload=file_path, **params)
@@ -465,7 +516,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             attributes (dict): The new objects attributes. Defaults to empty.
 
         Returns:
-            (dict): A template from which to set the new object's attributes.
+            dict: A template from which to set the new object's attributes.
         """
 
         return {

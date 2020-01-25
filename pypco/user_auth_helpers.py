@@ -19,7 +19,7 @@ def get_browser_redirect_url(client_id, redirect_uri, scopes):
         scopes (list): A list of the scopes to which you will authenticate (see above).
 
     Returns:
-        (str): The url to which a user's browser should be directed for OAUTH.
+        str: The url to which a user's browser should be directed for OAUTH.
     """
 
     url = "https://api.planningcenteronline.com/oauth/authorize?"
@@ -42,13 +42,13 @@ def _do_oauth_post(url, **kwargs):
         url (str): The url to which the request should be made.
         **kwargs: Data fields sent as the request payload.
 
-    Returns:
-        requests.Response: The response object from the request.
-
     Raises:
         PCORequestTimeoutException: The request timed out.
         PCOUnexpectedRequestException: Something unexpected went wrong with the request.
         PCORequestException: The HTTP response from PCO indicated an error.
+
+    Returns:
+        requests.Response: The response object from the request.
     """
 
     try:
@@ -90,13 +90,13 @@ def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
         code (int): The code returned by step one of your OAUTH sequence.
         redirect_uri (str): The redirect URI, identical to what was used in step 1.
 
-    Returns:
-        dict: The PCO response to your OAUTH request.
-
     Raises:
         PCORequestTimeoutException: The request timed out.
         PCOUnexpectedRequestException: Something unexpected went wrong with the request.
         PCORequestException: The HTTP response from PCO indicated an error.
+
+    Returns:
+        dict: The PCO response to your OAUTH request.
     """
 
     return _do_oauth_post(
@@ -119,13 +119,13 @@ def get_oauth_refresh_token(client_id, client_secret, refresh_token):
         client_secret (str): The client secret for your app.
         refresh_token (str): The refresh token for the user.
 
-    Returns:
-        dict: The PCO response to your token refresh request.
-
     Raises:
         PCORequestTimeoutException: The request timed out.
         PCOUnexpectedRequestException: Something unexpected went wrong with the request.
         PCORequestException: The HTTP response from PCO indicated an error.
+
+    Returns:
+        dict: The PCO response to your token refresh request.
     """
 
     return _do_oauth_post(
