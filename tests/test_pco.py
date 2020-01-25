@@ -667,6 +667,36 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
             self.assertEqual(1, len(included_person_ids))
             self.assertEqual(included_person_ids.pop(), person['data']['id'])
 
+    def test_list(self):
+        """Test the list function"""
+
+        pco = self.pco
+
+        # Make sure we get a list of appropriate size
+        all_people = pco.list('/people/v2/people')
+
+        self.assertIsInstance(all_people, list)
+        self.assertEqual(len(all_people), 50)
+
+        # Get emails, exlude admins
+        query = {
+            'where[site_administrator]': 'false',
+        }
+
+        all_people_with_emails = pco.list('/people/v2/people', include="emails", **query)
+
+        self.assertIsInstance(all_people_with_emails, list)
+        self.assertEqual(len(all_people_with_emails), 49)
+
+        for person in all_people_with_emails:
+            self.assertEqual(1, len(person['included']), 'Expected exactly one include.')
+            self.assertEqual('Email', person['included'][0]['type'], 'Unexpected include type.')
+            self.assertEqual(
+                person['data']['relationships']['emails']['data'][0]['id'],
+                person['included'][0]['id'],
+                'Email id did not match as expected.'
+            )
+
     def test_iterate_no_relationships(self):
         """Test iterate when the relationships attribute is missing."""
 

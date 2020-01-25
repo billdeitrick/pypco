@@ -48,11 +48,7 @@ def generate_people(num_people):
     (https://www.mailinator.com/)
     """
 
-    pco = PCO(
-        'https://api.planningcenteronline.com/people/v2',
-        application_id=PCO_APP_ID,
-        secret=PCO_SECRET
-    )
+    pco = PCO(PCO_APP_ID, PCO_SECRET)
 
     for ndx in range(num_people):
 
@@ -65,7 +61,7 @@ def generate_people(num_people):
         )
 
         person = pco.post(
-            '/people',
+            '/people/v2/people',
             new_person
         )
 
@@ -81,7 +77,7 @@ def generate_people(num_people):
         )
 
         pco.post(
-            f'/people/{person_id}/emails',
+            f'/people/v2/people/{person_id}/emails',
             new_email
         )
 
