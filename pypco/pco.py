@@ -371,7 +371,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             PCORequestException: The response from the PCO API indicated an error with your request.
 
         Returns:
-            requests.response: The response object returned by the API for this request.
+            requests.Response: The response object returned by the API for this request.
             A successful delete request will return a response with an empty payload,
             so we return the response object here instead.
         """

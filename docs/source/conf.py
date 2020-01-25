@@ -191,6 +191,21 @@ epub_title = project
 # A list of files that should not be packed into the epub file
 epub_exclude_files = ['search.html']
 
+# -- Pypco option additions --------------------------------------------------
+
+# Ignore errors for specific references with nitpick on
+nitpick_ignore = [
+    ('py:class', 'object'),
+    ('py:class', 'str'),
+    ('py:class', 'enum.Enum'),
+    ('py:class', 'Exception'),
+    ('py:class', 'int'),
+    ('py:class', 'requests.Response'),
+    ('py:class', 'dict'),
+    ('py:class', 'obj'),
+    ('py:class', 'list')
+]
+
 # -- Extension configuration -------------------------------------------------
 
 # Configure AutoStructify

@@ -26,7 +26,7 @@ class PCOAuthConfig:
         """The authentication type specified by this configuration.
 
         Raises:
-            PCOAuthException: You have specified invalid authentication information.
+            PCOCredentialsException: You have specified invalid authentication information.
 
         Returns:
             PCOAuthType: The authentication type for this config.
