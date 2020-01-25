@@ -1,0 +1,150 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - pypco
+    method: GET
+    uri: https://api.planningcenteronline.com/people/v2/people
+  response:
+    body:
+      string: '{"links":{"self":"https://api.planningcenteronline.com/people/v2/people"},"data":[{"type":"Person","id":"40135868","attributes":{"accounting_administrator":true,"anniversary":null,"avatar":"https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.png","birthdate":null,"child":false,"created_at":"2018-08-03T01:13:32Z","demographic_avatar_url":"https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.png","first_name":"Bill","gender":null,"given_name":null,"grade":null,"graduation_year":null,"inactivated_at":null,"last_name":"Deitrick","medical_notes":null,"membership":null,"middle_name":null,"name":"Bill
+        Deitrick","nickname":null,"passed_background_check":false,"people_permissions":null,"remote_id":null,"school_type":null,"site_administrator":true,"status":"active","updated_at":"2018-11-25T20:19:47Z"},"relationships":{"primary_campus":{"data":null}},"links":{"self":"https://api.planningcenteronline.com/people/v2/people/40135868"}},{"type":"Person","id":"45029164","attributes":{"accounting_administrator":false,"anniversary":null,"avatar":"https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.png","birthdate":null,"child":false,"created_at":"2018-11-25T20:31:31Z","demographic_avatar_url":"https://people.planningcenteronline.com/static/no_photo_thumbnail_gray.png","first_name":"Paul","gender":null,"given_name":null,"grade":null,"graduation_year":null,"inactivated_at":null,"last_name":"Revere","medical_notes":null,"membership":null,"middle_name":null,"name":"Paul
+        Revere","nickname":null,"passed_background_check":false,"people_permissions":null,"remote_id":null,"school_type":null,"site_administrator":false,"status":"active","updated_at":"2018-11-25T20:31:31Z"},"relationships":{"primary_campus":{"data":null}},"links":{"self":"https://api.planningcenteronline.com/people/v2/people/45029164"}}],"included":[],"meta":{"total_count":2,"count":2,"can_order_by":["given_name","first_name","nickname","middle_name","last_name","birthdate","anniversary","gender","grade","child","school_type","graduation_year","site_administrator","accounting_administrator","people_permissions","membership","inactivated_at","status","medical_notes","created_at","updated_at","remote_id"],"can_query_by":["given_name","first_name","nickname","middle_name","last_name","birthdate","anniversary","gender","grade","child","school_type","graduation_year","site_administrator","accounting_administrator","people_permissions","membership","inactivated_at","status","medical_notes","created_at","updated_at","search_name","search_name_or_email","search_name_or_email_or_phone_number","remote_id","id"],"can_include":["addresses","emails","field_data","households","inactive_reason","marital_status","name_prefix","name_suffix","organization","person_apps","phone_numbers","platform_notifications","primary_campus","school","social_profiles"],"can_filter":["created_since","admins","organization_admins"],"parent":{"id":"263468","type":"Organization"}}}'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Accept, Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match,
+        If-Unmodified-Since, Origin, X-Requested-With, X-CSRF-Token, X-PCO-API-Version,
+        X-PCO-API-Log-Level, X-PCO-API-Tracer-Class, X-PCO-API-Tracer-Secret
+      Access-Control-Allow-Methods:
+      - GET, POST, PATCH, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-PCO-API-Auth-Method
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/vnd.api+json; charset=utf-8
+      Date:
+      - Sat, 23 Nov 2019 06:14:09 GMT
+      ETag:
+      - W/"7adc698a65856c3e50e70b77bb145069"
+      Referrer-Policy:
+      - no-referrer-when-downgrade
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept, Accept-Encoding, Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-PCO-API-Auth-Method:
+      - HTTPBasic
+      X-PCO-API-Processed-As-Version:
+      - '2018-08-01'
+      X-PCO-API-Processor:
+      - ENG_2.2.2
+      X-PCO-API-Request-Rate-Count:
+      - '1'
+      X-PCO-API-Request-Rate-Limit:
+      - '100'
+      X-PCO-API-Request-Rate-Period:
+      - '20'
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - 45a26c37-95fd-4fcf-b069-c913d46a6d21
+      X-Runtime:
+      - '0.043124'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - pypco
+    method: GET
+    uri: https://api.planningcenteronline.com/bogus
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAx2LMQqAQAwEvxJSW1hY+QBLKzuxUG9F4TCYSwoR/26wmxmYh6EqWrgdHy42mwdy
+        UzdcsR2WEdaLUSd+pmgJNh854rCDFEVcV9AtHnI5iiHRKp4TnXEtoO0f3+n9AEjrraVqAAAA
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Accept, Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match,
+        If-Unmodified-Since, Origin, X-Requested-With, X-CSRF-Token, X-PCO-API-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, PATCH, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-PCO-API-Auth-Method
+      Cache-Control:
+      - no-cache
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 23 Nov 2019 06:14:09 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=15552000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      - Accept, Accept-Encoding, Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-PCO-API-Request-Rate-Count:
+      - '1'
+      X-PCO-API-Request-Rate-Limit:
+      - '100'
+      X-PCO-API-Request-Rate-Period:
+      - 20 seconds
+      X-Request-Id:
+      - 767a84fb-8c92-4208-b583-3bc21635c62a
+      X-Runtime:
+      - '0.018828'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 404
+      message: Not Found
+version: 1

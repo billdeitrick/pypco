@@ -80,20 +80,15 @@ def build_logging_environment():
 
 class CredsNotFoundError(Exception):
     """Exception indicating environment variables not found."""
-    pass
 
 class BasePCOTestCase(unittest.TestCase):
     """"A base class for unit tests on pypco library.
 
     This class provides boilerplate for pulling authentication and
     logging configuration.
-
-    Attributes:
-        creds (dict): PCO personal tokens for executing test requests.
     """
 
     def __init__(self, *args, **kwargs):
-        """Initialize the test case."""
 
         unittest.TestCase.__init__(self, *args, **kwargs)
 
@@ -110,7 +105,6 @@ class BasePCOVCRTestCase(vcr_unittest.VCRTestCase):
     """
 
     def __init__(self, *args, **kwargs):
-        """Initialize the test case."""
 
         vcr_unittest.VCRTestCase.__init__(self, *args, **kwargs)
 
@@ -121,7 +115,10 @@ class BasePCOVCRTestCase(vcr_unittest.VCRTestCase):
             self.creds['application_id'] = 'pico'
             self.creds['secret'] = 'robot'
 
-        self.pco = pypco.PCO(self.creds['application_id'], self.creds['secret']) #pylint: disable=W0201
+        self.pco = pypco.PCO(
+            self.creds['application_id'],
+            self.creds['secret']
+            )
 
         build_logging_environment()
 
