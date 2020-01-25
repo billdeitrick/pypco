@@ -9,7 +9,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='pypco',
-    version='1.0a1',
+    version='1.0.0',
     description='A Python wrapper for the Planning Center Online API.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -29,12 +29,13 @@ setup(
     ],
     zip_safe=True,
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Topic :: Software Development :: Libraries'
     ]
 )
