@@ -165,20 +165,6 @@ Often you will want to use includes to return associated objects with your call 
 
 You can learn more about the `iterate()` function in the [PCO module docs](pypco.html#pypco.pco.PCO.iterate).
 
-## Object Iteration with `list()`
-
-Sometimes it's helpful to quickly get the results of an API call that returns multiple objects as a `list` object rather than using the `iterate()` generator function. For this purpose, pypco provides the `list()` function, which simply wraps `iterate()` and returns a `list` to you:
-
-```python
->>> people = pco.list('/people/v2/people')
->>> print(person[0]['data']['attributes']['name'])
-John Rolfe
->>> print(person[1]['data']['attributes']['name'])
-Benjamin Franklin
-```
-
-Just like `iterate()`, keyword arguments you pass to `list()`  will be added as GET parameters to your API request (with the exception of a few specific arguments that modify the behavior of `list()`. You can learn more about the `list()` function in the [PCO module docs](pypco.html#pypco.pco.PCO.list).
-
 ### File Uploads with `upload()`
 
 Pypco provides a simple function to support file uploads to PCO (such as song attachments in Services, avatars in People, etc). To facilitate file uploads as described in the [PCO API docs for file uploads](https://developer.planning.center/docs/#/introduction/file-uploads), you'll first use the `upload()` function to upload files from your disk to PCO. This action will return to you a unique ID (UUID) for your newly uploaded file. Once you have the file UUID, you'll pass this to an endpoint that accepts a file.

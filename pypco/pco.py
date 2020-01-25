@@ -455,39 +455,6 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             if not 'next' in response['links']:
                 break
 
-    def list(self, url, offset=0, per_page=25, **params):
-        """Returns the list of objects in an API response, handling pagination.
-
-        This function is a wrapper for iterate() that returns a list instead of an iterator.
-
-        Objects specified as includes will be injected into their associated
-        object and returned.
-
-        Args:
-            url (str): The URL against which to perform the request. Can include
-                what's been set as api_base, which will be ignored if this value is also
-                present in your URL.
-            offset (int): The offset at which to start. Usually going to be 0 (the default).
-            per_page (int): The number of results that should be requested in a single page.
-                Valid values are 1 - 100, defaults to the PCO default of 25.
-            params: Any additional named arguments will be passed as query parameters. Values must
-                be of type str!
-
-        Raises:
-            PCORequestTimeoutException: The request to PCO timed out the maximum number of times.
-            PCOUnexpectedRequestException: An unexpected error occurred when making your request.
-            PCORequestException: The response from the PCO API indicated an error with your request.
-
-        Returns:
-            list: Each object returned by the API for this request. Returns "data",
-            "included", and "meta" nodes for each response. Note that data is processed somewhat
-            before being returned from the API. Namely, includes are injected into the object(s)
-            with which they are associated. This makes it easier to process includes associated with
-            specific objects since they are accessible directly from each returned object.
-        """
-
-        return [record for record in self.iterate(url, offset, per_page, **params)]
-
     def upload(self, file_path, **params):
         """Upload the file at the specified path to PCO.
 
