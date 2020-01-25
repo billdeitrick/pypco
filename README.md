@@ -4,7 +4,7 @@
 
 Stop writing boilerplate code to communicate with the [Planning Center Online](https://planning.center) REST API, and start using pypco! Pypco is a Python wrapper library that supports the full breadth of the PCO REST API. With pypco, you'll spend less time worrying about building and managing HTTP requests and more time building cool things.
 
-[>>> Read the Docs <<<](https://readthedocs.org/projects/pypco/badge/?version=latest) 
+[>>> Read the Docs (stable) <<<](https://pypco.readthedocs.io/en/stable/) 
 
 ## Features
 
