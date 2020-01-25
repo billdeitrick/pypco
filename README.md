@@ -1,6 +1,6 @@
 # Pypco ReadMe
 
-[![Build Status](https://travis-ci.org/billdeitrick/pypco.svg?branch=master)](https://travis-ci.org/billdeitrick/pypco) [![codecov](https://codecov.io/gh/billdeitrick/pypco/branch/master/graph/badge.svg)](https://codecov.io/gh/billdeitrick/pypco) [![Documentation Status](https://readthedocs.org/projects/pypco/badge/?version=latest)](https://pypco.readthedocs.io/en/latest/?badge=latest)
+[![Pypi Version](https://img.shields.io/pypi/v/pypco)](https://pypi.org/project/pypco/)[![Documentation Status](https://readthedocs.org/projects/pypco/badge/?version=latest)](https://pypco.readthedocs.io/en/latest/?badge=latest)[![Build Status](https://travis-ci.org/billdeitrick/pypco.svg?branch=master)](https://travis-ci.org/billdeitrick/pypco)[![codecov](https://codecov.io/gh/billdeitrick/pypco/branch/master/graph/badge.svg)](https://codecov.io/gh/billdeitrick/pypco)[![Pypi Python Versions](https://img.shields.io/pypi/pyversions/pypco)](https://pypi.org/project/pypco/)
 
 Stop writing boilerplate code to communicate with the [Planning Center Online](https://planning.center) REST API, and start using pypco! Pypco is a Python wrapper library that supports the full breadth of the PCO REST API. With pypco, you'll spend less time worrying about building and managing HTTP requests and more time building cool things.
 
