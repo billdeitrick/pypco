@@ -69,7 +69,7 @@ for email in pco.iterate(
 
 Code written for pypco v0 will not be compatible with the v1 release. Because of changes in the PCO API (primarily the introduction of versioning) and the need for significantly improved performance, v1 is almost a complete rewrite. The result is a much more flexible, performant, and robust API wrapper. Though perhaps a bit less "pythonic", pypco v1.0.x will be much more maintainable going forward. 
 
-If you're relying on pypco v0, the pypco-legacy package is available for you on PyPi. No new features will be added to the v0 release, but bug fixes may be considered and released. Open an issue and plead your case. 🙂
+If you're relying on pypco v0, you can still find the source code [here](https://github.com/billdeitrick/pypco/tree/v0). Development will not continue on the v0 release, but feel free to submit an issue if you're relying on v0 and need help with a specific problem.
 
 ## License
 
