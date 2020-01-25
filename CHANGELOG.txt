@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2020-01-25
+### Changed
+- 1.0 is almost a complete rewrite, and is not backwards compatible with v0. There are too many changes to list here, so check out the [docs](https://pypco.readthedocs.io/en/stable/).
+
 ## [0.0.2] - 2019-01-01
 ### Fixed
 - Request timeout handling added. HTTP calls that never generate a response will no longer cause applications to hang. If three subsequent HTTP calls time out, an exception will be raised.
