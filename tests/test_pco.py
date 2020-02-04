@@ -126,7 +126,7 @@ def connection_error_se(*args, **kwargs):
 class TestPrivateRequestFunctions(BasePCOTestCase):
     """Test low-level request mechanisms."""
 
-    @patch('requests.request')
+    @patch('requests.Session.request')
     @patch('builtins.open')
     def test_do_request(self, mock_fh, mock_request):
         """Test dispatching single requests; HTTP verbs, file uploads, etc."""
@@ -207,7 +207,7 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
 
         mock_fh.assert_called_once_with('/file/path', 'rb')
 
-    @patch('requests.request', side_effect=timeout_se)
+    @patch('requests.Session.request', side_effect=timeout_se)
     def test_do_timeout_managed_request(self, mock_request):
         """Test requests that automatically will retry on timeout."""
 
@@ -293,7 +293,7 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
                 '/test',
             )
 
-    @patch('requests.request', side_effect=ratelimit_se)
+    @patch('requests.Session.request', side_effect=ratelimit_se)
     @patch('time.sleep')
     def test_do_ratelimit_managed_request(self, mock_sleep, mock_request):
         """Test automatic rate limit handling."""
@@ -341,7 +341,7 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
         mock_sleep.assert_called_with(15)
         self.assertIsNotNone(result, "Didn't get response returned!")
 
-    @patch('requests.request')
+    @patch('requests.Session.request')
     def test_do_url_managed_request(self, mock_request):
         """Test requests with URL cleanup."""
 
@@ -438,7 +438,7 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
 class TestPublicRequestFunctions(BasePCOVCRTestCase):
     """Test public PCO request functions."""
 
-    @patch('requests.request', side_effect=connection_error_se)
+    @patch('requests.Session.request', side_effect=connection_error_se)
     def test_request_resonse_general_err(self, mock_request): #pylint: disable=unused-argument
         """Test the request_response() function when a general error is thrown."""
 

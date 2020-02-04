@@ -56,6 +56,8 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         self.timeout_retries = timeout_retries
 
+        self.session = requests.Session()
+
         self._log.debug("Pypco has been initialized!")
 
     def _do_request(self, method, url, payload=None, upload=None, **params):
@@ -102,7 +104,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         # The moment we've been waiting for...execute the request
         try:
-            response = requests.request(
+            response = self.session.request(
                 method,
                 url,
                 **request_params
@@ -473,6 +475,11 @@ class PCO(): #pylint: disable=too-many-instance-attributes
         """
 
         return self.request_json('POST', self.upload_url, upload=file_path, **params)
+
+    def __del__(self):
+        """Close the requests session when the PCO object goes out of scope."""
+
+        self.session.close()
 
     @staticmethod
     def template(object_type, attributes=None):
