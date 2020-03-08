@@ -9,6 +9,7 @@ build
 
 # IDEs
 .vscode
+.idea
 
 # Project-specific
 .env
