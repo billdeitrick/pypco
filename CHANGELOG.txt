@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2020-03-10
+### Added
+- Utilize a session object to enable connection pooling
+
 ## [1.0.0] - 2020-01-25
 ### Changed
 - 1.0 is almost a complete rewrite, and is not backwards compatible with v0. There are too many changes to list here, so check out the [docs](https://pypco.readthedocs.io/en/stable/).
