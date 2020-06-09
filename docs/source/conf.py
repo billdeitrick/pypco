@@ -211,7 +211,7 @@ nitpick_ignore = [
 # Configure AutoStructify
 def setup(app):
     app.add_config_value('recommonmark_config', {
-            'url_resolver': lambda url: url, # TODO: May need to adjust this when publishing to rtd, this works fine for local
+            'url_resolver': lambda url: url,
             'auto_toc_tree_section': 'Contents',
             }, True)
     app.add_transform(AutoStructify)
