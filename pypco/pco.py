@@ -284,11 +284,11 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         response = self.request_response(method, url, payload, upload, **params)
         if response.status_code == 204:
-            retVal = None
+            return_value = None
         else:
-            retVal = response.json()
+            return_value = response.json()
         
-        return retVal
+        return return_value
 
     def get(self, url, **params):
         """Perform a GET request against the PCO API.
