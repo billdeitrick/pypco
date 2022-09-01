@@ -36,6 +36,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             application_id=None,
             secret=None,
             token=None,
+            org_token=None,
             api_base='https://api.planningcenteronline.com',
             timeout=60,
             upload_url='https://upload.planningcenteronline.com/v2/files',
@@ -45,7 +46,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         self._log = logging.getLogger(__name__)
 
-        self._auth_config = PCOAuthConfig(application_id, secret, token)
+        self._auth_config = PCOAuthConfig(application_id, secret, token, org_token)
         self._auth_header = self._auth_config.auth_header
 
         self.api_base = api_base

@@ -12,14 +12,16 @@ class PCOAuthConfig:
             application_id (str): The application ID for your application (PAT).
             secret (str): The secret for your application (PAT).
             token (str): The token for your application (OAUTH).
+            org_token: The OrganizationToken used for api.churchcenter.com
             auth_type (PCOAuthType): The authentiation type specified by this config object.
     """
 
-    def __init__(self, application_id=None, secret=None, token=None):
+    def __init__(self, application_id=None, secret=None, token=None, org_token=None):
 
         self.application_id = application_id
         self.secret = secret
         self.token = token
+        self.org_token = org_token
 
     @property
     def auth_type(self):
@@ -36,6 +38,8 @@ class PCOAuthConfig:
             return PCOAuthType.PAT
         elif self.token and not (self.application_id or self.secret):
             return PCOAuthType.OAUTH
+        elif self.org_token and not (self.application_id or self.secret or self.token):
+            return PCOAuthType.ORGTOKEN
         else:
             raise PCOCredentialsException(
                 "You have specified invalid authentication information. "
@@ -61,6 +65,8 @@ class PCOAuthConfig:
                     ).encode()
                 ).decode()
             )
+        if self.auth_type == PCOAuthType.ORGTOKEN:
+            return "OrganizationToken {}".format(self.org_token)
 
         # Otherwise OAUTH using the Bearer scheme
         return "Bearer {}".format(self.token)
@@ -70,3 +76,4 @@ class PCOAuthType(Enum): #pylint: disable=R0903
 
     PAT = auto()
     OAUTH = auto()
+    ORGTOKEN = auto()
