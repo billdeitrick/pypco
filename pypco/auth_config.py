@@ -66,17 +66,11 @@ class PCOAuthConfig:
 
         # If PAT, use Basic auth
         if self.auth_type == PCOAuthType.PAT:
-            return "Basic {}".format(
-                base64.b64encode(
-                    '{}:{}'.format(
-                        self.application_id,
-                        self.secret
-                    ).encode()
-                ).decode()
-            )
+            return "Basic " \
+                   f"{base64.b64encode(f'{self.application_id}:{self.secret}'.encode()).decode()}"
 
         if self.auth_type == PCOAuthType.ORGTOKEN:
             return "OrganizationToken {}".format(self.org_token)
 
         # Otherwise OAUTH using the Bearer scheme
-        return "Bearer {}".format(self.token)
+        return f"Bearer {self.token}"

@@ -12,7 +12,7 @@ from .exceptions import PCORequestTimeoutException, \
     PCORequestException, PCOUnexpectedRequestException
 
 
-class PCO:  #pylint: disable=too-many-instance-attributes
+class PCO:  # pylint: disable=too-many-instance-attributes
     """The entry point to the PCO API.
 
     Note:
@@ -156,8 +156,7 @@ class PCO:  #pylint: disable=too-many-instance-attributes
                                     self.timeout_retries)
 
                     raise PCORequestTimeoutException(
-                        "The request to \"%s\" timed out after %d tries."
-                        % (url, timeout_count)) from exc
+                        f"The request to \"{url}\" timed out after {timeout_count} tries.") from exc
 
                 continue
 
