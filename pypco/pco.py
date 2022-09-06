@@ -3,7 +3,7 @@
 import time
 import logging
 import re
-
+from contextlib import contextmanager
 from typing import Any, Iterator
 import requests
 
@@ -12,7 +12,7 @@ from .exceptions import PCORequestTimeoutException, \
     PCORequestException, PCOUnexpectedRequestException
 
 
-class PCO:  #pylint: disable=too-many-instance-attributes
+class PCO:  # pylint: disable=too-many-instance-attributes
     """The entry point to the PCO API.
 
     Note:
@@ -79,45 +79,34 @@ class PCO:  #pylint: disable=too-many-instance-attributes
         Returns:
             requests.Response: The response to this request.
         """
-
-        # Standard header
-        headers = {
-            'User-Agent': 'pypco',
-            'Authorization': self._auth_header,
-        }
-
-        # Standard params
-        request_params = {
-            'headers': headers,
-            'params': params,
-            'json': payload,
-            'timeout': self.upload_timeout if upload else self.timeout
-        }
-
-        # Add files param if upload specified
-        if upload:
-            upload_fh = open(upload, 'rb')
-            request_params['files'] = {'file': upload_fh}
-
-        self._log.debug(
-            "Executing %s request to '%s' with args %s",
-            method,
-            url,
-            {param: value for (param, value) in request_params.items() if param != 'headers'}
-        )
+        @contextmanager
+        def request_params_provider():
+            # Standard params
+            params_for_request = {
+                # Standard header
+                'headers': {
+                    'User-Agent': 'pypco',
+                    'Authorization': self._auth_header,
+                },
+                'params': params,
+                'json': payload,
+                'timeout': self.upload_timeout if upload else self.timeout
+            }
+            if upload:
+                with open(upload, 'rb') as upload_fh:
+                    # Add files param if upload specified
+                    params_for_request['files'] = {'file': upload_fh}
+                    yield params_for_request
+            else:
+                yield params_for_request
 
         # The moment we've been waiting for...execute the request
-        try:
-            response = self.session.request(
+        with request_params_provider() as request_params:
+            return self.session.request(
                 method,
                 url,
-                **request_params # type: ignore[arg-type]
+                **request_params  # type: ignore[arg-type]
             )
-        finally:
-            if upload:
-                upload_fh.close()
-
-        return response
 
     def _do_timeout_managed_request(self, method: str, url: str, payload: Any = None, upload: str = None,
                                     **params) -> requests.Response:
@@ -385,7 +374,8 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
         return self.request_response('DELETE', url, **params)
 
-    def iterate(self, url: str, offset: int = 0, per_page: int = 25, **params: str) -> Iterator[dict]:  # pylint: disable=too-many-branches
+    def iterate(self, url: str, offset: int = 0, per_page: int = 25, **params: str)\
+            -> Iterator[dict]:  # pylint: disable=too-many-branches
         """Iterate a list of objects in a response, handling pagination.
 
         Basically, this function wraps get in a generator function designed for
