@@ -117,39 +117,6 @@ def mock_oauth_response(*args, **kwargs): #pylint: disable=E0211
     return MockOAuthResponse(None, 400)
 
 
-def mock_org_token_response(*args, **kwargs):
-    class MockOrgTokenResponse:
-        """Mocking class for OAuth response
-
-            Args:
-                json_data (dict): JSON data returned by the mocked API.
-                status_code (int): The HTTP status code returned by the mocked API.
-        """
-
-        def __init__(self, json_data, status_code):
-            self.json_data = json_data
-            self.status_code = status_code
-            self.text = '{"test_key": "test_value"}'
-
-        def json(self):
-            """Return our mock JSON data"""
-
-            return self.json_data
-
-        def raise_for_status(self):
-            """Raise HTTP exception if status code >= 400."""
-
-            if 400 <= self.status_code <= 500:
-                raise HTTPError(
-                    u'%s Client Error: %s for url: %s' % \
-                    (
-                        self.status_code,
-                        'Unauthorized',
-                        'https://somename.churchcenter.com/sessions/tokens'
-                    ),
-                    response=self
-                )
-
 class TestGetBrowserRedirectUrl(unittest.TestCase):
     """Test pypco functionality for getting browser redirect URL."""
 
@@ -400,15 +367,6 @@ class TestGetCcOrgToken(unittest.TestCase):
     #     @mock.patch('requests.post', side_effect=mock_org_token_response)
     def test_valid_org_token(self):
         """Verify successful refresh with valid token."""
-        """{'data': {'attributes': {'created_at': '2022-09-02T22:57:31Z',
-                         'expires_at': '2022-09-03T00:57:31Z',
-                         'token': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-                         'updated_at': '2022-09-02T22:57:31Z'},
-          'id': '234949848',
-          'relationships': {'organization': {'data': {'id': '35565',
-                                                      'type': 'Organization'}}},
-          'type': 'OrganizationToken'}}
-"""
 
         """Existing valid cc subdomain"""
         self.assertIn(
@@ -418,7 +376,13 @@ class TestGetCcOrgToken(unittest.TestCase):
             )['data']['attributes']
         )
 
+    def test_invalid_org_token(self):
         with self.assertRaises(PCOUnexpectedRequestException):
             pypco.get_cc_org_token(
                 'yourbcfamily',
             )
+
+    @mock.patch('pypco.get_cc_org_token', side_effect=PCORequestTimeoutException)
+    def test_timeout(self, get_cc_org_token):
+        with self.assertRaises(PCORequestTimeoutException):
+            get_cc_org_token('timeout')
