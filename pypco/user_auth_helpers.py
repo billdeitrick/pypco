@@ -1,6 +1,8 @@
 """User-facing authentication helper functions for pypco."""
 
 import urllib
+from json import JSONDecodeError
+
 import requests
 
 from .exceptions import PCORequestException
@@ -137,7 +139,7 @@ def get_oauth_refresh_token(client_id, client_secret, refresh_token):
     ).json()
 
 
-def get_cc_org_token(cc_url):
+def get_cc_org_token(cc_url: str) -> dict:
     """Get a non-authenticated Church Center OrganizationToken.
 
     Args:
@@ -149,7 +151,10 @@ def get_cc_org_token(cc_url):
         str: String of organization token
     """
     try:
-        response = requests.post(f'https://{cc_url}.churchcenter.com/sessions/tokens')
+        response = requests.post(
+            f'https://{cc_url}.churchcenter.com/sessions/tokens',
+            timeout=30
+        )
 
     except requests.exceptions.Timeout as err:
         raise PCORequestTimeoutException() from err
@@ -164,5 +169,8 @@ def get_cc_org_token(cc_url):
             str(err),
             response_body=response.text
         ) from err
-
-    return response.json()['data']['attributes']['token']
+    try:
+        response.json()
+        return response.json()
+    except JSONDecodeError as err:
+        raise PCOUnexpectedRequestException("Invalid Church Center URL") from err
