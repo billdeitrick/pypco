@@ -383,6 +383,8 @@ class TestGetCcOrgToken(unittest.TestCase):
             )
 
     @mock.patch('pypco.get_cc_org_token', side_effect=PCORequestTimeoutException)
-    def test_timeout(self, get_cc_org_token):
+    def test_timeout(self, mock_requests):
+        mock_requests.get.side_effect = (Timeout, 'Server Is Down')
         with self.assertRaises(PCORequestTimeoutException):
-            get_cc_org_token('timeout')
+            pypco.get_cc_org_token('timeout')
+
