@@ -12,6 +12,7 @@ from requests.exceptions import SSLError
 import pypco
 from pypco.exceptions import PCORequestTimeoutException, \
     PCORequestException, PCOUnexpectedRequestException
+from pypco.auth_config import PCOAuthConfig
 from tests import BasePCOTestCase, BasePCOVCRTestCase
 
 # region Side Effect Functions
@@ -22,11 +23,11 @@ from tests import BasePCOTestCase, BasePCOVCRTestCase
 REQUEST_COUNT = 0
 TIMEOUTS = 0
 
-def timeout_se(*args, **kwargs):
+def timeout_se(*_, **__):
     """A function to mock requests timeouts over multiple responses.
 
     You must set REQUEST_COUNT global variable to 0 and TIMEOUTS global variable to desired
-    number before this function is be called.
+    number before this function is being called.
 
     Returns:
         Mock: A mock response object.
@@ -49,7 +50,7 @@ def timeout_se(*args, **kwargs):
 RL_REQUEST_COUNT = 0
 RL_LIMITED_REQUESTS = 0
 
-def ratelimit_se(*args, **kwargs): #pylint: disable=unused-argument
+def ratelimit_se(*_, **__): #pylint: disable=unused-argument
     """Simulate rate limiting.
 
         You must define RL_REQUEST_COUNT and RL_LIMITED_REQUESTS as
@@ -116,7 +117,7 @@ def ratelimit_se(*args, **kwargs): #pylint: disable=unused-argument
 
     return RateLimitResponse()
 
-def connection_error_se(*args, **kwargs):
+def connection_error_se(*_, **__):
     """Simulate a requests SSLError being thrown."""
 
     raise SSLError()
@@ -154,8 +155,8 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
             'GET',
             'https://api.planningcenteronline.com/somewhere/v2/something',
             params={
-                'include':'test',
-                'per_page':100
+                'include' : 'test',
+                'per_page' : 100
             },
             headers={
                 'User-Agent': 'pypco',
@@ -397,8 +398,7 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
             timeout=60
         )
 
-        pco._do_url_managed_request('GET', \
-            'https://api.planningcenteronline.com//test///test1/test2/////test3/test4')
+        pco._do_url_managed_request('GET', 'https://api.planningcenteronline.com//test///test1/test2/////test3/test4')
 
         mock_request.assert_called_with(
             'GET',
@@ -439,7 +439,7 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
     """Test public PCO request functions."""
 
     @patch('requests.Session.request', side_effect=connection_error_se)
-    def test_request_resonse_general_err(self, mock_request): #pylint: disable=unused-argument
+    def test_request_resonse_general_err(self, _): #pylint: disable=unused-argument
         """Test the request_response() function when a general error is thrown."""
 
         pco = self.pco
@@ -464,8 +464,8 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
         self.assertEqual(err.status_code, 404)
         self.assertEqual(
             err.response_body,
-            '{"errors":[{"status":"404","title":"Not Found",' \
-                '"detail":"The resource you requested could not be found"}]}'
+            '{"errors":[{"status":"404","title":"Not Found",' 
+            '"detail":"The resource you requested could not be found"}]}'
         )
 
         with self.assertRaises(PCORequestException) as exception_ctxt:
@@ -479,9 +479,9 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
         self.assertEqual(err.status_code, 400)
         self.assertEqual(
             err.response_body,
-            '{"errors":[{"status":"400","title":"Bad Request",' \
-                '"code":"invalid_resource_payload",' \
-                    '"detail":"The payload given does not contain a \'data\' key."}]}'
+            '{"errors":[{"status":"400","title":"Bad Request",' 
+            '"code":"invalid_resource_payload",' 
+            '"detail":"The payload given does not contain a \'data\' key."}]}'
         )
 
     def test_request_json(self):
@@ -512,11 +512,9 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
         # Get with includes
         result = pco.get('/people/v2/people/45029164', include='emails,organization')
         self.assertEqual(result['included'][0]['type'], 'Email')
-        self.assertEqual(result['included'][0]['attributes']['address'], \
-            'paul.revere@mailinator.com')
+        self.assertEqual(result['included'][0]['attributes']['address'], 'paul.revere@mailinator.com')
         self.assertEqual(result['included'][1]['type'], 'Organization')
-        self.assertEqual(result['included'][1]['attributes']['name'], \
-            'Pypco Dev')
+        self.assertEqual(result['included'][1]['attributes']['name'], 'Pypco Dev')
 
         # Get with filter
         params = {
@@ -618,6 +616,8 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
                 person['included'][0]['id'],
                 'Email id did not match as expected.'
             )
+            self.assertIn("can_include", person["meta"])
+            self.assertIn("parent", person["meta"])
 
         # Test multiple includes, again excluding admins
         query = {
@@ -760,7 +760,7 @@ class TestPCOInitialization(BasePCOTestCase):
             'app_secret',
         )
 
-        self.assertIsInstance(pco._auth_config, pypco.auth_config.PCOAuthConfig)
+        self.assertIsInstance(pco._auth_config, PCOAuthConfig)
         self.assertIsInstance(pco._auth_header, str)
         self.assertEqual(pco.api_base, 'https://api.planningcenteronline.com')
         self.assertEqual(pco.timeout, 60)
@@ -775,7 +775,7 @@ class TestPCOInitialization(BasePCOTestCase):
             token='abc'
         )
 
-        self.assertIsInstance(pco._auth_config, pypco.auth_config.PCOAuthConfig)
+        self.assertIsInstance(pco._auth_config, PCOAuthConfig)
         self.assertIsInstance(pco._auth_header, str)
         self.assertEqual(pco.api_base, 'https://api.planningcenteronline.com')
         self.assertEqual(pco.timeout, 60)
@@ -796,7 +796,7 @@ class TestPCOInitialization(BasePCOTestCase):
             timeout_retries=500,
         )
 
-        self.assertIsInstance(pco._auth_config, pypco.auth_config.PCOAuthConfig)
+        self.assertIsInstance(pco._auth_config, PCOAuthConfig)
         self.assertIsInstance(pco._auth_header, str)
         self.assertEqual(pco.api_base, 'https://bogus.base')
         self.assertEqual(pco.timeout, 120)
