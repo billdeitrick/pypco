@@ -2,6 +2,8 @@
 
 import urllib
 from typing import List
+from json import JSONDecodeError
+
 import requests
 
 from .exceptions import PCORequestException
@@ -140,3 +142,40 @@ def get_oauth_refresh_token(client_id: str, client_secret: str, refresh_token: s
         refresh_token=refresh_token,
         grant_type='refresh_token'
     ).json()
+
+
+def get_cc_org_token(cc_url: str) -> dict:
+    """Get a non-authenticated Church Center OrganizationToken.
+
+    Args:
+        cc_url (str): The organization_name part of the organization_name.churchcenter.com url.
+
+    Raises:
+
+    Returns:
+        str: String of organization token
+    """
+    try:
+        response = requests.post(
+            f'https://{cc_url}.churchcenter.com/sessions/tokens',
+            timeout=30
+        )
+
+    except requests.exceptions.Timeout as err:
+        raise PCORequestTimeoutException() from err
+    except Exception as err:
+        raise PCOUnexpectedRequestException(str(err)) from err
+
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as err:
+        raise PCORequestException(
+            response.status_code,
+            str(err),
+            response_body=response.text
+        ) from err
+    try:
+        response.json()
+        return response.json()
+    except JSONDecodeError as err:
+        raise PCOUnexpectedRequestException("Invalid Church Center URL") from err

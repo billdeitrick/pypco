@@ -11,6 +11,7 @@ class PCOAuthType(Enum):  # pylint: disable=R0903
 
     PAT = auto()
     OAUTH = auto()
+    ORGTOKEN = auto()
 
 
 class PCOAuthConfig:
@@ -20,13 +21,16 @@ class PCOAuthConfig:
             application_id (str): The application ID for your application (PAT).
             secret (str): The secret for your application (PAT).
             token (str): The token for your application (OAUTH).
+            org_token (str): The OrganizationToken used for api.churchcenter.com
+            auth_type (PCOAuthType): The authentication type specified by this config object.
     """
 
-    def __init__(self, application_id: str = None, secret: str = None, token: str = None):
+    def __init__(self, application_id: str = None, secret: str = None, token: str = None, org_token: str = None):
 
         self.application_id = application_id
         self.secret = secret
         self.token = token
+        self.org_token = org_token
 
     @property
     def auth_type(self) -> PCOAuthType:
@@ -39,10 +43,12 @@ class PCOAuthConfig:
             PCOAuthType: The authentication type for this config.
         """
 
-        if self.application_id and self.secret and not self.token:  # pylint: disable=no-else-return
+        if self.application_id and self.secret and not (self.token or self.org_token):  # pylint: disable=no-else-return
             return PCOAuthType.PAT
-        elif self.token and not (self.application_id or self.secret):
+        elif self.token and not (self.application_id or self.secret or self.org_token):
             return PCOAuthType.OAUTH
+        elif self.org_token and not (self.application_id or self.secret or self.token):
+            return PCOAuthType.ORGTOKEN
         else:
             raise PCOCredentialsException(
                 "You have specified invalid authentication information. "
@@ -68,6 +74,9 @@ class PCOAuthConfig:
                     ).encode()
                 ).decode()
             )
+
+        if self.auth_type == PCOAuthType.ORGTOKEN:
+            return "OrganizationToken {}".format(self.org_token)
 
         # Otherwise OAUTH using the Bearer scheme
         return "Bearer {}".format(self.token)
