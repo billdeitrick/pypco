@@ -1,6 +1,7 @@
 """User-facing authentication helper functions for pypco."""
 
 import urllib
+from typing import List
 from json import JSONDecodeError
 
 import requests
@@ -9,7 +10,8 @@ from .exceptions import PCORequestException
 from .exceptions import PCORequestTimeoutException
 from .exceptions import PCOUnexpectedRequestException
 
-def get_browser_redirect_url(client_id, redirect_uri, scopes):
+
+def get_browser_redirect_url(client_id: str, redirect_uri: str, scopes: List[str]) -> str:
     """Get the URL to which the user's browser should be redirected.
 
     This helps you perform step 1 of PCO OAUTH as described at:
@@ -35,7 +37,8 @@ def get_browser_redirect_url(client_id, redirect_uri, scopes):
 
     return "{}{}".format(url, urllib.parse.urlencode(params))
 
-def _do_oauth_post(url, **kwargs):
+
+def _do_oauth_post(url: str, **kwargs) -> requests.Response:
     """Do a Post request to facilitate the OAUTH process.
 
     Handles error handling appropriately and raises pypco exceptions.
@@ -80,7 +83,8 @@ def _do_oauth_post(url, **kwargs):
 
     return response
 
-def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
+
+def get_oauth_access_token(client_id: str, client_secret: str, code: int, redirect_uri: str) -> dict:
     """Get the access token for the client.
 
     This assumes you have already completed steps 1 and 2 as described at:
@@ -110,7 +114,8 @@ def get_oauth_access_token(client_id, client_secret, code, redirect_uri):
         grant_type="authorization_code"
     ).json()
 
-def get_oauth_refresh_token(client_id, client_secret, refresh_token):
+
+def get_oauth_refresh_token(client_id: str, client_secret: str, refresh_token: str) -> dict:
     """Refresh the access token.
 
     This assumes you have already completed steps 1, 2, and 3 as described at:

@@ -5,6 +5,15 @@ from enum import Enum, auto
 
 from .exceptions import PCOCredentialsException
 
+
+class PCOAuthType(Enum): #pylint: disable=R0903
+    """Defines PCO authentication types."""
+
+    PAT = auto()
+    OAUTH = auto()
+    ORGTOKEN = auto()
+
+
 class PCOAuthConfig:
     """Auth configuration for PCO.
 
@@ -16,7 +25,7 @@ class PCOAuthConfig:
             auth_type (PCOAuthType): The authentiation type specified by this config object.
     """
 
-    def __init__(self, application_id=None, secret=None, token=None, org_token=None):
+    def __init__(self, application_id: str = None, secret: str = None, token: str = None, org_token: str = None):
 
         self.application_id = application_id
         self.secret = secret
@@ -24,7 +33,7 @@ class PCOAuthConfig:
         self.org_token = org_token
 
     @property
-    def auth_type(self):
+    def auth_type(self) -> PCOAuthType:
         """The authentication type specified by this configuration.
 
         Raises:
@@ -34,7 +43,7 @@ class PCOAuthConfig:
             PCOAuthType: The authentication type for this config.
         """
 
-        if self.application_id and self.secret and not (self.token or self.org_token): #pylint: disable=no-else-return
+        if self.application_id and self.secret and not (self.token or self.org_token):  # pylint: disable=no-else-return
             return PCOAuthType.PAT
         elif self.token and not (self.application_id or self.secret or self.org_token):
             return PCOAuthType.OAUTH
@@ -48,7 +57,7 @@ class PCOAuthConfig:
             )
 
     @property
-    def auth_header(self):
+    def auth_header(self) -> str:
         """Get the authorization header for this authentication configuration scheme.
 
         Returns:
@@ -65,6 +74,7 @@ class PCOAuthConfig:
                     ).encode()
                 ).decode()
             )
+
         if self.auth_type == PCOAuthType.ORGTOKEN:
             return "OrganizationToken {}".format(self.org_token)
 
@@ -76,4 +86,3 @@ class PCOAuthType(Enum): #pylint: disable=R0903
 
     PAT = auto()
     OAUTH = auto()
-    ORGTOKEN = auto()
