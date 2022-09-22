@@ -6,7 +6,7 @@ from enum import Enum, auto
 from .exceptions import PCOCredentialsException
 
 
-class PCOAuthType(Enum): #pylint: disable=R0903
+class PCOAuthType(Enum):  # pylint: disable=R0903
     """Defines PCO authentication types."""
 
     PAT = auto()
@@ -21,8 +21,8 @@ class PCOAuthConfig:
             application_id (str): The application ID for your application (PAT).
             secret (str): The secret for your application (PAT).
             token (str): The token for your application (OAUTH).
-            org_token: The OrganizationToken used for api.churchcenter.com
-            auth_type (PCOAuthType): The authentiation type specified by this config object.
+            org_token (str): The OrganizationToken used for api.churchcenter.com
+            auth_type (PCOAuthType): The authentication type specified by this config object.
     """
 
     def __init__(self, application_id: str = None, secret: str = None, token: str = None, org_token: str = None):
@@ -80,9 +80,3 @@ class PCOAuthConfig:
 
         # Otherwise OAUTH using the Bearer scheme
         return "Bearer {}".format(self.token)
-
-class PCOAuthType(Enum): #pylint: disable=R0903
-    """Defines PCO authentication types."""
-
-    PAT = auto()
-    OAUTH = auto()

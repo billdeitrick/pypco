@@ -4,6 +4,7 @@ from pypco.auth_config import PCOAuthConfig, PCOAuthType
 from pypco.exceptions import PCOCredentialsException
 from tests import BasePCOTestCase
 
+
 class TestPCOAuthConfig(BasePCOTestCase):
     """Test the PCOAuthConfig class."""
 
@@ -30,37 +31,35 @@ class TestPCOAuthConfig(BasePCOTestCase):
 
         self.assertEqual(auth_config.auth_type, PCOAuthType.OAUTH, "Wrong authentication type!")
 
-
     def test_org_token(self):
         """Verify class functionality with ORGTOKEN."""
 
         auth_config = PCOAuthConfig(org_token="abcd1234")
 
-        self.assertIsInstance(auth_config, PCOAuthConfig, "Class is not instnace of PCOAuthConfig!")
+        self.assertIsInstance(auth_config, PCOAuthConfig, "Class is not instance of PCOAuthConfig!")
 
         self.assertIsNotNone(auth_config.org_token, "No token found on object!")
 
         self.assertEqual(auth_config.auth_type, PCOAuthType.ORGTOKEN, "Wrong authentication type!")
-
 
     def test_invalid_auth(self):
         """Verify an error when we try to get auth type with bad auth."""
 
         # Test with only auth_id
         with self.assertRaises(PCOCredentialsException):
-            PCOAuthConfig('bad_app_id').auth_type #pylint: disable=W0106
+            PCOAuthConfig('bad_app_id').auth_type  # pylint: disable=W0106
 
         # Test with only secret
         with self.assertRaises(PCOCredentialsException):
-            PCOAuthConfig(secret='bad_app_secret').auth_type #pylint: disable=W0106
+            PCOAuthConfig(secret='bad_app_secret').auth_type  # pylint: disable=W0106
 
         # Test with token and auth_id
         with self.assertRaises(PCOCredentialsException):
-            PCOAuthConfig(application_id='bad_app_id', token='token').auth_type #pylint: disable=W0106
+            PCOAuthConfig(application_id='bad_app_id', token='token').auth_type  # pylint: disable=W0106
 
         # Test with token and secret
         with self.assertRaises(PCOCredentialsException):
-            PCOAuthConfig(secret='bad_secret', token='bad_token').auth_type #pylint: disable=W0106
+            PCOAuthConfig(secret='bad_secret', token='bad_token').auth_type  # pylint: disable=W0106
 
         # Test with org_token and auth_id
         with self.assertRaises(PCOCredentialsException):
@@ -76,22 +75,22 @@ class TestPCOAuthConfig(BasePCOTestCase):
 
         # Test with no args
         with self.assertRaises(PCOCredentialsException):
-            PCOAuthConfig().auth_type #pylint: disable=W0106
+            PCOAuthConfig().auth_type  # pylint: disable=W0106
 
     def test_auth_headers(self):
         """Verify that we get the correct authentication headers."""
 
         # PAT
         auth_config = PCOAuthConfig('app_id', 'secret')
-        self.assertEqual(auth_config.auth_header, "Basic YXBwX2lkOnNlY3JldA==", \
-            "Invalid PAT authentication header.")
+        self.assertEqual(auth_config.auth_header, "Basic YXBwX2lkOnNlY3JldA==",
+                         "Invalid PAT authentication header.")
 
         # OAUTH
         auth_config = PCOAuthConfig(token="abcd1234")
-        self.assertEqual(auth_config.auth_header, "Bearer abcd1234", \
-            "Invalid OAUTH authentication header.")
+        self.assertEqual(auth_config.auth_header, "Bearer abcd1234",
+                         "Invalid OAUTH authentication header.")
 
         # ORGTOKEN
         auth_config = PCOAuthConfig(org_token="abcd1234")
-        self.assertEqual(auth_config.auth_header, "OrganizationToken abcd1234", \
-            "Invalid ORGTOKEN authentication header.")
+        self.assertEqual(auth_config.auth_header, "OrganizationToken abcd1234",
+                         "Invalid ORGTOKEN authentication header.")
