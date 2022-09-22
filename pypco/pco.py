@@ -4,13 +4,15 @@ import time
 import logging
 import re
 
+from typing import Any, Iterator
 import requests
 
 from .auth_config import PCOAuthConfig
 from .exceptions import PCORequestTimeoutException, \
     PCORequestException, PCOUnexpectedRequestException
 
-class PCO(): #pylint: disable=too-many-instance-attributes
+
+class PCO:  #pylint: disable=too-many-instance-attributes
     """The entry point to the PCO API.
 
     Note:
@@ -31,17 +33,17 @@ class PCO(): #pylint: disable=too-many-instance-attributes
         timeout_retries (int): How many times to retry requests that have timed out. Default 3.
     """
 
-    def __init__( #pylint: disable=too-many-arguments
+    def __init__(  # pylint: disable=too-many-arguments
             self,
-            application_id=None,
-            secret=None,
-            token=None,
-            api_base='https://api.planningcenteronline.com',
-            timeout=60,
-            upload_url='https://upload.planningcenteronline.com/v2/files',
-            upload_timeout=300,
-            timeout_retries=3,
-        ):
+            application_id: str = None,
+            secret: str = None,
+            token: str = None,
+            api_base: str = 'https://api.planningcenteronline.com',
+            timeout: int = 60,
+            upload_url: str = 'https://upload.planningcenteronline.com/v2/files',
+            upload_timeout: int = 300,
+            timeout_retries: int = 3,
+    ):
 
         self._log = logging.getLogger(__name__)
 
@@ -60,7 +62,8 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         self._log.debug("Pypco has been initialized!")
 
-    def _do_request(self, method, url, payload=None, upload=None, **params):
+    def _do_request(self, method: str, url: str, payload: Any = None, upload: str = None,
+                    **params) -> requests.Response:
         """Builds, executes, and performs a single request against the PCO API.
 
         Executed request could be one of the standard HTTP verbs or a file upload.
@@ -84,9 +87,9 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         # Standard params
         request_params = {
-            'headers':headers,
-            'params':params,
-            'json':payload,
+            'headers': headers,
+            'params': params,
+            'json': payload,
             'timeout': self.upload_timeout if upload else self.timeout
         }
 
@@ -99,7 +102,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             "Executing %s request to '%s' with args %s",
             method,
             url,
-            {param:value for (param, value) in request_params.items() if param != 'headers'}
+            {param: value for (param, value) in request_params.items() if param != 'headers'}
         )
 
         # The moment we've been waiting for...execute the request
@@ -107,7 +110,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             response = self.session.request(
                 method,
                 url,
-                **request_params
+                **request_params # type: ignore[arg-type]
             )
         finally:
             if upload:
@@ -115,7 +118,8 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         return response
 
-    def _do_timeout_managed_request(self, method, url, payload=None, upload=None, **params):
+    def _do_timeout_managed_request(self, method: str, url: str, payload: Any = None, upload: str = None,
+                                    **params) -> requests.Response:
         """Performs a single request against the PCO API with automatic retried in case of timeout.
 
         Executed request could be one of the standard HTTP verbs or a file upload.
@@ -134,7 +138,6 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             requests.Response: The response to this request.
         """
 
-
         timeout_count = 0
 
         while True:
@@ -144,20 +147,21 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             except requests.exceptions.Timeout as exc:
                 timeout_count += 1
 
-                self._log.debug("The request to \"%s\" timed out after %d tries.", \
-                    url, timeout_count)
+                self._log.debug("The request to \"%s\" timed out after %d tries.",
+                                url, timeout_count)
 
                 if timeout_count == self.timeout_retries:
-                    self._log.debug("Maximum retries (%d) hit. Will raise exception.", \
-                        self.timeout_retries)
+                    self._log.debug("Maximum retries (%d) hit. Will raise exception.",
+                                    self.timeout_retries)
 
-                    raise PCORequestTimeoutException( \
-                        "The request to \"%s\" timed out after %d tries." \
+                    raise PCORequestTimeoutException(
+                        "The request to \"%s\" timed out after %d tries."
                         % (url, timeout_count)) from exc
 
                 continue
 
-    def _do_ratelimit_managed_request(self, method, url, payload=None, upload=None, **params):
+    def _do_ratelimit_managed_request(self, method: str, url: str, payload: Any = None, upload: str = None,
+                                      **params) -> requests.Response:
         """Performs a single request against the PCO API with automatic rate limit handling.
 
         Executed request could be one of the standard HTTP verbs or a file upload.
@@ -176,21 +180,21 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             requests.Response: The response to this request.
         """
 
-
         while True:
 
             response = self._do_timeout_managed_request(method, url, payload, upload, **params)
 
             if response.status_code == 429:
-                self._log.debug("Received rate limit response. Will try again after %d sec(s).", \
-                    int(response.headers['Retry-After']))
+                self._log.debug("Received rate limit response. Will try again after %d sec(s).",
+                                int(response.headers['Retry-After']))
 
                 time.sleep(int(response.headers['Retry-After']))
                 continue
 
             return response
 
-    def _do_url_managed_request(self, method, url, payload=None, upload=None, **params):
+    def _do_url_managed_request(self, method: str, url: str, payload: Any = None, upload: str = None,
+                                **params) -> requests.Response:
         """Performs a single request against the PCO API, automatically cleaning up the URL.
 
         Executed request could be one of the standard HTTP verbs or a file upload.
@@ -219,7 +223,8 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         return self._do_ratelimit_managed_request(method, url, payload, upload, **params)
 
-    def request_response(self, method, url, payload=None, upload=None, **params):
+    def request_response(self, method: str, url: str, payload: Any = None, upload: str = None,
+                         **params) -> requests.Response:
         """A generic entry point for making a managed request against PCO.
 
         This function will return a Requests response object, allowing access to
@@ -261,7 +266,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         return response
 
-    def request_json(self, method, url, payload=None, upload=None, **params):
+    def request_json(self, method: str, url: str, payload: Any = None, upload: str = None, **params: str) -> dict:
         """A generic entry point for making a managed request against PCO.
 
         This function will return the payload from the PCO response (a dict).
@@ -284,7 +289,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         return self.request_response(method, url, payload, upload, **params).json()
 
-    def get(self, url, **params):
+    def get(self, url: str, **params) -> dict:
         """Perform a GET request against the PCO API.
 
         Performs a fully managed GET request (handles ratelimiting, timeouts, etc.).
@@ -293,8 +298,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             url (str): The URL against which to perform the request. Can include
                 what's been set as api_base, which will be ignored if this value is also
                 present in your URL.
-            params: Any named arguments will be passed as query parameters. Values must
-                be of type str!
+            params: Any named arguments will be passed as query parameters.
 
         Raises:
             PCORequestTimeoutException: The request to PCO timed out the maximum number of times.
@@ -307,7 +311,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         return self.request_json('GET', url, **params)
 
-    def post(self, url, payload=None, **params):
+    def post(self, url: str, payload: dict = None, **params: str) -> dict:
         """Perform a POST request against the PCO API.
 
         Performs a fully managed POST request (handles ratelimiting, timeouts, etc.).
@@ -331,7 +335,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         return self.request_json('POST', url, payload, **params)
 
-    def patch(self, url, payload=None, **params):
+    def patch(self, url: str, payload: dict = None, **params: str) -> dict:
         """Perform a PATCH request against the PCO API.
 
         Performs a fully managed PATCH request (handles ratelimiting, timeouts, etc.).
@@ -355,7 +359,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         return self.request_json('PATCH', url, payload, **params)
 
-    def delete(self, url, **params):
+    def delete(self, url: str, **params: str) -> requests.Response:
         """Perform a DELETE request against the PCO API.
 
         Performs a fully managed DELETE request (handles ratelimiting, timeouts, etc.).
@@ -380,7 +384,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
 
         return self.request_response('DELETE', url, **params)
 
-    def iterate(self, url, offset=0, per_page=25, **params): #pylint: disable=too-many-branches
+    def iterate(self, url: str, offset: int = 0, per_page: int = 25, **params: str) -> Iterator[dict]:  # pylint: disable=too-many-branches
         """Iterate a list of objects in a response, handling pagination.
 
         Basically, this function wraps get in a generator function designed for
@@ -413,7 +417,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
             specific objects since they are accessible directly from each returned object.
         """
 
-        while True: #pylint: disable=too-many-nested-blocks
+        while True:  # pylint: disable=too-many-nested-blocks
 
             response = self.get(url, offset=offset, per_page=per_page, **params)
 
@@ -425,10 +429,10 @@ class PCO(): #pylint: disable=too-many-instance-attributes
                 }
 
                 if 'can_include' in response['meta']:
-                    record['meta']['can_include']: response['meta']['can_include']
+                    record['meta']['can_include'] = response['meta']['can_include']
 
                 if 'parent' in response['meta']:
-                    record['meta']['parent']: response['meta']['parent']
+                    record['meta']['parent'] = response['meta']['parent']
 
                 if 'relationships' in cur:
                     for key in cur['relationships']:
@@ -438,26 +442,24 @@ class PCO(): #pylint: disable=too-many-instance-attributes
                             if isinstance(relationships, dict):
                                 for include in response['included']:
                                     if include['type'] == relationships['type'] and \
-                                        include['id'] == relationships['id']:
-
+                                            include['id'] == relationships['id']:
                                         record['included'].append(include)
 
                             elif isinstance(relationships, list):
                                 for relationship in relationships:
                                     for include in response['included']:
                                         if include['type'] == relationship['type'] and \
-                                            include['id'] == relationship['id']:
-
+                                                include['id'] == relationship['id']:
                                             record['included'].append(include)
 
                 yield record
 
             offset += per_page
 
-            if not 'next' in response['links']:
+            if 'next' not in response['links']:
                 break
 
-    def upload(self, file_path, **params):
+    def upload(self, file_path: str, **params) -> dict:
         """Upload the file at the specified path to PCO.
 
         Args:
@@ -482,7 +484,7 @@ class PCO(): #pylint: disable=too-many-instance-attributes
         self.session.close()
 
     @staticmethod
-    def template(object_type, attributes=None):
+    def template(object_type: str, attributes: dict = None) -> dict:
         """Get template JSON for creating a new object.
 
         Args:
