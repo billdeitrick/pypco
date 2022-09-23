@@ -34,11 +34,11 @@ class TestPCOAuthConfig(BasePCOTestCase):
     def test_org_token(self):
         """Verify class functionality with ORGTOKEN."""
 
-        auth_config = PCOAuthConfig(org_token="abcd1234")
+        auth_config = PCOAuthConfig(cc_name="carlsbad")
 
         self.assertIsInstance(auth_config, PCOAuthConfig, "Class is not instance of PCOAuthConfig!")
 
-        self.assertIsNotNone(auth_config.org_token, "No token found on object!")
+        self.assertIsNotNone(auth_config.cc_name, "No token found on object!")
 
         self.assertEqual(auth_config.auth_type, PCOAuthType.ORGTOKEN, "Wrong authentication type!")
 
@@ -63,15 +63,15 @@ class TestPCOAuthConfig(BasePCOTestCase):
 
         # Test with org_token and auth_id
         with self.assertRaises(PCOCredentialsException):
-            PCOAuthConfig(application_id='bad_app_id', org_token='token').auth_type  # pylint: disable=W0106
+            PCOAuthConfig(application_id='bad_app_id', cc_name='carlsbad').auth_type  # pylint: disable=W0106
 
         # Test with org_token and secret
         with self.assertRaises(PCOCredentialsException):
-            PCOAuthConfig(secret='bad_secret', org_token='token').auth_type  # pylint: disable=W0106
+            PCOAuthConfig(secret='bad_secret', cc_name='carlsbad').auth_type  # pylint: disable=W0106
 
         # Test with org_token and token
         with self.assertRaises(PCOCredentialsException):
-            PCOAuthConfig(token='bad_token', org_token='token').auth_type  # pylint: disable=W0106
+            PCOAuthConfig(token='bad_token', cc_name='carlsbad').auth_type  # pylint: disable=W0106
 
         # Test with no args
         with self.assertRaises(PCOCredentialsException):
@@ -91,6 +91,6 @@ class TestPCOAuthConfig(BasePCOTestCase):
                          "Invalid OAUTH authentication header.")
 
         # ORGTOKEN
-        auth_config = PCOAuthConfig(org_token="abcd1234")
-        self.assertEqual(auth_config.auth_header, "OrganizationToken abcd1234",
+        auth_config = PCOAuthConfig(cc_name="carlsbad")
+        self.assertIn('OrganizationToken', auth_config.auth_header,
                          "Invalid ORGTOKEN authentication header.")
