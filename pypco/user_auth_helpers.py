@@ -144,7 +144,7 @@ def get_oauth_refresh_token(client_id: str, client_secret: str, refresh_token: s
     ).json()
 
 
-def get_cc_org_token(cc_url: str) -> dict:
+def get_cc_org_token(cc_name: str) -> str:
     """Get a non-authenticated Church Center OrganizationToken.
 
     Args:
@@ -157,7 +157,7 @@ def get_cc_org_token(cc_url: str) -> dict:
     """
     try:
         response = requests.post(
-            f'https://{cc_url}.churchcenter.com/sessions/tokens',
+            f'https://{cc_name}.churchcenter.com/sessions/tokens',
             timeout=30
         )
 
@@ -176,6 +176,6 @@ def get_cc_org_token(cc_url: str) -> dict:
         ) from err
     try:
         response.json()
-        return response.json()
+        return response.json()['data']['attributes']['token']
     except JSONDecodeError as err:
         raise PCOUnexpectedRequestException("Invalid Church Center URL") from err

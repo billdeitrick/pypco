@@ -77,7 +77,7 @@ class PCOAuthConfig:
             )
 
         if self.auth_type == PCOAuthType.ORGTOKEN:
-            return "OrganizationToken {}".format(get_cc_org_token(self.cc_name)['data']['attributes']['token'])
+            return f"OrganizationToken {get_cc_org_token(self.cc_name)}"
 
         # Otherwise OAUTH using the Bearer scheme
         return "Bearer {}".format(self.token)
