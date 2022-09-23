@@ -124,7 +124,7 @@ person = next(people)
 print(person)
 ```
 
-OAuth tokens will work for up to two hours after they have been issued, and can be renewed with a refresh token. Again, pypco helps you out here by providing a simple convenience function you can use to refresh OAuth tokens.
+OrgTokens are generated with every request to the church center api they should always be fresh.
 
 ```python
 import pypco
@@ -142,23 +142,21 @@ print(person)
 
 ### Church Center API Organization Token (OrganizationToken) Authentication
 
-If you want to access api.churchcenter.com endpoints you need to use org_token.
-We have added a convenience utility to get an organization token using `get_cc_org_token` from user_auth_helpers.py.
+If you want to access api.churchcenter.com endpoints you need to use an OrganizationToken.
+We have added the ability for pypco to get these OrganizationTokens for you using `cc_name` as an auth option.
 
-You need to pass the vanity portion of the church center url to `get_cc_org_token` 
-To get an org token for https://carlsbad.churchcenter.com use `carlsbad` as the `cc_url`
+You need to pass the vanity portion of the church center url as cc_name when initializing the PCO object. 
+To auth for https://carlsbad.churchcenter.com use `carlsbad` as the `cc_name`.
+
 
 Now, you're ready to connect to the Church Center API. The example below demonstrates authentication with an Org Token, the steps needed to change the base url, and executes a simple query to get and display events from the church center api.
 
 ```python
 import pypco
 
-# Generate an Org Token
-token_response = pypco.get_cc_org_token('carlsbad')
-
 # Get an instance of the PCO object using your personal access token.
 # Set the api_base to https://api.churchcenter.com
-pco = pypco.PCO(org_token=token_response['data']['attributes']['token'],
+pco = pypco.PCO(cc_name='carlsbad',
                 api_base="https://api.churchcenter.com")
 
 # Get the events from api.churchcenter.com
