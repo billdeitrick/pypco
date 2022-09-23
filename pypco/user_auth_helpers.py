@@ -148,7 +148,7 @@ def get_cc_org_token(cc_name: str) -> str:
     """Get a non-authenticated Church Center OrganizationToken.
 
     Args:
-        cc_url (str): The organization_name part of the organization_name.churchcenter.com url.
+        cc_name (str): The organization_name part of the organization_name.churchcenter.com url.
 
     Raises:
 
