@@ -1,10 +1,10 @@
 """Test the primary pypco entry point -- the PCO object"""
 
-#pylint: disable=protected-access,global-statement
+# pylint: disable=protected-access,global-statement
 
 import os
 import json
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch,MagicMock
 
 import requests
 from requests.exceptions import SSLError
@@ -14,6 +14,8 @@ from pypco.exceptions import PCORequestTimeoutException, \
     PCORequestException, PCOUnexpectedRequestException
 from pypco.auth_config import PCOAuthConfig
 from tests import BasePCOTestCase, BasePCOVCRTestCase
+from pathlib import Path
+import vcr
 
 # region Side Effect Functions
 
@@ -22,6 +24,10 @@ from tests import BasePCOTestCase, BasePCOVCRTestCase
 ## Timeout testing
 REQUEST_COUNT = 0
 TIMEOUTS = 0
+
+# Path to upload file
+uploaded_file_path = Path(__file__).parent.joinpath('assets/test_upload.jpg')
+
 
 def timeout_se(*_, **__):
     """A function to mock requests timeouts over multiple responses.
@@ -33,7 +39,7 @@ def timeout_se(*_, **__):
         Mock: A mock response object.
     """
 
-    global REQUEST_COUNT, TIMEOUTS #pylint: disable=global-statement
+    global REQUEST_COUNT, TIMEOUTS  # pylint: disable=global-statement
 
     REQUEST_COUNT += 1
 
@@ -46,11 +52,13 @@ def timeout_se(*_, **__):
 
     raise requests.exceptions.Timeout()
 
+
 ## Rate limit handling
 RL_REQUEST_COUNT = 0
 RL_LIMITED_REQUESTS = 0
 
-def ratelimit_se(*_, **__): #pylint: disable=unused-argument
+
+def ratelimit_se(*_, **__):  # pylint: disable=unused-argument
     """Simulate rate limiting.
 
         You must define RL_REQUEST_COUNT and RL_LIMITED_REQUESTS as
@@ -67,14 +75,14 @@ def ratelimit_se(*_, **__): #pylint: disable=unused-argument
     class RateLimitResponse:
         """Mocking class for rate limited response
         When this class is called with a req_count > 0, it mock a successful
-        request. Otherwise a rate limited request is mocked.
+        request. Otherwise, a rate limited request is mocked.
         """
 
         @property
         def status_code(self):
             """Mock the status code property"""
 
-            if  RL_LIMITED_REQUESTS > RL_REQUEST_COUNT:
+            if RL_LIMITED_REQUESTS > RL_REQUEST_COUNT:
                 return 200
 
             return 429
@@ -117,10 +125,12 @@ def ratelimit_se(*_, **__): #pylint: disable=unused-argument
 
     return RateLimitResponse()
 
+
 def connection_error_se(*_, **__):
     """Simulate a requests SSLError being thrown."""
 
     raise SSLError()
+
 
 # endregion
 
@@ -128,16 +138,16 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
     """Test low-level request mechanisms."""
 
     @patch('requests.Session.request')
-    @patch('builtins.open')
-    def test_do_request(self, mock_fh, mock_request):
+    @patch.object(Path,"__new__")
+    def test_do_request(self, mock_path, mock_request):
         """Test dispatching single requests; HTTP verbs, file uploads, etc."""
-
         # Setup PCO object and request mock
         pco = pypco.PCO(
             application_id='app_id',
             secret='secret'
         )
-
+        fake_path_instance=MagicMock()
+        mock_path.return_value=fake_path_instance
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.text = '{"hello": "world"}'
@@ -155,8 +165,8 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
             'GET',
             'https://api.planningcenteronline.com/somewhere/v2/something',
             params={
-                'include' : 'test',
-                'per_page' : 100
+                'include': 'test',
+                'per_page': 100
             },
             headers={
                 'User-Agent': 'pypco',
@@ -198,7 +208,6 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
         )
 
         # File Upload
-        mock_fh.name = "open()"
 
         pco._do_request(
             'POST',
@@ -206,7 +215,9 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
             upload='/file/path',
         )
 
-        mock_fh.assert_called_once_with('/file/path', 'rb')
+        mock_path.assert_called_once_with(Path, '/file/path')
+        fake_path_instance.open.assert_called_once_with("rb")
+
 
     @patch('requests.Session.request', side_effect=timeout_se)
     def test_do_timeout_managed_request(self, mock_request):
@@ -413,7 +424,7 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
     def _test_do_url_managed_upload_request(self, mock_request):
         """Test upload request with URL cleanup (should ignore)."""
 
-       # Setup PCO object
+        # Setup PCO object
         pco = pypco.PCO(
             'app_id',
             'secret'
@@ -435,11 +446,12 @@ class TestPrivateRequestFunctions(BasePCOTestCase):
             timeout=60
         )
 
+
 class TestPublicRequestFunctions(BasePCOVCRTestCase):
     """Test public PCO request functions."""
 
     @patch('requests.Session.request', side_effect=connection_error_se)
-    def test_request_resonse_general_err(self, _): #pylint: disable=unused-argument
+    def test_request_resonse_general_err(self, _):  # pylint: disable=unused-argument
         """Test the request_response() function when a general error is thrown."""
 
         pco = self.pco
@@ -464,7 +476,7 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
         self.assertEqual(err.status_code, 404)
         self.assertEqual(
             err.response_body,
-            '{"errors":[{"status":"404","title":"Not Found",' 
+            '{"errors":[{"status":"404","title":"Not Found",'
             '"detail":"The resource you requested could not be found"}]}'
         )
 
@@ -479,8 +491,8 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
         self.assertEqual(err.status_code, 400)
         self.assertEqual(
             err.response_body,
-            '{"errors":[{"status":"400","title":"Bad Request",' 
-            '"code":"invalid_resource_payload",' 
+            '{"errors":[{"status":"400","title":"Bad Request",'
+            '"code":"invalid_resource_payload",'
             '"detail":"The payload given does not contain a \'data\' key."}]}'
         )
 
@@ -711,15 +723,19 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
             }
         )
 
-    def test_upload(self):
-        """Test the file upload function."""
+    def test_upload_str(self):
+        self._base_test_upload(f"{uploaded_file_path}")
 
+    def test_upload_path_lib(self):
+        self._base_test_upload(uploaded_file_path)
+
+    @vcr.use_cassette(str(Path(__file__).parent.joinpath("cassettes/common/test_upload.yaml")))
+    def _base_test_upload(self, uploaded):
+        """Test the file upload function."""
+        # todo consider migrating to pytest this inner (base) test could just have been parametrized
         pco = self.pco
 
-        base_path = os.path.dirname(os.path.abspath(__file__))
-        file_path = '/assets/test_upload.jpg'
-
-        upload_response = pco.upload(f'{base_path}{file_path}')
+        upload_response = pco.upload(uploaded)
 
         self.assertEqual(upload_response['data'][0]['type'], 'File')
         self.assertIsInstance(upload_response['data'][0]['id'], str)
@@ -747,6 +763,7 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
         patch_result = pco.patch(paul['data']['links']['self'], user_template)
 
         self.assertNotRegex(patch_result['data']['attributes']['avatar'], r'.*no_photo_thumbnail.*')
+
 
 class TestPCOInitialization(BasePCOTestCase):
     """Test initializing PCO objects with various argument combinations."""
