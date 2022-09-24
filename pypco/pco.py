@@ -3,16 +3,19 @@
 import time
 import logging
 import re
-
-from typing import Any, Iterator
+from contextlib import contextmanager
+from typing import Any, Iterator, Union
+from pathlib import Path
 import requests
 
 from .auth_config import PCOAuthConfig
 from .exceptions import PCORequestTimeoutException, \
     PCORequestException, PCOUnexpectedRequestException
 
+PathLike = Union[Path, str]  # pylint: disable=unsubscriptable-object
 
-class PCO:  #pylint: disable=too-many-instance-attributes
+
+class PCO:  # pylint: disable=too-many-instance-attributes
     """The entry point to the PCO API.
 
     Note:
@@ -63,7 +66,7 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
         self._log.debug("Pypco has been initialized!")
 
-    def _do_request(self, method: str, url: str, payload: Any = None, upload: str = None,
+    def _do_request(self, method: str, url: str, payload: Any = None, upload: PathLike = None,
                     **params) -> requests.Response:
         """Builds, executes, and performs a single request against the PCO API.
 
@@ -73,53 +76,45 @@ class PCO:  #pylint: disable=too-many-instance-attributes
             method (str): The HTTP method to use for this request.
             url (str): The URL against which this request will be executed.
             payload (obj): A json-serializable Python object to be sent as the post/put payload.
-            upload(str): The path to a file to upload.
+            upload(str|Path): The path to a file to upload.
             params (obj): A dictionary or list of tuples or bytes to send in the query string.
 
         Returns:
             requests.Response: The response to this request.
         """
 
-        # Standard header
-        headers = {
-            'User-Agent': 'pypco',
-            'Authorization': self._auth_header,
-        }
+        @contextmanager
+        def request_params_provider(path):
+            # Standard params
+            params_for_request = {
+                # Standard header
+                'headers': {
+                    'User-Agent': 'pypco',
+                    'Authorization': self._auth_header,
+                },
+                'params': params,
+                'json': payload,
+                'timeout': self.upload_timeout if path else self.timeout
+            }
+            if path:
+                path = Path(path)  # if is path already this is noop
 
-        # Standard params
-        request_params = {
-            'headers': headers,
-            'params': params,
-            'json': payload,
-            'timeout': self.upload_timeout if upload else self.timeout
-        }
-
-        # Add files param if upload specified
-        if upload:
-            upload_fh = open(upload, 'rb')
-            request_params['files'] = {'file': upload_fh}
-
-        self._log.debug(
-            "Executing %s request to '%s' with args %s",
-            method,
-            url,
-            {param: value for (param, value) in request_params.items() if param != 'headers'}
-        )
+                with path.open("rb") as upload_fh:
+                    # Add files param if upload specified
+                    params_for_request['files'] = {'file': upload_fh}
+                    yield params_for_request
+            else:
+                yield params_for_request
 
         # The moment we've been waiting for...execute the request
-        try:
-            response = self.session.request(
+        with request_params_provider(upload) as request_params:
+            return self.session.request(
                 method,
                 url,
-                **request_params # type: ignore[arg-type]
+                **request_params  # type: ignore[arg-type]
             )
-        finally:
-            if upload:
-                upload_fh.close()
 
-        return response
-
-    def _do_timeout_managed_request(self, method: str, url: str, payload: Any = None, upload: str = None,
+    def _do_timeout_managed_request(self, method: str, url: str, payload: Any = None, upload: PathLike = None,
                                     **params) -> requests.Response:
         """Performs a single request against the PCO API with automatic retried in case of timeout.
 
@@ -129,7 +124,7 @@ class PCO:  #pylint: disable=too-many-instance-attributes
             method (str): The HTTP method to use for this request.
             url (str): The URL against which this request will be executed.
             payload (obj): A json-serializable Python object to be sent as the post/put payload.
-            upload(str): The path to a file to upload.
+            upload(str|Path): The path to a file to upload.
             params (obj): A dictionary or list of tuples or bytes to send in the query string.
 
         Raises:
@@ -161,7 +156,7 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
                 continue
 
-    def _do_ratelimit_managed_request(self, method: str, url: str, payload: Any = None, upload: str = None,
+    def _do_ratelimit_managed_request(self, method: str, url: str, payload: Any = None, upload: PathLike = None,
                                       **params) -> requests.Response:
         """Performs a single request against the PCO API with automatic rate limit handling.
 
@@ -171,7 +166,7 @@ class PCO:  #pylint: disable=too-many-instance-attributes
             method (str): The HTTP method to use for this request.
             url (str): The URL against which this request will be executed.
             payload (obj): A json-serializable Python object to be sent as the post/put payload.
-            upload(str): The path to a file to upload.
+            upload(str|Path): The path to a file to upload.
             params (obj): A dictionary or list of tuples or bytes to send in the query string.
 
         Raises:
@@ -194,7 +189,7 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
             return response
 
-    def _do_url_managed_request(self, method: str, url: str, payload: Any = None, upload: str = None,
+    def _do_url_managed_request(self, method: str, url: str, payload: Any = None, upload: PathLike = None,
                                 **params) -> requests.Response:
         """Performs a single request against the PCO API, automatically cleaning up the URL.
 
@@ -204,7 +199,7 @@ class PCO:  #pylint: disable=too-many-instance-attributes
             method (str): The HTTP method to use for this request.
             url (str): The URL against which this request will be executed.
             payload (obj): A json-serializable Python object to be sent as the post/put payload.
-            upload(str): The path to a file to upload.
+            upload(str|Path): The path to a file to upload.
             params (obj): A dictionary or list of tuples or bytes to send in the query string.
 
         Raises:
@@ -224,7 +219,7 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
         return self._do_ratelimit_managed_request(method, url, payload, upload, **params)
 
-    def request_response(self, method: str, url: str, payload: Any = None, upload: str = None,
+    def request_response(self, method: str, url: str, payload: Any = None, upload: PathLike = None,
                          **params) -> requests.Response:
         """A generic entry point for making a managed request against PCO.
 
@@ -237,7 +232,7 @@ class PCO:  #pylint: disable=too-many-instance-attributes
             method (str): The HTTP method to use for this request.
             url (str): The URL against which this request will be executed.
             payload (obj): A json-serializable Python object to be sent as the post/put payload.
-            upload(str): The path to a file to upload.
+            upload(str|Path): The path to a file to upload.
             params (obj): A dictionary or list of tuples or bytes to send in the query string.
 
         Raises:
@@ -267,7 +262,8 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
         return response
 
-    def request_json(self, method: str, url: str, payload: Any = None, upload: str = None, **params: str) -> dict:
+    def request_json(self, method: str, url: str, payload: Any = None, upload: PathLike = None,
+                     **params: str) -> dict:
         """A generic entry point for making a managed request against PCO.
 
         This function will return the payload from the PCO response (a dict).
@@ -276,7 +272,7 @@ class PCO:  #pylint: disable=too-many-instance-attributes
             method (str): The HTTP method to use for this request.
             url (str): The URL against which this request will be executed.
             payload (obj): A json-serializable Python object to be sent as the post/put payload.
-            upload(str): The path to a file to upload.
+            upload(str|Path): The path to a file to upload.
             params (obj): A dictionary or list of tuples or bytes to send in the query string.
 
         Raises:
@@ -385,7 +381,8 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
         return self.request_response('DELETE', url, **params)
 
-    def iterate(self, url: str, offset: int = 0, per_page: int = 25, **params: str) -> Iterator[dict]:  # pylint: disable=too-many-branches
+    def iterate(self, url: str, offset: int = 0, per_page: int = 25, **params: str) \
+            -> Iterator[dict]:  # pylint: disable=too-many-branches
         """Iterate a list of objects in a response, handling pagination.
 
         Basically, this function wraps get in a generator function designed for
