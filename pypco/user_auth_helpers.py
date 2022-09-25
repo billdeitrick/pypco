@@ -176,6 +176,6 @@ def get_cc_org_token(cc_name: str) -> str:
         ) from err
     try:
         response.json()
-        return response.json()['data']['attributes']['token']
+        return str(response.json()['data']['attributes']['token'])
     except JSONDecodeError as err:
         raise PCOUnexpectedRequestException("Invalid Church Center URL") from err
