@@ -2,7 +2,6 @@
 
 import base64
 from enum import Enum, auto
-from typing import Optional
 
 from pypco.user_auth_helpers import get_cc_org_token
 from .exceptions import PCOCredentialsException
