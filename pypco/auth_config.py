@@ -2,9 +2,10 @@
 
 import base64
 from enum import Enum, auto
+from typing import Optional
 
-from .exceptions import PCOCredentialsException
 from pypco.user_auth_helpers import get_cc_org_token
+from .exceptions import PCOCredentialsException
 
 
 class PCOAuthType(Enum):  # pylint: disable=R0903
@@ -77,7 +78,7 @@ class PCOAuthConfig:
             )
 
         if self.auth_type == PCOAuthType.ORGTOKEN:
-            return f"OrganizationToken {str(get_cc_org_token(self.cc_name))}"
+            return f"OrganizationToken {get_cc_org_token(self.cc_name)}"
 
         # Otherwise OAUTH using the Bearer scheme
         return "Bearer {}".format(self.token)

@@ -1,7 +1,7 @@
 """User-facing authentication helper functions for pypco."""
 
 import urllib
-from typing import List
+from typing import List, Optional
 from json import JSONDecodeError
 
 import requests
@@ -144,7 +144,7 @@ def get_oauth_refresh_token(client_id: str, client_secret: str, refresh_token: s
     ).json()
 
 
-def get_cc_org_token(cc_name: str) -> str:
+def get_cc_org_token(cc_name: Optional[str] = None) -> Optional[str]:
     """Get a non-authenticated Church Center OrganizationToken.
 
     Args:
