@@ -2,7 +2,9 @@
 
 import unittest
 from unittest import mock
+from unittest.mock import MagicMock
 
+import requests
 from requests import HTTPError
 from requests import ConnectionError as RequestsConnectionError
 from requests import Timeout
@@ -115,6 +117,7 @@ def mock_oauth_response(*args, **kwargs): #pylint: disable=E0211
             )
 
     return MockOAuthResponse(None, 400)
+
 
 class TestGetBrowserRedirectUrl(unittest.TestCase):
     """Test pypco functionality for getting browser redirect URL."""
@@ -358,3 +361,57 @@ class TestGetOAuthRefreshToken(unittest.TestCase):
             },
             timeout=30
         )
+
+
+class TestGetCcOrgToken(unittest.TestCase):
+    """Test pypco functionality for getting church center organization tokens"""
+
+    #     @mock.patch('requests.post', side_effect=mock_org_token_response)
+    def test_valid_org_token(self):
+        """Verify successful refresh with valid token."""
+
+        """Existing valid cc subdomain"""
+        self.assertIs(
+            str,
+            type(pypco.get_cc_org_token(
+                'carlsbad',
+            )),
+            "No String Returned"
+        )
+
+    def test_invalid_org_token(self):
+        with self.assertRaises(PCOUnexpectedRequestException):
+            pypco.get_cc_org_token(
+                'carlsbadtypo',
+            )
+
+    @mock.patch('requests.post', side_effect=Timeout)
+    def test_get_cc_org_token_timeout(self, mock_get):  # pylint: disable=unused-argument
+        """Ensure error response with timeoute"""
+
+        # Request timeout
+        with self.assertRaises(PCORequestTimeoutException):
+            pypco.user_auth_helpers.get_cc_org_token(
+                'yourcbcfamily',
+            )
+
+    @mock.patch('requests.post', side_effect=Exception)
+    def test_get_cc_org_token_general_exception(self, mock_get):  # pylint: disable=unused-argument
+        """Ensure error response with invalid status code"""
+
+        # Request timeout
+        with self.assertRaises(PCOUnexpectedRequestException):
+            pypco.user_auth_helpers.get_cc_org_token(
+                'yourcbcfamily',
+            )
+
+    @mock.patch('requests.post')
+    def test_get_cc_org_token_raise_for_status(self, mock_requests):  # pylint: disable=unused-argument
+        """Ensure error response with invalid status code"""
+        exception = HTTPError(mock.Mock(status=404), "not found")
+        mock_requests(mock.ANY).raise_for_status.side_effect = exception
+        with self.assertRaises(PCORequestException):
+            pypco.user_auth_helpers.get_cc_org_token(
+                'yourcbcfamily',
+            )
+

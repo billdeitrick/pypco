@@ -36,7 +36,6 @@ pypco.user\_auth\_helpers module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Changed
 - New build pipeline on Github Actions
+- Add typing and mypy testing (thanks @07pepa!)
+- Add Church Center Org Token authentication (thanks @pastorhudson!)
+- Add support and testing for Python versions 3.7 - 3.11
+- Readability improvements: replace .format() with f strings (thanks @07pepa!)
 
 ## [1.1.0] - 2020-03-10
 ### Added
