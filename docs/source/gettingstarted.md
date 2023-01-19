@@ -140,6 +140,39 @@ person = next(people)
 print(person)
 ```
 
+### Church Center API Organization Token (OrganizationToken) Authentication
+
+If you want to access api.churchcenter.com endpoints you need to use an OrganizationToken.
+We have added the ability for pypco to get these OrganizationTokens for you using `cc_name` as an auth option.
+
+You need to pass the vanity portion of the church center url as cc_name when initializing the PCO object. 
+To auth for https://carlsbad.churchcenter.com use `carlsbad` as the `cc_name`.
+
+
+Now, you're ready to connect to the Church Center API. The example below demonstrates authentication with an Org Token, the steps needed to change the base url, and executes a simple query to get and display events from the church center api.
+
+```python
+import pypco
+
+# Get an instance of the PCO object using your personal access token.
+# Set the api_base to https://api.churchcenter.com
+pco = pypco.PCO(cc_name='carlsbad',
+                api_base="https://api.churchcenter.com")
+
+# Get the events from api.churchcenter.com
+# The iterate() function provides an easy way to retrieve lists of objects
+# from an API endpoint, and automatically handles pagination
+
+events = pco.iterate('/calendar/v2/events')
+event = next(events)
+print(event)
+
+```
+
+If you can run the above example and see output for one of the events in Test Church Center account, you have successfully connected to the API. Continue to the [API Tour](apitour) to learn more.
+
+OrgTokens are generated with every request to the Church Center API so they should always be fresh.
+
 ## Conclusion
 
 Once you've authenticated and been able to make a simple API call, you're good to go. Head over to the [API Tour](apitour) document for a brief tour of the pypco API; this document will show you how pypco calls relate to their PCO API counterparts. Once you've read through the API Tour, you should be ready to fully leverage the capabilities of pypco (and hopefully be done reading pypco documentation…you'll be able to know exactly what pypco calls to make by reading the PCO API docs).
