@@ -124,7 +124,7 @@ person = next(people)
 print(person)
 ```
 
-OrgTokens are generated with every request to the church center api they should always be fresh.
+OAuth tokens will work for up to two hours after they have been issued, and can be renewed with a refresh token. Again, pypco helps you out here by providing a simple convenience function you can use to refresh OAuth tokens.
 
 ```python
 import pypco
@@ -171,6 +171,7 @@ print(event)
 
 If you can run the above example and see output for one of the events in Test Church Center account, you have successfully connected to the API. Continue to the [API Tour](apitour) to learn more.
 
+OrgTokens are generated with every request to the Church Center API so they should always be fresh.
 
 ## Conclusion
 
