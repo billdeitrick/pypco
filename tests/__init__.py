@@ -58,10 +58,9 @@ def build_logging_environment():
 
             # Build file handler
             file_handler = logging.handlers.RotatingFileHandler(
-                "{}{}{}".format(log_dir, os.sep, "pypco.log"),
+                f"{log_dir}{os.sep}pypco.log",
                 maxBytes=50000,
-                backupCount=10
-            )
+                backupCount=10)
             file_handler.setLevel(logging.DEBUG)
 
             # Build formatter
