@@ -4,7 +4,7 @@ import time
 import logging
 import re
 
-from typing import Any, Iterator
+from typing import Any, Iterator, Union
 import requests
 
 from .auth_config import PCOAuthConfig
@@ -35,10 +35,10 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
     def __init__(  # pylint: disable=too-many-arguments
             self,
-            application_id: str = None,
-            secret: str = None,
-            token: str = None,
-            cc_name: str = None,
+            application_id: Union[str, None] = None,
+            secret: Union[str, None] = None,
+            token: Union[str, None] = None,
+            cc_name: Union[str, None] = None,
             api_base: str = 'https://api.planningcenteronline.com',
             timeout: int = 60,
             upload_url: str = 'https://upload.planningcenteronline.com/v2/files',
