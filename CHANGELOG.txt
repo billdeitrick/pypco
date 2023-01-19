@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - New build pipeline on Github Actions
 - Add typing and mypy testing (thanks @07pepa!)
+- Add Church Center Org Token authentication (thanks @pastorhudson!)
 
 ## [1.1.0] - 2020-03-10
 ### Added
