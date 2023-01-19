@@ -3,6 +3,8 @@
 import base64
 from enum import Enum, auto
 
+from typing import Optional
+
 from pypco.user_auth_helpers import get_cc_org_token
 from .exceptions import PCOCredentialsException
 
@@ -26,7 +28,13 @@ class PCOAuthConfig:
             auth_type (PCOAuthType): The authentication type specified by this config object.
     """
 
-    def __init__(self, application_id: str = None, secret: str = None, token: str = None, cc_name: str = None):
+    def __init__(
+            self,
+            application_id: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            secret: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            token: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            cc_name: Optional[str] = None  # pylint: disable=unsubscriptable-object
+    ):
 
         self.application_id = application_id
         self.secret = secret

@@ -144,7 +144,7 @@ def get_oauth_refresh_token(client_id: str, client_secret: str, refresh_token: s
     ).json()
 
 
-def get_cc_org_token(cc_name: Optional[str] = None) -> Optional[str]: # pylint: disable=unsubscriptable-object
+def get_cc_org_token(cc_name: Optional[str] = None) -> Optional[str]:  # pylint: disable=unsubscriptable-object
     """Get a non-authenticated Church Center OrganizationToken.
 
     Args:
