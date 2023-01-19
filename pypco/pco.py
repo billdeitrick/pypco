@@ -35,10 +35,10 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
     def __init__(  # pylint: disable=too-many-arguments
             self,
-            application_id: Optional[str] = None,
-            secret: Optional[str] = None,
-            token: Optional[str] = None,
-            cc_name: Optional[str] = None,
+            application_id: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            secret: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            token: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            cc_name: Optional[str] = None,  # pylint: disable=unsubscriptable-object
             api_base: str = 'https://api.planningcenteronline.com',
             timeout: int = 60,
             upload_url: str = 'https://upload.planningcenteronline.com/v2/files',
@@ -63,8 +63,14 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
         self._log.debug("Pypco has been initialized!")
 
-    def _do_request(self, method: str, url: str, payload: Optional[Any] = None, upload: Optional[str] = None,
-                    **params) -> requests.Response:
+    def _do_request(
+            self,
+            method: str,
+            url: str,
+            payload: Optional[Any] = None,  # pylint: disable=unsubscriptable-object
+            upload: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            **params
+    ) -> requests.Response:
         """Builds, executes, and performs a single request against the PCO API.
 
         Executed request could be one of the standard HTTP verbs or a file upload.
@@ -119,8 +125,14 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
         return response
 
-    def _do_timeout_managed_request(self, method: str, url: str, payload: Optional[Any] = None, upload: Optional[str] = None,
-                                    **params) -> requests.Response:
+    def _do_timeout_managed_request(
+            self,
+            method: str,
+            url: str,
+            payload: Optional[Any] = None,  # pylint: disable=unsubscriptable-object
+            upload: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            **params
+        ) -> requests.Response:
         """Performs a single request against the PCO API with automatic retried in case of timeout.
 
         Executed request could be one of the standard HTTP verbs or a file upload.
@@ -161,8 +173,14 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
                 continue
 
-    def _do_ratelimit_managed_request(self, method: str, url: str, payload: Optional[Any] = None, upload: Optional[str] = None,
-                                      **params) -> requests.Response:
+    def _do_ratelimit_managed_request(
+            self,
+            method: str,
+            url: str,
+            payload: Optional[Any] = None,  # pylint: disable=unsubscriptable-object
+            upload: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            **params
+        ) -> requests.Response:
         """Performs a single request against the PCO API with automatic rate limit handling.
 
         Executed request could be one of the standard HTTP verbs or a file upload.
@@ -194,8 +212,14 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
             return response
 
-    def _do_url_managed_request(self, method: str, url: str, payload: Optional[Any] = None, upload: Optional[str] = None,
-                                **params) -> requests.Response:
+    def _do_url_managed_request(
+            self,
+            method: str,
+            url: str,
+            payload: Optional[Any] = None,  # pylint: disable=unsubscriptable-object
+            upload: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            **params
+        ) -> requests.Response:
         """Performs a single request against the PCO API, automatically cleaning up the URL.
 
         Executed request could be one of the standard HTTP verbs or a file upload.
@@ -224,8 +248,14 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
         return self._do_ratelimit_managed_request(method, url, payload, upload, **params)
 
-    def request_response(self, method: str, url: str, payload: Optional[Any] = None, upload: Optional[str] = None,
-                         **params) -> requests.Response:
+    def request_response(
+            self,
+            method: str,
+            url: str,
+            payload: Optional[Any] = None,  # pylint: disable=unsubscriptable-object
+            upload: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            **params
+        ) -> requests.Response:
         """A generic entry point for making a managed request against PCO.
 
         This function will return a Requests response object, allowing access to
@@ -267,7 +297,14 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
         return response
 
-    def request_json(self, method: str, url: str, payload: Optional[Any] = None, upload: Optional[str] = None, **params: str) -> dict:
+    def request_json(
+            self,
+            method: str,
+            url: str,
+            payload: Optional[Any] = None,  # pylint: disable=unsubscriptable-object
+            upload: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            **params: str
+    ) -> dict:
         """A generic entry point for making a managed request against PCO.
 
         This function will return the payload from the PCO response (a dict).
@@ -312,7 +349,12 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
         return self.request_json('GET', url, **params)
 
-    def post(self, url: str, payload: Optional[dict] = None, **params: str) -> dict:
+    def post(
+            self,
+            url: str,
+            payload: Optional[dict] = None,  # pylint: disable=unsubscriptable-object
+            **params: str
+        ) -> dict:
         """Perform a POST request against the PCO API.
 
         Performs a fully managed POST request (handles ratelimiting, timeouts, etc.).
@@ -336,7 +378,12 @@ class PCO:  #pylint: disable=too-many-instance-attributes
 
         return self.request_json('POST', url, payload, **params)
 
-    def patch(self, url: str, payload: Optional[dict] = None, **params: str) -> dict:
+    def patch(
+            self,
+            url: str,
+            payload: Optional[dict] = None,  # pylint: disable=unsubscriptable-object
+            **params: str
+        ) -> dict:
         """Perform a PATCH request against the PCO API.
 
         Performs a fully managed PATCH request (handles ratelimiting, timeouts, etc.).
@@ -485,7 +532,10 @@ class PCO:  #pylint: disable=too-many-instance-attributes
         self.session.close()
 
     @staticmethod
-    def template(object_type: str, attributes: Optional[dict] = None) -> dict:
+    def template(
+            object_type: str,
+            attributes: Optional[dict] = None  # pylint: disable=unsubscriptable-object
+    ) -> dict:
         """Get template JSON for creating a new object.
 
         Args:

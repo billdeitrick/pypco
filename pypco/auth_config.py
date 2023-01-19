@@ -30,10 +30,10 @@ class PCOAuthConfig:
 
     def __init__(
             self,
-            application_id: Optional[str] = None,
-            secret: Optional[str] = None,
-            token: Optional[str] = None,
-            cc_name: Optional[str] = None
+            application_id: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            secret: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            token: Optional[str] = None,  # pylint: disable=unsubscriptable-object
+            cc_name: Optional[str] = None  # pylint: disable=unsubscriptable-object
     ):
 
         self.application_id = application_id
