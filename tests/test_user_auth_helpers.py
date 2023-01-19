@@ -371,17 +371,18 @@ class TestGetCcOrgToken(unittest.TestCase):
         """Verify successful refresh with valid token."""
 
         """Existing valid cc subdomain"""
-        self.assertIn(
-            'token',
-            pypco.get_cc_org_token(
-                'yourcbcfamily',
-            )['data']['attributes']
+        self.assertIs(
+            str,
+            type(pypco.get_cc_org_token(
+                'carlsbad',
+            )),
+            "No String Returned"
         )
 
     def test_invalid_org_token(self):
         with self.assertRaises(PCOUnexpectedRequestException):
             pypco.get_cc_org_token(
-                'yourbcfamily',
+                'carlsbadtypo',
             )
 
     @mock.patch('requests.post', side_effect=Timeout)
