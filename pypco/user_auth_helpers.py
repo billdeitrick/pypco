@@ -35,7 +35,7 @@ def get_browser_redirect_url(client_id: str, redirect_uri: str, scopes: List[str
         ('scope', ' '.join(scopes))
     ]
 
-    return "{}{}".format(url, urllib.parse.urlencode(params))
+    return f"{url}{urllib.parse.urlencode(params)}"
 
 
 def _do_oauth_post(url: str, **kwargs) -> requests.Response:
