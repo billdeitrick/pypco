@@ -10,6 +10,7 @@ import requests
 from .auth_config import PCOAuthConfig
 from .exceptions import PCORequestTimeoutException, \
     PCORequestException, PCOUnexpectedRequestException
+from typing import Union
 
 
 class PCO:  # pylint: disable=too-many-instance-attributes
@@ -303,7 +304,7 @@ class PCO:  # pylint: disable=too-many-instance-attributes
             payload: Optional[Any] = None,  # pylint: disable=unsubscriptable-object
             upload: Optional[str] = None,  # pylint: disable=unsubscriptable-object
             **params: str
-    ) -> dict:
+    ) -> dict | None:
         """A generic entry point for making a managed request against PCO.
 
         This function will return the payload from the PCO response (a dict).
