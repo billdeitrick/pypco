@@ -4,13 +4,12 @@ import time
 import logging
 import re
 
-from typing import Any, Iterator, Optional
+from typing import Any, Iterator, Optional, Union
 import requests
 
 from .auth_config import PCOAuthConfig
 from .exceptions import PCORequestTimeoutException, \
     PCORequestException, PCOUnexpectedRequestException
-from typing import Union
 
 
 class PCO:  # pylint: disable=too-many-instance-attributes
