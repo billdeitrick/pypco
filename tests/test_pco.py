@@ -748,6 +748,16 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
 
         self.assertNotRegex(patch_result['data']['attributes']['avatar'], r'.*no_photo_thumbnail.*')
 
+    def test_empty_response(self):
+        """Test getting an empty response. (204) from pco api"""
+
+        pco = self.pco
+
+        # Refresh a list returns a 204
+        result = pco.get('/people/v2/lists/1097503/run')
+        self.assertEqual(result, None)
+
+
 class TestPCOInitialization(BasePCOTestCase):
     """Test initializing PCO objects with various argument combinations."""
 
