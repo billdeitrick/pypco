@@ -329,7 +329,7 @@ class PCO:  # pylint: disable=too-many-instance-attributes
             return_value = None
         else:
             return_value = response.json()
-        
+
         return return_value
 
     def get(self, url: str, **params) -> dict:
