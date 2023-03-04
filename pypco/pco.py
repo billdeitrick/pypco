@@ -474,6 +474,9 @@ class PCO:  # pylint: disable=too-many-instance-attributes
 
             response = self.get(url, offset=offset, per_page=per_page, **params)
 
+            if response is None:
+                return
+
             for cur in response['data']:
                 record = {
                     'data': cur,

@@ -680,6 +680,17 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
             'Unexpected number of report templates returned.'
         )
 
+    @patch('pypco.PCO.get')
+    def test_iterate_response_none(self, get_mock):
+        """Test iterate when PCO API returns 204 / None."""
+
+        get_mock.return_value = None
+
+        pco = self.pco
+
+        # No response, should give back an empty list
+        self.assertEqual([], list(pco.iterate('/people/v2/people')))
+
     def test_template(self):
         """Test the template function."""
 
