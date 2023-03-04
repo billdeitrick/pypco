@@ -303,7 +303,7 @@ class PCO:  # pylint: disable=too-many-instance-attributes
             payload: Optional[Any] = None,  # pylint: disable=unsubscriptable-object
             upload: Optional[str] = None,  # pylint: disable=unsubscriptable-object
             **params: str
-    ) -> dict:
+    ) -> Optional[dict]:  # pylint: disable=unsubscriptable-object
         """A generic entry point for making a managed request against PCO.
 
         This function will return the payload from the PCO response (a dict).
@@ -324,9 +324,15 @@ class PCO:  # pylint: disable=too-many-instance-attributes
             dict: The payload from the response to this request.
         """
 
-        return self.request_response(method, url, payload, upload, **params).json()
+        response = self.request_response(method, url, payload, upload, **params)
+        if response.status_code == 204:
+            return_value = None
+        else:
+            return_value = response.json()
 
-    def get(self, url: str, **params) -> dict:
+        return return_value
+
+    def get(self, url: str, **params) -> Optional[dict]:  # pylint: disable=unsubscriptable-object
         """Perform a GET request against the PCO API.
 
         Performs a fully managed GET request (handles ratelimiting, timeouts, etc.).
@@ -353,7 +359,7 @@ class PCO:  # pylint: disable=too-many-instance-attributes
             url: str,
             payload: Optional[dict] = None,  # pylint: disable=unsubscriptable-object
             **params: str
-        ) -> dict:
+        ) -> Optional[dict]:  # pylint: disable=unsubscriptable-object
         """Perform a POST request against the PCO API.
 
         Performs a fully managed POST request (handles ratelimiting, timeouts, etc.).
@@ -382,7 +388,7 @@ class PCO:  # pylint: disable=too-many-instance-attributes
             url: str,
             payload: Optional[dict] = None,  # pylint: disable=unsubscriptable-object
             **params: str
-        ) -> dict:
+        ) -> Optional[dict]:  # pylint: disable=unsubscriptable-object
         """Perform a PATCH request against the PCO API.
 
         Performs a fully managed PATCH request (handles ratelimiting, timeouts, etc.).
@@ -468,6 +474,9 @@ class PCO:  # pylint: disable=too-many-instance-attributes
 
             response = self.get(url, offset=offset, per_page=per_page, **params)
 
+            if response is None:
+                return
+
             for cur in response['data']:
                 record = {
                     'data': cur,
@@ -506,7 +515,7 @@ class PCO:  # pylint: disable=too-many-instance-attributes
             if 'next' not in response['links']:
                 break
 
-    def upload(self, file_path: str, **params) -> dict:
+    def upload(self, file_path: str, **params) -> Optional[dict]:  # pylint: disable=unsubscriptable-object
         """Upload the file at the specified path to PCO.
 
         Args:

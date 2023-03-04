@@ -1,0 +1,73 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - pypco
+    method: GET
+    uri: https://api.planningcenteronline.com/people/v2/lists/1097503/run
+  response:
+    body:
+      string: ''
+    headers:
+      Access-Control-Allow-Credentials:
+        - 'true'
+      Access-Control-Allow-Headers:
+        - Accept, Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match,
+          If-Unmodified-Since, Origin, X-Requested-With, X-CSRF-Token, X-PCO-API-Version,
+          X-PCO-API-Log-Level, X-PCO-API-Tracer-Class, X-PCO-API-Tracer-Secret
+      Access-Control-Allow-Methods:
+        - GET, POST, PATCH, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+        - '*'
+      Access-Control-Expose-Headers:
+        - ETag, Link, X-PCO-API-Auth-Method, X-PCO-API-Request-Rate-Count, X-PCO-API-Request-Rate-Limit,
+          X-PCO-API-Request-Rate-Period, Retry-After
+      Cache-Control:
+        - no-cache
+      Connection:
+        - keep-alive
+      Date:
+        - Fri, 20 Jan 2023 01:42:25 GMT
+      Referrer-Policy:
+        - no-referrer-when-downgrade
+      Strict-Transport-Security:
+        - max-age=31536000; includeSubDomains
+      Vary:
+        - Accept, Accept-Encoding, Origin
+      X-Content-Type-Options:
+        - nosniff
+      X-Download-Options:
+        - noopen
+      X-Frame-Options:
+        - SAMEORIGIN
+      X-PCO-API-Auth-Method:
+        - HTTPBasic
+      X-PCO-API-Processed-As-Version:
+        - '2022-07-14'
+      X-PCO-API-Processor:
+        - ENG_4.8.1
+      X-PCO-API-Request-Rate-Count:
+        - '1'
+      X-PCO-API-Request-Rate-Limit:
+        - '100'
+      X-PCO-API-Request-Rate-Period:
+        - '20'
+      X-Permitted-Cross-Domain-Policies:
+        - none
+      X-Request-Id:
+        - 6960500b-2f96-4431-b4ed-01fbc44d6fa0
+      X-Runtime:
+        - '0.594637'
+      X-XSS-Protection:
+        - 1; mode=block
+    status:
+      code: 204
+      message: No Content
+  version: 1

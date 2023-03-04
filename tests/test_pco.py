@@ -680,6 +680,17 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
             'Unexpected number of report templates returned.'
         )
 
+    @patch('pypco.PCO.get')
+    def test_iterate_response_none(self, get_mock):
+        """Test iterate when PCO API returns 204 / None."""
+
+        get_mock.return_value = None
+
+        pco = self.pco
+
+        # No response, should give back an empty list
+        self.assertEqual([], list(pco.iterate('/people/v2/people')))
+
     def test_template(self):
         """Test the template function."""
 
@@ -747,6 +758,16 @@ class TestPublicRequestFunctions(BasePCOVCRTestCase):
         patch_result = pco.patch(paul['data']['links']['self'], user_template)
 
         self.assertNotRegex(patch_result['data']['attributes']['avatar'], r'.*no_photo_thumbnail.*')
+
+    def test_empty_response(self):
+        """Test getting an empty response. (204) from pco api"""
+
+        pco = self.pco
+
+        # Refresh a list returns a 204
+        result = pco.get('/people/v2/lists/1097503/run')
+        self.assertEqual(result, None)
+
 
 class TestPCOInitialization(BasePCOTestCase):
     """Test initializing PCO objects with various argument combinations."""
