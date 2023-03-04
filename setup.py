@@ -9,14 +9,14 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='pypco',
-    version='1.1.0',
+    version='1.2.0',
     description='A Python wrapper for the Planning Center Online API.',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/billdeitrick/pypco',
     author='Bill Deitrick',
     author_email='hello@billdeitrick.com',
-    python_requires='>=3.6.0',
+    python_requires='>=3.7.0',
     license='MIT',
     packages=find_packages(
         exclude=[
