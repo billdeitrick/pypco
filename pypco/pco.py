@@ -536,8 +536,8 @@ class PCO:  # pylint: disable=too-many-instance-attributes
 
     def __del__(self):
         """Close the requests session when the PCO object goes out of scope."""
-
-        self.session.close()
+        if self.session is not None:
+            self.session.close()
 
     @staticmethod
     def template(

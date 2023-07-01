@@ -11,7 +11,7 @@ from requests.exceptions import SSLError
 
 import pypco
 from pypco.exceptions import PCORequestTimeoutException, \
-    PCORequestException, PCOUnexpectedRequestException
+    PCORequestException, PCOUnexpectedRequestException, PCOCredentialsException
 from pypco.auth_config import PCOAuthConfig
 from tests import BasePCOTestCase, BasePCOVCRTestCase
 
@@ -774,6 +774,10 @@ class TestPCOInitialization(BasePCOTestCase):
 
     def test_pco_initialization(self):
         """Test initializing the PCO object with various combinations of arguments."""
+
+        # region no Args:
+        with self.assertRaises(PCOCredentialsException):
+            pypco.PCO()
 
         # region Minimal Args: PAT Auth
         pco = pypco.PCO(
